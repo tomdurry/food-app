@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  dev-postgres:
+    image: postgres:15.1-alpine
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: yukihiro
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: yukihiro
+    restart: always
+    networks:
+      - lesson
+networks:
+  lesson:
