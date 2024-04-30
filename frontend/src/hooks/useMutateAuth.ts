@@ -11,7 +11,7 @@ export const useMutateAuth = () => {
     async (user: Credential) =>
       await axios.post(`${process.env.REACT_APP_API_URL}/login`, user),
     {
-      //navigateの実装
+      //ToDo navigateの実装
       onError: (err: any) => {
         if (err.response.data.message) {
           switchErrorHandling(err.response.data.message)
