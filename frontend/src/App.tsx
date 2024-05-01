@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { NavigationBar } from './components/NavigationBar'
 import { Auth } from './components/Auth'
+import { Generate } from './components/Generate'
 import axios from 'axios'
 import { CsrfToken } from './types'
 
@@ -17,9 +19,13 @@ function App() {
   }, [])
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Auth />} />
-      </Routes>
+      <NavigationBar />Ï
+      <div className="pt-16">
+        <Routes>
+          <Route path="/" element={<Auth />} />Ï
+          <Route path="/generate" element={<Generate />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   )
 }

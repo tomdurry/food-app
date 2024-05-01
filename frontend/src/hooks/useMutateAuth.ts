@@ -3,15 +3,22 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { Credential } from '../types'
 import { useError } from '../hooks/useError'
+import useStore from '../store'
 
 export const useMutateAuth = () => {
   const navigate = useNavigate()
   const { switchErrorHandling } = useError()
+  const { setIsLogin } = useStore((state) => ({
+    setIsLogin: state.setIsLogin,
+  }))
   const loginMutation = useMutation(
     async (user: Credential) =>
       await axios.post(`${process.env.REACT_APP_API_URL}/login`, user),
     {
-      //ToDo navigateの実装
+      onSuccess: () => {
+        setIsLogin(true)
+        navigate('/generate')
+      },
       onError: (err: any) => {
         if (err.response.data.message) {
           switchErrorHandling(err.response.data.message)
@@ -38,6 +45,7 @@ export const useMutateAuth = () => {
     async () => await axios.post(`${process.env.REACT_APP_API_URL}/logout`),
     {
       onSuccess: () => {
+        setIsLogin(false)
         navigate('/')
       },
       onError: (err: any) => {
