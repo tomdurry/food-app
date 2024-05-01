@@ -1,16 +1,19 @@
 import { useState, FormEvent } from 'react'
-import { CheckBadgeIcon, ArrowPathIcon } from '@heroicons/react/24/solid'
+import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 import { useMutateAuth } from '../hooks/useMutateAuth'
+import useStore from '../store'
 
 export const Auth = () => {
   const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
-  const [isLogin, setIsLogin] = useState(true)
+  const { isLoginForm } = useStore((state) => ({
+    isLoginForm: state.isLoginForm,
+  }))
   const { loginMutation, registerMutation } = useMutateAuth()
 
   const submitAuthHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (isLogin) {
+    if (isLoginForm) {
       loginMutation.mutate({
         email: email,
         password: pw,
@@ -31,13 +34,10 @@ export const Auth = () => {
   }
   return (
     <div className="flex justify-center items-center flex-col min-h-screen text-gray-600 font-mono">
-      <div className="flex items-center">
+      <div className="flex items-center mb-8">
         <CheckBadgeIcon className="h-8 w-8 mr-2 text-blue-500" />
-        <span className="text-center text-3xl font-extrabold">
-          Login Page
-        </span>
+        <span className="text-center text-3xl font-extrabold">Login Page</span>
       </div>
-      <h2 className="my-6">{isLogin ? 'Login' : 'Create a new account'}</h2>
       <form onSubmit={submitAuthHandler}>
         <div>
           <input
@@ -66,14 +66,10 @@ export const Auth = () => {
             disabled={!email || !pw}
             type="submit"
           >
-            {isLogin ? 'Login' : 'Sign Up'}
+            {isLoginForm ? 'ログイン' : 'ユーザー作成'}
           </button>
         </div>
       </form>
-      <ArrowPathIcon
-        onClick={() => setIsLogin(!isLogin)}
-        className="h-6 w-6 my-2 text-blue-500 cursor-pointer"
-      />
     </div>
   )
 }
