@@ -17,7 +17,9 @@ export const NavigationBar = () => {
     <div className="fixed top-0 left-0 w-full bg-orange-500 shadow-md z-10">
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-3xl font-extrabold">Cooking Buddy</span>
+            <Link to={isLogin ? "/generate" : "/"} className="text-3xl font-extrabold">
+                Cooking Buddy
+            </Link>
         </div>
         <div className="flex">
           <Link to="/generate" className="mx-2 text-lg">
