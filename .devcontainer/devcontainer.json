@@ -1,0 +1,27 @@
+{
+	"name": "food-app",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"features": {
+		"ghcr.io/devcontainers/features/git-lfs:1": {},
+		"ghcr.io/devcontainers/features/go:1": {},
+		"ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/devcontainers-contrib/features/tfcdk-cli:1": {}
+	},
+    "initializeCommand": "bash ./.devcontainer/initializeCommand.sh",
+    "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dsznajder.es7-react-js-snippets",
+				"esbenp.prettier-vscode",
+				"streetsidesoftware.code-spell-checker",
+				"DavidAnson.vscode-markdownlint",
+				"eamodio.gitlens",
+				"oderwat.indent-rainbow",
+				"ICS.japanese-proofreading",
+				"yzhang.markdown-all-in-one",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	}
+}
