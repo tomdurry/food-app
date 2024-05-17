@@ -6,9 +6,7 @@
 		"ghcr.io/devcontainers/features/go:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers-contrib/features/tfcdk-cli:1": {},
-		"docker-from-docker": {
-            "version": "latest"
-        }
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
     "initializeCommand": "bash ./.devcontainer/initializeCommand.sh",
     "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
@@ -22,8 +20,7 @@
 				"eamodio.gitlens",
 				"oderwat.indent-rainbow",
 				"ICS.japanese-proofreading",
-				"yzhang.markdown-all-in-one",
-				"ms-azuretools.vscode-docker"
+				"yzhang.markdown-all-in-one"
 			]
 		}
 	},
