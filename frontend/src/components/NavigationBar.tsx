@@ -18,7 +18,7 @@ export const NavigationBar = () => {
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
         <div className="flex items-center">
             <Link to={isLogin ? "/generate" : "/"} className="text-3xl font-extrabold">
-                Cooking Buddy
+                みんなの食卓
             </Link>
         </div>
         <div className="flex">
@@ -52,3 +52,4 @@ export const NavigationBar = () => {
     </div>
   )
 }
+
