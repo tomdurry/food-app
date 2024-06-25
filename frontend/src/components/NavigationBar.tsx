@@ -26,7 +26,7 @@ export const NavigationBar = () => {
             レシピ生成
           </Link>
           <Link to="/list" className="mx-2 text-lg">
-            レシピ一覧
+            お気に入りレシピ
           </Link>
           {isLogin ? (
             <>
