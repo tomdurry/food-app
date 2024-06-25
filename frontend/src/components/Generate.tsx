@@ -4,6 +4,7 @@ interface Recipe {
   recipe_name: string;
   ingredients: { ingredient: string; quantity: string }[];
   instructions: string | string[];
+  image_url: string;
 }
 
 export function Generate() {
@@ -149,6 +150,11 @@ export function Generate() {
             recipe.instructions.split('\n').map((instruction, index) => (
               <p key={index}>{index + 1}. {instruction}</p>
             ))
+          )}
+          {recipe.image_url && (
+            <div className="mt-4">
+              <img src={recipe.image_url} alt={recipe.recipe_name} className="w-full h-auto rounded" />
+            </div>
           )}
         </div>
       )}
