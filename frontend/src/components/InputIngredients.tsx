@@ -1,20 +1,20 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Recipe } from '../types';
 
-interface Recipe {
-  recipe_name: string;
-  ingredients: { ingredient: string; quantity: string }[];
-  instructions: string | string[];
-  image_url: string;
+interface GenerateProps {
+  setRecipe: (recipe: Recipe) => void;
+  setLoading: (loading: boolean) => void;
+  loading: boolean;
 }
 
-export function Generate() {
+export function InputIngredients({ setRecipe, setLoading, loading }: GenerateProps) {
   const [cookingTime, setCookingTime] = useState("");
   const [taste, setTaste] = useState("");
   const [ingredient, setIngredient] = useState("");
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [loading, setLoading] = useState(false);
   const [useOnlySelectedIngredients, setUseOnlySelectedIngredients] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddIngredient = () => {
     if (ingredient.trim()) {
@@ -43,6 +43,7 @@ export function Generate() {
     const data = await response.json();
     setRecipe(data.recipe as Recipe);
     setLoading(false);
+    navigate("/recipe");  // 生成されたレシピ画面へ遷移
   };
 
   return (
@@ -76,7 +77,7 @@ export function Generate() {
           <option value="ダイエット向け">ダイエット向け</option>
           <option value="インターナショナル">インターナショナル</option>
           <option value="スタミナ料理">スタミナ料理</option>
-          <option value="男飯">男</option>
+          <option value="男飯">男飯</option>
         </select>
       </div>
 
@@ -128,34 +129,6 @@ export function Generate() {
       {loading && (
         <div className="mt-6 text-center">
           <p>レシピを生成中です...</p>
-        </div>
-      )}
-
-      {recipe && (
-        <div className="mt-6">
-          <h2 className="text-xl font-bold mb-4">生成されたレシピ</h2>
-          <h3 className="mb-4">{recipe.recipe_name}</h3>
-          <p className="mb-4">材料:</p>
-          <ul className="mb-4">
-            {recipe.ingredients.map((ingredient, index) => (
-              <li key={index}>{ingredient.ingredient} - {ingredient.quantity}</li>
-            ))}
-          </ul>
-          <p className="mb-4">手順:</p>
-          {Array.isArray(recipe.instructions) ? (
-            recipe.instructions.map((instruction, index) => (
-              <p key={index}>{index + 1}. {instruction}</p>
-            ))
-          ) : (
-            recipe.instructions.split('\n').map((instruction, index) => (
-              <p key={index}>{index + 1}. {instruction}</p>
-            ))
-          )}
-          {recipe.image_url && (
-            <div className="mt-4">
-              <img src={recipe.image_url} alt={recipe.recipe_name} className="w-full h-auto rounded" />
-            </div>
-          )}
         </div>
       )}
     </div>
