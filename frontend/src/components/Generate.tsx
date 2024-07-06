@@ -1,13 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Recipe } from '../types'
 
-interface Recipe {
-  recipe_name: string;
-  ingredients: { ingredient: string; quantity: string }[];
-  instructions: string | string[];
-  image_url: string;
-}
-
-export function Generate() {
+export const Generate = () => {
   const [cookingTime, setCookingTime] = useState("");
   const [taste, setTaste] = useState("");
   const [ingredient, setIngredient] = useState("");
@@ -72,7 +66,6 @@ export function Generate() {
           className="block w-full p-2 border rounded"
         >
           <option value="">未選択</option>
-          <option value="グルテンフリー">グルテンフリー</option>
           <option value="ダイエット向け">ダイエット向け</option>
           <option value="インターナショナル">インターナショナル</option>
           <option value="スタミナ料理">スタミナ料理</option>
