@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { NavigationBar } from './components/NavigationBar'
 import { Auth } from './components/Auth'
 import { Generate } from './components/Generate'
+import { Display } from './components/Display'
 import axios from 'axios'
 import { CsrfToken } from './types'
 
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Auth />} />Ï
           <Route path="/generate" element={<Generate />} />
+          <Route path="/display" element={<Display />} />
         </Routes>
       </div>
     </BrowserRouter>
