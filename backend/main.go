@@ -6,13 +6,19 @@ import (
 	"github.com/tomdurry/food-app/repository"
 	"github.com/tomdurry/food-app/router"
 	"github.com/tomdurry/food-app/usecase"
+	"github.com/tomdurry/food-app/validator"
 )
 
 func main() {
 	db := db.NewDB()
+	userValidator := validator.NewUserValidator()
+	recipeValidator := validator.NewRecipeValidator()
 	userRepository := repository.NewUserRepository(db)
-	userUsecase := usecase.NewUserUsecase(userRepository)
+	recipeRepository := repository.NewRecipeRepository(db)
+	userUsecase := usecase.NewUserUsecase(userRepository, userValidator)
+	recipeUsecase := usecase.NewRecipeUsecase(recipeRepository, recipeValidator)
 	userController := controller.NewUserController(userUsecase)
-	e := router.NewRouter(userController)
+	recipeController := controller.NewRecipeController(recipeUsecase)
+	e := router.NewRouter(userController, recipeController)
 	e.Logger.Fatal(e.Start(":8080"))
 }
