@@ -4,7 +4,7 @@ import { useMutateAuth } from '../hooks/useMutateAuth'
 
 export const NavigationBar = () => {
   const { logoutMutation } = useMutateAuth()
-  const { isLogin, setIsLoginForm} = useStore((state) => ({
+  const { isLogin, setIsLoginForm } = useStore((state) => ({
     isLogin: state.isLogin,
     setIsLoginForm: state.setIsLoginForm,
   }))
@@ -17,15 +17,18 @@ export const NavigationBar = () => {
     <div className="fixed top-0 left-0 w-full bg-orange-500 shadow-md z-10">
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
         <div className="flex items-center">
-            <Link to={isLogin ? "/generate" : "/"} className="text-3xl font-extrabold">
-                みんなの食卓
-            </Link>
+          <Link
+            to={isLogin ? '/generate' : '/'}
+            className="text-3xl font-extrabold"
+          >
+            みんなの食卓
+          </Link>
         </div>
         <div className="flex">
           <Link to="/generate" className="mx-2 text-lg">
             レシピ生成
           </Link>
-          <Link to="/list" className="mx-2 text-lg">
+          <Link to="/favorite" className="mx-2 text-lg">
             お気に入りレシピ
           </Link>
           {isLogin ? (
@@ -36,7 +39,10 @@ export const NavigationBar = () => {
             </>
           ) : (
             <>
-              <button onClick={() => setIsLoginForm(true)} className="mx-2 text-lg">
+              <button
+                onClick={() => setIsLoginForm(true)}
+                className="mx-2 text-lg"
+              >
                 ログイン
               </button>
               <button
