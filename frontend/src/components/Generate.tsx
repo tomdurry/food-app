@@ -44,8 +44,8 @@ export const Generate = () => {
       }
     )
 
-    const data = await response.json()
-    GenerateRecipe(data.recipe)
+    const generateData = await response.json()
+    GenerateRecipe(generateData.recipe)
     setLoading(false)
     navigate('/display')
   }

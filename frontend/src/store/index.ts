@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 
 type Recipe = {
+  id: number
   recipe_name: string
   ingredients: { ingredient: string; quantity: string }[]
   instructions: string | string[]
@@ -10,7 +11,6 @@ type Recipe = {
 type State = {
   Recipe: Recipe
   GenerateRecipe: (payload: Recipe) => void
-  resetGenerateRecipe: () => void
 
   isLogin: boolean
   setIsLogin: (isLogin: boolean) => void
@@ -21,6 +21,7 @@ type State = {
 
 const useStore = create<State>((set) => ({
   Recipe: {
+    id: 0,
     recipe_name: '',
     ingredients: [],
     instructions: '',
@@ -29,15 +30,6 @@ const useStore = create<State>((set) => ({
   GenerateRecipe: (payload) =>
     set({
       Recipe: payload,
-    }),
-  resetGenerateRecipe: () =>
-    set({
-      Recipe: {
-        recipe_name: '',
-        ingredients: [],
-        instructions: '',
-        image_url: '',
-      },
     }),
 
   isLogin: false,
