@@ -1,21 +1,18 @@
 package router
 
 import (
+	"github.com/tomdurry/food-app/controller"
+
 	"net/http"
 	"os"
 
-	"github.com/tomdurry/food-app/controller"
-
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func NewRouter(uc controller.IUserController) *echo.Echo {
+func NewRouter(uc controller.IUserController, rc controller.IRecipeController) *echo.Echo {
 	e := echo.New()
-	e.POST("/signup", uc.SignUp)
-	e.POST("/login", uc.LogIn)
-	e.POST("/logout", uc.LogOut)
-	e.GET("/csrf", uc.CsrfToken)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000", os.Getenv("FE_URL")},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept,
@@ -28,8 +25,21 @@ func NewRouter(uc controller.IUserController) *echo.Echo {
 		CookieDomain:   os.Getenv("API_DOMAIN"),
 		CookieHTTPOnly: true,
 		CookieSameSite: http.SameSiteNoneMode,
-		// CookieSameSite: http.SameSiteDefaultMode,
+		//CookieSameSite: http.SameSiteDefaultMode,
 		//CookieMaxAge:   60,
 	}))
+	e.POST("/signup", uc.SignUp)
+	e.POST("/login", uc.LogIn)
+	e.POST("/logout", uc.LogOut)
+	e.GET("/csrf", uc.CsrfToken)
+	t := e.Group("/recipes")
+	t.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey:  []byte(os.Getenv("SECRET")),
+		TokenLookup: "cookie:token",
+	}))
+	t.GET("", rc.GetAllRecipes)
+	t.GET("/:recipeId", rc.GetRecipeById)
+	t.POST("", rc.FavoriteRecipe)
+	t.DELETE("/:recipeId", rc.UnFavoriteRecipe)
 	return e
 }
