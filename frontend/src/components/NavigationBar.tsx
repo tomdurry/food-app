@@ -25,19 +25,20 @@ export const NavigationBar = () => {
           </Link>
         </div>
         <div className="flex">
-          <Link to="/generate" className="mx-2 text-lg">
-            レシピ生成
-          </Link>
-          <Link to="/favorite" className="mx-2 text-lg">
-            お気に入りレシピ
-          </Link>
-          {isLogin ? (
+          {isLogin && (
             <>
+              <Link to="/generate" className="mx-2 text-lg">
+                レシピ生成
+              </Link>
+              <Link to="/favorite" className="mx-2 text-lg">
+                お気に入りレシピ
+              </Link>
               <button onClick={logout} className="mx-2 text-lg">
                 ログアウト
               </button>
             </>
-          ) : (
+          )}
+          {!isLogin && (
             <>
               <button
                 onClick={() => setIsLoginForm(true)}

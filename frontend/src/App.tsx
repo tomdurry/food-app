@@ -5,6 +5,7 @@ import { Auth } from './components/Auth'
 import { Generate } from './components/Generate'
 import { Display } from './components/Display'
 import { Favorite } from './components/Favorite'
+import { PrivateRoute } from './components/PrivateRoute'
 import axios from 'axios'
 import { CsrfToken } from './types'
 
@@ -19,15 +20,37 @@ function App() {
     }
     getCsrfToken()
   }, [])
+
   return (
     <BrowserRouter>
-      <NavigationBar />Ï
+      <NavigationBar />
       <div className="pt-16">
         <Routes>
-          <Route path="/" element={<Auth />} />Ï
-          <Route path="/generate" element={<Generate />} />
-          <Route path="/display" element={<Display />} />
-          <Route path="/favorite" element={<Favorite />} />
+          <Route path="/" element={<Auth />} />
+          <Route
+            path="/generate"
+            element={
+              <PrivateRoute>
+                <Generate />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/display"
+            element={
+              <PrivateRoute>
+                <Display />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/favorite"
+            element={
+              <PrivateRoute>
+                <Favorite />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>
