@@ -13,23 +13,27 @@ export const Auth = () => {
 
   const submitAuthHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (isLoginForm) {
-      loginMutation.mutate({
-        email: email,
-        password: pw,
-      })
-    } else {
-      await registerMutation
-        .mutateAsync({
+    try {
+      if (isLoginForm) {
+        loginMutation.mutate({
           email: email,
           password: pw,
         })
-        .then(() =>
-          loginMutation.mutate({
+      } else {
+        await registerMutation
+          .mutateAsync({
             email: email,
             password: pw,
           })
-        )
+          .then(() =>
+            loginMutation.mutate({
+              email: email,
+              password: pw,
+            })
+          )
+      }
+    } catch (err) {
+      console.error('An error occurred during authentication:', err)
     }
   }
   return (
