@@ -70,7 +70,7 @@ export const Generate = () => {
         </div>
 
         <div className="mt-6">
-          <label className="block mb-2">② オプション *</label>
+          <label className="block mb-2">② コンセプト *</label>
           <select
             value={taste}
             onChange={(e) => setTaste(e.target.value)}
