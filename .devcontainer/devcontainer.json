@@ -20,7 +20,8 @@
 				"eamodio.gitlens",
 				"oderwat.indent-rainbow",
 				"ICS.japanese-proofreading",
-				"yzhang.markdown-all-in-one"
+				"yzhang.markdown-all-in-one",
+				"ms-vscode.go"
 			]
 		}
 	},
