@@ -21,7 +21,8 @@
 				"oderwat.indent-rainbow",
 				"ICS.japanese-proofreading",
 				"yzhang.markdown-all-in-one",
-				"ms-vscode.go"
+				"ms-vscode.go",
+				"HashiCorp.terraform"
 			]
 		}
 	},
