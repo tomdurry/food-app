@@ -1,6 +1,6 @@
 {
   "language": "typescript",
-  "app": "npx ts-node main.ts",
+  "app": "npx ts-node bin/main.ts",
   "projectId": "9de0f4cd-7923-4f56-b890-6de2bf9e7bca",
   "sendCrashReports": "true",
   "terraformProviders": [],
