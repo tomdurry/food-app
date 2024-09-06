@@ -3,5 +3,11 @@ version: 0.2
 phases:
   install:
     commands:
+      - npm install -g cdktf-cli
+  pre_build:
+    commands:
+      - cd infra
+  build:
+    commands:
       - cd infra
       - cdktf deploy *stack
