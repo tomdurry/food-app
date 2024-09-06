@@ -7,7 +7,6 @@ import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { Codepipeline } from "@cdktf/provider-aws/lib/codepipeline";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { CodestarconnectionsConnection } from "@cdktf/provider-aws/lib/codestarconnections-connection";
-import * as path from "path";
 
 export class PipelineStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -64,7 +63,7 @@ export class PipelineStack extends TerraformStack {
       serviceRole: codeBuildRole.arn,
       source: {
         type: "CODEPIPELINE",
-        buildspec: path.join(__dirname, "../buildspec/buildspec.yml"),
+        buildspec: "infra/lib/buildspec/buildspec.yml",
       },
       environment: {
         computeType: "BUILD_GENERAL1_SMALL",
