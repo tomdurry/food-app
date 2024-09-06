@@ -64,7 +64,7 @@ export class PipelineStack extends TerraformStack {
       serviceRole: codeBuildRole.arn,
       source: {
         type: "CODEPIPELINE",
-        buildspec: path.join(__dirname, "buildspec/buildspec.yml"),
+        buildspec: path.join(__dirname, "../buildspec/buildspec.yml"),
       },
       environment: {
         computeType: "BUILD_GENERAL1_SMALL",
