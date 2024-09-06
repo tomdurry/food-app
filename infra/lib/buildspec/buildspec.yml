@@ -7,4 +7,4 @@ phases:
   build:
     commands:
       - cd infra
-      - cdktf deploy *stack
+      - cdktf deploy recipe-generation-stack
