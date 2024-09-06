@@ -4,9 +4,6 @@ phases:
   install:
     commands:
       - npm install -g cdktf-cli
-  pre_build:
-    commands:
-      - cd infra
   build:
     commands:
       - cd infra
