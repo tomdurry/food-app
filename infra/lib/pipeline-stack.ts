@@ -67,7 +67,7 @@ export class PipelineStack extends TerraformStack {
       },
       environment: {
         computeType: "BUILD_GENERAL1_SMALL",
-        image: "aws/codebuild/amazonlinux2-x86_64-standard:5.0",
+        image: "hashicorp/terraform:latest",
         type: "LINUX_CONTAINER",
       },
       artifacts: {
