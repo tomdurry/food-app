@@ -5,8 +5,8 @@ phases:
     commands:
       - apk add --no-cache nodejs npm
       - npm install -g cdktf-cli ts-node
-      - cd infra # infraディレクトリに移動
-      - npm install # プロジェクト依存関係をインストール
+      - cd infra
+      - npm install
 
   build:
     commands:
