@@ -1,10 +1,18 @@
 version: 0.2
 
 phases:
-  install:
+  pre_build:
     commands:
+      - echo "Installing Node.js and npm..."
+      - apk add --no-cache nodejs npm
+      - echo "Installing cdktf-cli..."
       - npm install -g cdktf-cli
   build:
     commands:
+      - echo "Deploying stack using CDKTF..."
       - cd infra
-      - cdktf deploy recipe-generation-stack
+      - cdktf deploy *stack
+
+artifacts:
+  files:
+    - "**/*"
