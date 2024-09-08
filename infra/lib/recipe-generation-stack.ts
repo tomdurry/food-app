@@ -32,7 +32,10 @@ export class RecipeGenerationStack extends TerraformStack {
     );
 
     const lambdaBucket = new S3Bucket(this, "LambdaBucket", {
-      bucket: `lambda-zip-${Math.random().toString(36).substring(7)}`,
+      bucket: `lambda-zip-${new Date()
+        .toISOString()
+        .replace(/[:\-T.]/g, "")
+        .substring(0, 14)}`,
     });
 
     const lambdaZip = new S3Object(this, "LambdaZip", {
