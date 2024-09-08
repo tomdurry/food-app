@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { CodebuildProject } from "@cdktf/provider-aws/lib/codebuild-project";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
-import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
+import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { Codepipeline } from "@cdktf/provider-aws/lib/codepipeline";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { CodestarconnectionsConnection } from "@cdktf/provider-aws/lib/codestarconnections-connection";
@@ -39,24 +39,14 @@ export class PipelineStack extends TerraformStack {
       }),
     });
 
-    new IamRolePolicy(this, "CodeBuildServiceRolePolicy", {
-      role: codeBuildRole.name,
-      policy: JSON.stringify({
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: "Allow",
-            Action: [
-              "s3:*",
-              "logs:*",
-              "codebuild:*",
-              "codestar-connections:UseConnection",
-            ],
-            Resource: "*",
-          },
-        ],
-      }),
-    });
+    new IamRolePolicyAttachment(
+      this,
+      "CodeBuildServiceRoleAdministratorAccess",
+      {
+        role: codeBuildRole.name,
+        policyArn: "arn:aws:iam::aws:policy/AdministratorAccess",
+      }
+    );
 
     const codeBuildProject = new CodebuildProject(this, "FoodAppDeployer", {
       name: "food-app-deployer",
