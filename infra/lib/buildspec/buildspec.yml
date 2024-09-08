@@ -3,15 +3,14 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Installing Node.js and npm..."
       - apk add --no-cache nodejs npm
-      - echo "Installing cdktf-cli..."
-      - npm install -g cdktf-cli
+      - npm install -g cdktf-cli ts-node
+      - cd infra # infraディレクトリに移動
+      - npm install # プロジェクト依存関係をインストール
+
   build:
     commands:
-      - echo "Deploying stack using CDKTF..."
-      - cd infra
-      - cdktf deploy *stack
+      - cdktf deploy *stack --auto-approve
 
 artifacts:
   files:
