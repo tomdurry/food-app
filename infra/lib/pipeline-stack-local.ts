@@ -102,7 +102,7 @@ export class PipelineStack extends TerraformStack {
               configuration: {
                 ConnectionArn: codeStarConnection.arn,
                 FullRepositoryId: "tomdurry/food-app",
-                BranchName: "aws_ci_cd_#100",
+                BranchName: "main",
               },
             },
           ],
