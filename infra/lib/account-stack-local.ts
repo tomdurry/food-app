@@ -60,6 +60,32 @@ export class AccountStack extends TerraformStack {
       policyArn: "arn:aws:iam::aws:policy/AdministratorAccess",
     });
 
+    const mfaRequiredPolicy = new IamPolicy(this, "mfaRequiredPolicy", {
+      name: "MFARequiredPolicy",
+      policy: JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Sid: "RequireMFA",
+            Effect: "Deny",
+            Action: "*",
+            Resource: "*",
+            Condition: {
+              BoolIfExists: {
+                "aws:MultiFactorAuthPresent": "false",
+              },
+            },
+          },
+        ],
+      }),
+    });
+
+    new IamPolicyAttachment(this, "mfaRequiredPolicyAttachment", {
+      name: "MFARequiredPolicyAttachment",
+      users: [adminUser.name],
+      policyArn: mfaRequiredPolicy.arn,
+    });
+
     const watcher = new IamUser(this, "watcher", {
       name: "watcher",
     });
