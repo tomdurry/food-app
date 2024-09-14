@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - cd infra/terraform/aws/environments/dev
+
+  build:
+    commands:
+      - terraform apply --auto-approve
+
+artifacts:
+  files:
+    - "**/*"
