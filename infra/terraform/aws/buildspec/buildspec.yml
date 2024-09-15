@@ -8,7 +8,7 @@ phases:
   build:
     commands:
       - terraform init
-      - terraform apply --auto-approve
+      - terraform apply -var="aws_profile="
 
 artifacts:
   files:
