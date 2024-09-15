@@ -15,13 +15,18 @@ terraform {
 # Provider
 # ---------------------------------------------
 provider "aws" {
-  profile = "terraform"
+  profile = var.aws_profile != "" ? var.aws_profile : null
   region  = "ap-northeast-1"
 }
 
 # ---------------------------------------------
 # Variables
 # ---------------------------------------------
+variable "aws_profile" {
+  type    = string
+  default = "terraform"
+}
+
 variable "project" {
   type = string
 }
