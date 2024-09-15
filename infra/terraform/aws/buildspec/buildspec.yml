@@ -9,7 +9,3 @@ phases:
     commands:
       - terraform init
       - terraform apply -var="aws_profile=" -auto-approve
-
-artifacts:
-  files:
-    - "**/*"
