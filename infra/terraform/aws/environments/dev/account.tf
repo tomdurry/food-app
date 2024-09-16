@@ -18,30 +18,14 @@ resource "aws_iam_role" "AdministratorRole" {
   })
 }
 
-resource "aws_iam_policy" "adminAssumeRolePolicy" {
-  name = "AdminAssumeRolePolicy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action   = "sts:AssumeRole"
-        Effect   = "Allow"
-        Resource = aws_iam_role.AdministratorRole.arn
-      }
-    ]
-  })
-}
-
-resource "aws_iam_policy_attachment" "adminUserAssumeRolePolicyAttachment" {
-  name       = "AdminUserAssumeRolePolicyAttachment"
-  users      = [aws_iam_user.AdministratorUser.name]
-  policy_arn = aws_iam_policy.adminAssumeRolePolicy.arn
-}
-
-resource "aws_iam_policy_attachment" "adminRolePolicyAttachment" {
-  name       = "AdminRolePolicyAttachment"
-  roles      = [aws_iam_role.AdministratorRole.name]
+resource "aws_iam_role_policy_attachment" "admin_role_policy_attachment" {
+  role       = aws_iam_role.AdministratorRole.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+resource "aws_iam_user_policy_attachment" "mfa_required_policy_attachment" {
+  user       = aws_iam_user.AdministratorUser.name
+  policy_arn = aws_iam_policy.mfaRequiredPolicy.arn
 }
 
 resource "aws_iam_policy" "mfaRequiredPolicy" {
@@ -64,12 +48,6 @@ resource "aws_iam_policy" "mfaRequiredPolicy" {
   })
 }
 
-resource "aws_iam_policy_attachment" "mfaRequiredPolicyAttachment" {
-  name       = "MFARequiredPolicyAttachment"
-  users      = [aws_iam_user.AdministratorUser.name]
-  policy_arn = aws_iam_policy.mfaRequiredPolicy.arn
-}
-
 resource "aws_iam_user" "watcher" {
   name = "watcher"
 }
@@ -89,29 +67,7 @@ resource "aws_iam_role" "WatcherRole" {
     ]
   })
 }
-
-resource "aws_iam_policy" "watchAssumeRolePolicy" {
-  name = "WatchAssumeRolePolicy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action   = "sts:AssumeRole"
-        Effect   = "Allow"
-        Resource = aws_iam_role.WatcherRole.arn
-      }
-    ]
-  })
-}
-
-resource "aws_iam_policy_attachment" "watchUserAssumeRolePolicyAttachment" {
-  name       = "WatchUserAssumeRolePolicyAttachment"
-  users      = [aws_iam_user.watcher.name]
-  policy_arn = aws_iam_policy.watchAssumeRolePolicy.arn
-}
-
-resource "aws_iam_policy_attachment" "watchRolePolicyAttachment" {
-  name       = "WatchRolePolicyAttachment"
-  roles      = [aws_iam_role.WatcherRole.name]
+resource "aws_iam_role_policy_attachment" "watch_role_policy_attachment" {
+  role       = aws_iam_role.WatcherRole.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
