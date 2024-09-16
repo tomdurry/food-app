@@ -13,39 +13,39 @@ resource "aws_iam_role" "AdministratorRole" {
         Principal = {
           AWS = aws_iam_user.AdministratorUser.arn
         }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "admin_role_policy_attachment" {
-  role       = aws_iam_role.AdministratorRole.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-resource "aws_iam_user_policy_attachment" "mfa_required_policy_attachment" {
-  user       = aws_iam_user.AdministratorUser.name
-  policy_arn = aws_iam_policy.mfaRequiredPolicy.arn
-}
-
-resource "aws_iam_policy" "mfaRequiredPolicy" {
-  name = "MFARequiredPolicy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid      = "RequireMFA"
-        Effect   = "Deny"
-        Action   = "*"
-        Resource = "*"
         Condition = {
-          BoolIfExists = {
-            "aws:MultiFactorAuthPresent" = "false"
+          Bool = {
+            "aws:MultiFactorAuthPresent" = "true"
           }
         }
       }
     ]
   })
+}
+
+resource "aws_iam_policy" "assume_role_policy" {
+  name        = "AssumeRolePolicy"
+  description = "Policy to allow assuming the AdministratorRole"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sts:AssumeRole"
+        Resource = aws_iam_role.AdministratorRole.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_user_policy_attachment" "assume_role_policy_attachment" {
+  user       = aws_iam_user.AdministratorUser.name
+  policy_arn = aws_iam_policy.assume_role_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "admin_role_policy_attachment" {
+  role       = aws_iam_role.AdministratorRole.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 resource "aws_iam_user" "watcher" {
