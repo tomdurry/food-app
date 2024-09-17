@@ -40,7 +40,7 @@ resource "aws_iam_policy" "administrator_assume_role_policy" {
 
 resource "aws_iam_user_policy_attachment" "administrator_assume_role_policy_attachment" {
   user       = aws_iam_user.AdministratorUser.name
-  policy_arn = aws_iam_policy.assume_role_policy.arn
+  policy_arn = aws_iam_policy.administrator_assume_role_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "admin_role_policy_attachment" {
@@ -90,7 +90,7 @@ resource "aws_iam_policy" "watcher_assume_role_policy" {
 
 resource "aws_iam_user_policy_attachment" "Watcher_assume_role_policy_attachment" {
   user       = aws_iam_user.WatcherUser.name
-  policy_arn = aws_iam_policy.assume_role_policy.arn
+  policy_arn = aws_iam_policy.watcher_assume_role_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "watch_role_policy_attachment" {
