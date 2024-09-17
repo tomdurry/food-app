@@ -23,8 +23,8 @@ resource "aws_iam_role" "AdministratorRole" {
   })
 }
 
-resource "aws_iam_policy" "assume_role_policy" {
-  name        = "AssumeRolePolicy"
+resource "aws_iam_policy" "administrator_assume_role_policy" {
+  name        = "AdministratorAssumeRolePolicy"
   description = "Policy to allow assuming the AdministratorRole"
   policy = jsonencode({
     Version = "2012-10-17"
@@ -38,7 +38,7 @@ resource "aws_iam_policy" "assume_role_policy" {
   })
 }
 
-resource "aws_iam_user_policy_attachment" "assume_role_policy_attachment" {
+resource "aws_iam_user_policy_attachment" "administrator_assume_role_policy_attachment" {
   user       = aws_iam_user.AdministratorUser.name
   policy_arn = aws_iam_policy.assume_role_policy.arn
 }
@@ -73,8 +73,8 @@ resource "aws_iam_role" "WatcherRole" {
   })
 }
 
-resource "aws_iam_policy" "assume_role_policy" {
-  name        = "AssumeRolePolicy"
+resource "aws_iam_policy" "watcher_assume_role_policy" {
+  name        = "WatcherAssumeRolePolicy"
   description = "Policy to allow assuming the WatcherRole"
   policy = jsonencode({
     Version = "2012-10-17"
@@ -88,7 +88,7 @@ resource "aws_iam_policy" "assume_role_policy" {
   })
 }
 
-resource "aws_iam_user_policy_attachment" "assume_role_policy_attachment" {
+resource "aws_iam_user_policy_attachment" "Watcher_assume_role_policy_attachment" {
   user       = aws_iam_user.WatcherUser.name
   policy_arn = aws_iam_policy.assume_role_policy.arn
 }
