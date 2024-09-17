@@ -48,8 +48,8 @@ resource "aws_iam_role_policy_attachment" "admin_role_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-resource "aws_iam_user" "watcher" {
-  name = "watcher"
+resource "aws_iam_user" "WatcherUser" {
+  name = "Watcher"
 }
 
 resource "aws_iam_role" "WatcherRole" {
@@ -61,12 +61,38 @@ resource "aws_iam_role" "WatcherRole" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          AWS = aws_iam_user.watcher.arn
+          AWS = aws_iam_user.WatcherUser.arn
+        }
+        Condition = {
+          Bool = {
+            "aws:MultiFactorAuthPresent" = "true"
+          }
         }
       }
     ]
   })
 }
+
+resource "aws_iam_policy" "assume_role_policy" {
+  name        = "AssumeRolePolicy"
+  description = "Policy to allow assuming the WatcherRole"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sts:AssumeRole"
+        Resource = aws_iam_role.WatcherRole.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_user_policy_attachment" "assume_role_policy_attachment" {
+  user       = aws_iam_user.WatcherUser.name
+  policy_arn = aws_iam_policy.assume_role_policy.arn
+}
+
 resource "aws_iam_role_policy_attachment" "watch_role_policy_attachment" {
   role       = aws_iam_role.WatcherRole.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
