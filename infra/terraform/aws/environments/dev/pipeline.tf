@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_admin_policy" {
 
 resource "aws_codebuild_project" "food_app_deployer" {
   name         = "food-app-deployer"
-  service_role = aws_iam_role.codebuild_role.arn # local変数を直接参照に変更
+  service_role = aws_iam_role.codebuild_role.arn
 
   source {
     type      = "CODEPIPELINE"
@@ -40,12 +40,18 @@ resource "aws_codebuild_project" "food_app_deployer" {
     compute_type = "BUILD_GENERAL1_SMALL"
     image        = "hashicorp/terraform:latest"
     type         = "LINUX_CONTAINER"
+
+    environment_variable {
+      name  = "ENV"
+      value = "dev"
+    }
   }
 
   artifacts {
     type = "CODEPIPELINE"
   }
 }
+
 
 resource "aws_s3_bucket" "food_app_artifact_bucket" {
   bucket        = "food-app-artifact-bucket"
