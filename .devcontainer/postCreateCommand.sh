@@ -22,13 +22,62 @@ go install github.com/go-delve/delve/cmd/dlv@latest &
 
 # AWS CLI
 {
+    sudo apt-get install -y unzip
     curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
     unzip -o awscliv2.zip
     chmod +x ./aws/install
-    chmod -R 755 ./aws
     sudo ./aws/install
+    sudo chmod +x /usr/local/bin/aws
     rm -f awscliv2.zip
     rm -rf ./aws
+} &
+
+# kubectl
+{
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
+    chmod +x kubectl
+    sudo mv kubectl /usr/local/bin/
+    rm kubectl
+
+} &
+
+# eksctl
+{
+    ARCH=arm64
+    PLATFORM=$(uname -s)_$ARCH
+    curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+    curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+    tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+    sudo mv /tmp/eksctl /usr/local/bin
+} &
+
+# docker-compose
+{
+    sudo apt-get update
+    sudo apt-get install -y docker-compose
+} &
+
+# kubectx と kubens
+{
+    sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+    sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+    sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+} &
+
+# kube-ps1
+{
+    sudo git clone https://github.com/jonmosco/kube-ps1 /opt/kube-ps1
+} &
+
+# stern
+{
+    go install github.com/stern/stern@latest
+} &
+
+# Helm
+{
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 } &
 
 wait
