@@ -25,7 +25,8 @@
 				"ICS.japanese-proofreading",
 				"yzhang.markdown-all-in-one",
 				"ms-vscode.go",
-				"HashiCorp.terraform"
+				"HashiCorp.terraform",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
 			]
 		}
 	},
