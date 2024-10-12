@@ -28,22 +28,22 @@ resource "aws_iam_role_policy_attachment" "codebuild_admin_policy" {
 }
 
 resource "aws_codebuild_project" "food_app_deployer" {
-  name         = "food-app-deployer"
+  name         = "${var.project_name}-deployer"
   service_role = aws_iam_role.codebuild_role.arn
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = "infra/terraform/aws/buildspec/buildspec.yml"
+    buildspec = var.buildspec_file_path
   }
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"
-    image        = "hashicorp/terraform:latest"
+    image        = var.codebuild_image
     type         = "LINUX_CONTAINER"
 
     environment_variable {
       name  = "ENV"
-      value = "dev"
+      value = var.environment
     }
   }
 
@@ -52,19 +52,18 @@ resource "aws_codebuild_project" "food_app_deployer" {
   }
 }
 
-
 resource "aws_s3_bucket" "food_app_artifact_bucket" {
-  bucket        = "food-app-artifact-bucket"
+  bucket        = var.artifact_bucket_name
   force_destroy = true
 }
 
 resource "aws_codestarconnections_connection" "codestar_connection" {
-  name          = "GitHubConnection"
+  name          = var.codestar_connection_name
   provider_type = "GitHub"
 }
 
 resource "aws_codepipeline" "food_app_pipeline" {
-  name     = "food-app-pipeline"
+  name     = "${var.project_name}-pipeline"
   role_arn = aws_iam_role.codebuild_role.arn
 
   artifact_store {
@@ -85,8 +84,8 @@ resource "aws_codepipeline" "food_app_pipeline" {
 
       configuration = {
         ConnectionArn    = aws_codestarconnections_connection.codestar_connection.arn
-        FullRepositoryId = "tomdurry/food-app"
-        BranchName       = "main"
+        FullRepositoryId = var.repository_name
+        BranchName       = var.branch_name
       }
     }
   }
