@@ -13,16 +13,10 @@ resource "aws_iam_role" "AdministratorRole" {
         Principal = {
           AWS = aws_iam_user.AdministratorUser.arn
         }
-        Condition = {
-          Bool = {
-            "aws:MultiFactorAuthPresent" = "true"
-          }
-        }
       }
     ]
   })
 }
-
 resource "aws_iam_role_policy_attachment" "admin_role_policy_attachment" {
   role       = aws_iam_role.AdministratorRole.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
