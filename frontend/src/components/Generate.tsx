@@ -29,7 +29,7 @@ export const Generate = () => {
     }))
 
     const response = await fetch(
-      'https://ent75yb360.execute-api.ap-northeast-1.amazonaws.com/generate-recipe',
+      'https://0bq5egflid.execute-api.ap-northeast-1.amazonaws.com/generate-recipe',
       {
         method: 'POST',
         headers: {
