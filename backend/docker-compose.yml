@@ -1,15 +1,30 @@
 version: "3.8"
 services:
-  dev-postgres:
-    image: postgres:15.1-alpine
+  go-app:
+    build: .
     ports:
-      - 5434:5432
+      - "8080:8080"
     environment:
-      POSTGRES_USER: yukihiro
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: yukihiro
-    restart: always
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=yukihiro
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=yukihiro
+    depends_on:
+      - postgres
     networks:
       - lesson
+
+  postgres:
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_USER=yukihiro
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=yukihiro
+    ports:
+      - "5434:5432"
+    networks:
+      - lesson
+
 networks:
   lesson:
