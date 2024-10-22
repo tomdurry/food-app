@@ -1,18 +1,73 @@
 module "network" {
-  source               = "../../modules/network"
-  vpc_cidr             = var.vpc_cidr
-  public_subnet_cidrs  = var.public_subnet_cidrs
-  private_subnet_cidrs = var.private_subnet_cidrs
-  availability_zones   = var.availability_zones
-  service_endpoints    = var.service_endpoints
+  source                    = "../../modules/network"
+  project                   = var.project
+  environment               = var.environment
+  vpc_cidr                  = var.vpc_cidr
+  enable_dns_support        = var.enable_dns_support
+  enable_dns_hostnames      = var.enable_dns_hostnames
+  public_subnet_cidrs       = var.public_subnet_cidrs
+  private_subnet_cidrs      = var.private_subnet_cidrs
+  availability_zones        = var.availability_zones
+  service_endpoints         = var.service_endpoints
+  public_subnet_count       = var.public_subnet_count
+  private_subnet_count      = var.private_subnet_count
+  public_route_table_count  = var.public_route_table_count
+  private_route_table_count = var.private_route_table_count
+  map_public_ip_on_launch   = var.map_public_ip_on_launch
+  internet_route_cidr       = var.internet_route_cidr
+  http_port                 = var.http_port
+  ingress_protocol          = var.ingress_protocol
+  ingress_cidr_blocks       = var.ingress_cidr_blocks
+  egress_from_port          = var.egress_from_port
+  egress_to_port            = var.egress_to_port
+  egress_protocol           = var.egress_protocol
+  egress_cidr_blocks        = var.egress_cidr_blocks
+}
+
+module "role" {
+  source                                = "../../modules/role"
+  project                               = var.project
+  environment                           = var.environment
+  eks_cluster_policy_arns               = var.eks_cluster_policy_arns
+  fargate_pod_execution_role_policy_arn = var.fargate_pod_execution_role_policy_arn
+}
+
+module "ecr" {
+  source               = "../../modules/container/ecr"
+  project              = var.project
+  environment          = var.environment
+  image_tag_mutability = var.image_tag_mutability
+  scan_on_push         = var.scan_on_push
+}
+
+module "eks-cluster" {
+  source          = "../../modules/container/eks-cluster"
+  cluster_name    = var.cluster_name
+  eks_role_arn    = module.role.eks_cluster_role_arn
+  cluster_version = var.cluster_version
+  vpc_id          = module.network.vpc_id
+  subnet_ids      = module.network.private_subnets
+  depends_on = [
+    module.role
+  ]
+}
+
+module "fargate_profile" {
+  source                 = "../../modules/container/fargate-profile"
+  project                = var.project
+  environment            = var.environment
+  cluster_name           = module.eks-cluster.cluster_name
+  pod_execution_role_arn = module.role.fargate_pod_execution_role_arn
+  subnet_ids             = module.network.private_subnets
+  depends_on = [
+    module.role,
+    module.eks-cluster
+  ]
 }
 
 module "recipeApi" {
-  source             = "../../modules/recipeApi"
-  environment        = var.environment
-  project            = var.project
+  source             = "../../modules/recipe-api"
   lambda_key         = var.lambda_key
   lambda_bucket_name = var.lambda_bucket_name
   openai_api_key     = var.openai_api_key
 }
-
