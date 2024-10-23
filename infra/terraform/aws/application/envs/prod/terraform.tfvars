@@ -57,9 +57,36 @@ fargate_pod_execution_role_policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargat
 ########################################
 # Lambda setting
 ########################################
-lambda_key         = "mypackage.zip"
-lambda_bucket_name = "lambda-zip-food-app-prod"
-openai_api_key     = "sk-proj-xMOUvQHg1HcwnP9OZKJUT3BlbkFJqXbDGM2Gdr23UwDlqQK0"
+lambda_bucket_name   = "food-app-generate-lambda-bucket"
+lambda_key           = "mypackage.zip"
+lambda_role_name     = "lambda-role"
+lambda_function_name = "recipe_generate"
+lambda_handler       = "recipe_generate.lambda_handler"
+lambda_runtime       = "python3.12"
+lambda_timeout       = 60
+lambda_architectures = ["arm64"]
+openai_api_key       = "sk-proj-xMOUvQHg1HcwnP9OZKJUT3BlbkFJqXbDGM2Gdr23UwDlqQK0"
+
+########################################
+# API Gateway setting
+########################################
+api_name               = "recipe-generate-api"
+protocol_type          = "HTTP"
+cors_allow_origins     = ["*"]
+cors_allow_methods     = ["POST"]
+cors_allow_headers     = ["Content-Type"]
+cors_max_age           = 3600
+integration_type       = "AWS_PROXY"
+payload_format_version = "2.0"
+route_key              = "POST /generate-recipe"
+stage_name             = "$default"
+auto_deploy            = true
+statement_id           = "AllowApiGatewayInvoke"
+lambda_action          = "lambda:InvokeFunction"
+principal              = "apigateway.amazonaws.com"
+ssm_parameter_name     = "/recipe-generate/api-url"
+ssm_parameter_type     = "SecureString"
+
 
 ########################################
 # ECR setting
