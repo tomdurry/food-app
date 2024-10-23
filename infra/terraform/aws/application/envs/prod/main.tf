@@ -65,9 +65,41 @@ module "fargate_profile" {
   ]
 }
 
-module "recipeApi" {
-  source             = "../../modules/recipe-api"
-  lambda_key         = var.lambda_key
-  lambda_bucket_name = var.lambda_bucket_name
-  openai_api_key     = var.openai_api_key
+module "lambda" {
+  source               = "../../modules/lambda"
+  lambda_key           = var.lambda_key
+  lambda_bucket_name   = var.lambda_bucket_name
+  lambda_role_name     = var.lambda_role_name
+  lambda_function_name = var.lambda_function_name
+  lambda_handler       = var.lambda_handler
+  lambda_runtime       = var.lambda_runtime
+  lambda_timeout       = var.lambda_timeout
+  lambda_architectures = var.lambda_architectures
+  openai_api_key       = var.openai_api_key
+}
+
+module "api_gateway" {
+  source                 = "../../modules/api-gateway"
+  environment            = var.environment
+  api_name               = var.api_name
+  protocol_type          = var.protocol_type
+  cors_allow_origins     = var.cors_allow_origins
+  cors_allow_methods     = var.cors_allow_methods
+  cors_allow_headers     = var.cors_allow_headers
+  cors_max_age           = var.cors_max_age
+  integration_type       = var.integration_type
+  integration_uri        = module.lambda.lambda_invoke_arn
+  payload_format_version = var.payload_format_version
+  route_key              = var.route_key
+  stage_name             = var.stage_name
+  auto_deploy            = var.auto_deploy
+  statement_id           = var.statement_id
+  lambda_action          = var.lambda_action
+  function_name          = module.lambda.lambda_function_name
+  principal              = var.principal
+  ssm_parameter_name     = var.ssm_parameter_name
+  ssm_parameter_type     = var.ssm_parameter_type
+  depends_on = [
+    module.lambda
+  ]
 }

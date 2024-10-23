@@ -155,20 +155,134 @@ variable "fargate_pod_execution_role_policy_arn" {
 }
 
 ########################################
+# Api Gateway  variable
+########################################
+variable "api_name" {
+  description = "The name of the API Gateway"
+  default     = "recipe-generate-api"
+}
+
+variable "protocol_type" {
+  description = "The protocol type for the API Gateway"
+  default     = "HTTP"
+}
+
+variable "cors_allow_origins" {
+  description = "List of origins allowed for CORS"
+  default     = ["*"]
+}
+
+variable "cors_allow_methods" {
+  description = "List of HTTP methods allowed for CORS"
+  default     = ["POST"]
+}
+
+variable "cors_allow_headers" {
+  description = "List of headers allowed for CORS"
+  default     = ["Content-Type"]
+}
+
+variable "cors_max_age" {
+  description = "Max age for CORS preflight requests"
+  default     = 3600
+}
+
+variable "integration_type" {
+  description = "The type of integration for API Gateway"
+  default     = "AWS_PROXY"
+}
+
+variable "payload_format_version" {
+  description = "The payload format version for the integration"
+  default     = "2.0"
+}
+
+variable "route_key" {
+  description = "The route key for the API Gateway route"
+  default     = "POST /generate-recipe"
+}
+
+variable "stage_name" {
+  description = "The name of the API Gateway stage"
+  default     = "$default"
+}
+
+variable "auto_deploy" {
+  description = "Whether the stage should auto-deploy"
+  default     = true
+}
+
+variable "statement_id" {
+  description = "The statement ID for the Lambda permission"
+  default     = "AllowApiGatewayInvoke"
+}
+
+variable "lambda_action" {
+  description = "The action for the Lambda permission"
+  default     = "lambda:InvokeFunction"
+}
+
+variable "principal" {
+  description = "The principal for the Lambda permission"
+  default     = "apigateway.amazonaws.com"
+}
+
+variable "ssm_parameter_name" {
+  description = "The name of the SSM parameter to store the API URL"
+  default     = "/recipe-generate/api-url"
+}
+
+variable "ssm_parameter_type" {
+  description = "The type of the SSM parameter"
+  default     = "SecureString"
+}
+
+
+########################################
 # Lambda  variable
 ########################################
-variable "lambda_key" {
-  description = "The S3 key for the Lambda function ZIP file"
+variable "lambda_bucket_name" {
+  description = "Name of the S3 bucket for Lambda functions"
   type        = string
 }
 
-variable "lambda_bucket_name" {
-  description = "The name of the S3 bucket where the Lambda ZIP file is stored"
+variable "lambda_key" {
+  description = "Key of the Lambda function zip file in the S3 bucket"
   type        = string
+}
+
+variable "lambda_role_name" {
+  description = "Name of the IAM role for the Lambda function"
+  default     = "lambda-role"
+}
+
+variable "lambda_function_name" {
+  description = "Name of the Lambda function"
+  default     = "recipe_generate"
+}
+
+variable "lambda_handler" {
+  description = "Handler for the Lambda function"
+  default     = "recipe_generate.lambda_handler"
+}
+
+variable "lambda_runtime" {
+  description = "Runtime for the Lambda function"
+  default     = "python3.12"
+}
+
+variable "lambda_timeout" {
+  description = "Timeout for the Lambda function in seconds"
+  default     = 60
+}
+
+variable "lambda_architectures" {
+  description = "Architectures for the Lambda function"
+  default     = ["arm64"]
 }
 
 variable "openai_api_key" {
-  description = "The OpenAI API key for accessing the API"
+  description = "API key for OpenAI"
   type        = string
   sensitive   = true
 }
