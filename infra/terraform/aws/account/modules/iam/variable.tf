@@ -1,12 +1,4 @@
 ########################################
-# Environment variable
-########################################
-variable "aws_profile" {
-  type    = string
-  default = "terraform"
-}
-
-########################################
 # Account variable
 ########################################
 variable "administrator_user_name" {
@@ -62,4 +54,3 @@ variable "mfa_policy_name" {
   type        = string
   default     = "MFASetupPolicy"
 }
-
