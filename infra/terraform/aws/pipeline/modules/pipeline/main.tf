@@ -49,6 +49,10 @@ resource "aws_codebuild_project" "docker_build_project" {
     privileged_mode = true
 
     environment_variable {
+      name  = var.environment_variable_name
+      value = var.environment
+    }
+    environment_variable {
       name  = "REPOSITORY_URI"
       value = "039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/${var.project}-ecr-repository-${var.environment}"
     }
