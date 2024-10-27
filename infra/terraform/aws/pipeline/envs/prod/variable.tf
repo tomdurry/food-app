@@ -30,12 +30,6 @@ variable "admin_policy_arn" {
   type        = string
 }
 
-variable "codebuild_project_name" {
-  description = "Suffix for the CodeBuild project name"
-  type        = string
-  default     = "food-app-deployer"
-}
-
 variable "source_type" {
   description = "The source type for the CodeBuild project (e.g., CODEPIPELINE, GITHUB)"
   type        = string
@@ -207,5 +201,5 @@ variable "build_input_artifacts" {
 variable "build_output_artifacts" {
   description = "The output artifacts for the build action"
   type        = list(string)
-  default     = ["build_output"]
+  default     = ["SourceArtifact"]
 }

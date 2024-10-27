@@ -4,7 +4,6 @@ module "pipeline" {
   environment               = var.environment
   iam_role_name             = var.iam_role_name
   admin_policy_arn          = var.admin_policy_arn
-  codebuild_project_name    = var.codebuild_project_name
   source_type               = var.source_type
   buildspec_file_path       = var.buildspec_file_path
   codebuild_image           = var.codebuild_image
