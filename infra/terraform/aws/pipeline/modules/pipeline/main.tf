@@ -56,6 +56,15 @@ resource "aws_codebuild_project" "docker_build_project" {
       name  = "REPOSITORY_URI"
       value = "039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/${var.project}-ecr-repository-${var.environment}"
     }
+    environment_variable {
+      name  = "DOCKER_HUB_USERNAME"
+      value = "tomdurry"
+    }
+    environment_variable {
+      name  = "DOCKER_HUB_PASSWORD"
+      value = "neCQYjwQJJcft9KcBC.e"
+    }
+
   }
 
   artifacts {
