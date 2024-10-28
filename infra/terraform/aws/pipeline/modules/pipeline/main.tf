@@ -83,7 +83,7 @@ resource "aws_codebuild_project" "eks_deploy_project" {
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"
-    image        = "aws/codebuild/standard:6.0"
+    image        = "aws/codebuild/standard:7.0"
     type         = "LINUX_CONTAINER"
 
     environment_variable {

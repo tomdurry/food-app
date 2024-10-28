@@ -10,8 +10,9 @@ phases:
       - echo "$DOCKER_HUB_PASSWORD" | docker login --username "$DOCKER_HUB_USERNAME" --password-stdin
       - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com
       - docker build -t food-app-ecr-repository-${ENV} .
-      - docker tag food-app-ecr-repository-${ENV}:latest 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-${ENV}:latest
-      - docker push 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-${ENV}:latest
+      - docker tag food-app-ecr-repository-${ENV}:latest 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-${ENV}:${BUILD_ID}
+      - docker push 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-${ENV}:${BUILD_ID}
+
 
 artifacts:
   files:
