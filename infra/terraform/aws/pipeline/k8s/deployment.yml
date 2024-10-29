@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: food-app
-  namespace: food-app-prod
+  name: food-app-deployment
+  namespace: prod
 spec:
   replicas: 2
   selector:
