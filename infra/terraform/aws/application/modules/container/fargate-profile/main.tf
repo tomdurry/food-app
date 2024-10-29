@@ -8,7 +8,7 @@ resource "aws_eks_fargate_profile" "this" {
   selector {
     namespace = "${var.project}-${var.environment}"
     labels = {
-      app = "serverless"
+      app = "food-app"
     }
   }
 }
