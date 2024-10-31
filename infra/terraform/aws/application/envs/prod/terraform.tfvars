@@ -28,6 +28,7 @@ service_endpoints = {
 ########################################
 public_subnet_count       = 2
 private_subnet_count      = 2
+nat_gateway_count         = 1
 public_route_table_count  = 2
 private_route_table_count = 2
 map_public_ip_on_launch   = true

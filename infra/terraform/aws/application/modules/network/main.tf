@@ -34,10 +34,33 @@ resource "aws_subnet" "private" {
   }
 }
 
+########################################
+# Internet Gateway
+########################################
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
   tags = {
     Name = "${var.project}-igw-${var.environment}"
+  }
+}
+
+########################################
+# NAT Gateway and Elastic IP
+########################################
+resource "aws_eip" "nat" {
+  count = var.nat_gateway_count
+  vpc   = true
+  tags = {
+    Name = "${var.project}-nat-eip-${count.index + 1}-${var.environment}"
+  }
+}
+
+resource "aws_nat_gateway" "nat" {
+  count         = var.nat_gateway_count
+  allocation_id = aws_eip.nat[count.index].id
+  subnet_id     = aws_subnet.public[count.index].id
+  tags = {
+    Name = "${var.project}-nat-gateway-${count.index + 1}-${var.environment}"
   }
 }
 
@@ -68,6 +91,14 @@ resource "aws_route_table" "private" {
   tags = {
     Name = "${var.project}-private-route-table-${count.index + 1}-${var.environment}"
   }
+}
+
+# Route for private subnets to use NAT Gateway for internet access
+resource "aws_route" "private_nat" {
+  count                  = var.private_route_table_count
+  route_table_id         = aws_route_table.private[count.index].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat[count.index % var.nat_gateway_count].id
 }
 
 resource "aws_route_table_association" "private" {
@@ -149,6 +180,9 @@ resource "aws_vpc_endpoint" "s3" {
   }
 }
 
+########################################
+# Security Group
+########################################
 resource "aws_security_group" "allow_http" {
   vpc_id = aws_vpc.main.id
   name   = "${var.project}-vpc-security-group-${var.environment}"

@@ -11,6 +11,7 @@ module "network" {
   service_endpoints         = var.service_endpoints
   public_subnet_count       = var.public_subnet_count
   private_subnet_count      = var.private_subnet_count
+  nat_gateway_count         = var.nat_gateway_count
   public_route_table_count  = var.public_route_table_count
   private_route_table_count = var.private_route_table_count
   map_public_ip_on_launch   = var.map_public_ip_on_launch
