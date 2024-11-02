@@ -66,6 +66,13 @@ module "fargate_profile" {
   ]
 }
 
+module "eks-policy" {
+  source = "../../modules/container/eks-policy"
+  depends_on = [
+    module.eks-cluster
+  ]
+}
+
 module "lambda" {
   source               = "../../modules/lambda"
   lambda_key           = var.lambda_key
