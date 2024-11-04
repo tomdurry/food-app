@@ -20,8 +20,8 @@ provider "aws" {
   region  = "ap-northeast-1"
 }
 provider "kubernetes" {
-  host                   = module.eks_cluster.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks_cluster.cluster_ca_cert)
+  host                   = module.eks-cluster.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks-cluster.cluster_ca_cert)
   exec {
     api_version = "client.authentication.k8s.io/v1"
     command     = "aws"
