@@ -22,10 +22,10 @@ phases:
   build:
     commands:
       - echo "Deploying application to EKS"
-      - kubectl apply -f deployment-go-app.yml
-      - kubectl apply -f statefulset-postgres.yml
-      - kubectl apply -f service-go-app.yml
-      - kubectl apply -f service-postgres.yml
+      - kubectl apply -f k8s/deployment-go-app.yml
+      - kubectl apply -f k8s/statefulset-postgres.yml
+      - kubectl apply -f k8s/service-go-app.yml
+      - kubectl apply -f k8s/service-postgres.yml
       - kubectl apply -f k8s/configmap.yml
 
   post_build:
