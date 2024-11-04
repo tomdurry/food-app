@@ -1,19 +1,17 @@
 version: 0.2
 
 phases:
-  pre_build:
+  install:
     commands:
-      - cd infra/terraform/aws/application/envs/${ENV}
       - apk update && apk add curl
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       - unzip awscliv2.zip
       - ./aws/install
-      - find / -name aws 2>/dev/null
-      - export PATH=$PATH:/usr/local/bin
       - aws --version
 
   build:
     commands:
+      - cd infra/terraform/aws/application/envs/${ENV}
       - terraform init
       - terraform apply -var="aws_profile=" -auto-approve
 
