@@ -3,7 +3,7 @@
 ########################################
 variable "aws_profile" {
   type    = string
-  default = "terraform"
+  default = "default"
 }
 
 variable "project" {

@@ -16,7 +16,6 @@ phases:
     commands:
       - cd infra/terraform/aws/pipeline
       - echo "Authenticating with AWS EKS cluster"
-      - aws eks update-kubeconfig --region ap-northeast-1 --name $CLUSTER_NAME --role-arn arn:aws:iam::039725305879:role/AdministratorRole
       - kubectl get namespace prod || kubectl create namespace prod
 
   build:
