@@ -26,7 +26,6 @@ phases:
       - kubectl apply -f k8s/service.yml
       - kubectl apply -f k8s/configmap.yml
 
-
   post_build:
     commands:
       - echo "Deployment complete"
