@@ -2,15 +2,14 @@ version: 0.2
 
 phases:
   pre_build:
-  commands:
-    - cd infra/terraform/aws/application/envs/${ENV}
-    - apk update && apk add curl
-    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    - unzip awscliv2.zip
-    - ./aws/install
-    - export PATH=$PATH:/usr/local/bin
-    - aws --version
-
+    commands:
+      - cd infra/terraform/aws/application/envs/${ENV}
+      - apk update && apk add curl
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - ./aws/install
+      - export PATH=$PATH:/usr/local/bin
+      - aws --version
 
   build:
     commands:
