@@ -6,9 +6,11 @@ phases:
       - apk update && apk add curl
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       - unzip awscliv2.zip
-      - sudo chmod +x /usr/local/bin/aws
+      - chmod +x /usr/local/bin/aws
       - ./aws/install
-      - aws --version
+      - /usr/local/bin/aws --version
+      # - apk update && apk add aws-cli
+      # - aws --version 
 
   build:
     commands:
