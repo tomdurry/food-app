@@ -73,12 +73,12 @@ module "eks-policy" {
   ]
 }
 
-module "configmap" {
-  source = "../../modules/container/configmap"
-  depends_on = [
-    module.eks-cluster
-  ]
-}
+# module "configmap" {
+#   source = "../../modules/container/configmap"
+#   depends_on = [
+#     module.eks-cluster
+#   ]
+# }
 
 module "lambda" {
   source               = "../../modules/lambda"
