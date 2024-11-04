@@ -49,7 +49,6 @@ resource "aws_internet_gateway" "gw" {
 ########################################
 resource "aws_eip" "nat" {
   count = var.nat_gateway_count
-  vpc   = true
   tags = {
     Name = "${var.project}-nat-eip-${count.index + 1}-${var.environment}"
   }
