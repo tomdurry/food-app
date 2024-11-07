@@ -11,4 +11,8 @@ resource "aws_eks_fargate_profile" "this" {
       app = "go-app"
     }
   }
+
+  selector {
+    namespace = "kube-system"
+  }
 }
