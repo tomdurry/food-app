@@ -22,11 +22,15 @@ phases:
       - kubectl get namespace prod || kubectl create namespace prod
       - echo "Retrieving RDS endpoint from Parameter Store"
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
+      - echo "Adding Helm labels and annotations to existing ConfigMap"
+      - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app || echo "ConfigMap aws-auth not found"
+      - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod || echo "ConfigMap aws-auth not found"
+      - kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm || echo "ConfigMap aws-auth not found"
 
   build:
     commands:
       - echo "Deploying application to EKS with Helm"
-      - helm upgrade --install food-app ./k8s --set postgresHost=$POSTGRES_HOST
+      - helm upgrade --install go-app ./k8s --set postgresHost=$POSTGRES_HOST
 
   post_build:
     commands:
