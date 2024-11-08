@@ -24,7 +24,7 @@ resource "aws_db_instance" "postgres" {
   instance_class         = "db.t4g.micro"
   username               = "yukihiro"
   password               = "Yuki3769"
-  parameter_group_name   = "default.postgres15"
+  parameter_group_name   = "default.postgres16"
   skip_final_snapshot    = true
   publicly_accessible    = false
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
