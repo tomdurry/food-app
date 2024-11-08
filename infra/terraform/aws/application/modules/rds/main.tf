@@ -20,7 +20,7 @@ resource "aws_security_group" "rds_sg" {
 resource "aws_db_instance" "postgres" {
   allocated_storage      = 20
   engine                 = "postgres"
-  engine_version         = "16.4-R2"
+  engine_version         = "16.3"
   instance_class         = "db.t4g.micro"
   username               = "yukihiro"
   password               = "Yuki3769"
