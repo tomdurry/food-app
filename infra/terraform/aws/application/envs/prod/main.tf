@@ -25,6 +25,13 @@ module "network" {
   egress_cidr_blocks        = var.egress_cidr_blocks
 }
 
+module "rds" {
+  source     = "../../modules/rds"
+  vpc_id     = module.network.vpc_id
+  subnet_ids = module.network.private_subnets
+}
+
+
 module "role" {
   source                                = "../../modules/role"
   project                               = var.project

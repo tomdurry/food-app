@@ -11,6 +11,8 @@ phases:
       - curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.18.9/2021-01-05/bin/linux/amd64/aws-iam-authenticator
       - chmod +x aws-iam-authenticator
       - mv aws-iam-authenticator /usr/local/bin/
+      - echo "Installing Helm"
+      - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
   pre_build:
     commands:
@@ -18,15 +20,13 @@ phases:
       - echo "Authenticating with AWS EKS cluster"
       - aws eks update-kubeconfig --region ap-northeast-1 --name $CLUSTER_NAME
       - kubectl get namespace prod || kubectl create namespace prod
+      - echo "Retrieving RDS endpoint from Parameter Store"
+      - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
 
   build:
     commands:
-      - echo "Deploying application to EKS"
-      - kubectl apply -f k8s/deployment-go-app.yml
-      - kubectl apply -f k8s/statefulset-postgres.yml
-      - kubectl apply -f k8s/service-go-app.yml
-      - kubectl apply -f k8s/service-postgres.yml
-      - kubectl apply -f k8s/configmap.yml
+      - echo "Deploying application to EKS with Helm"
+      - helm upgrade --install go-app ./k8s --set postgresHost=$POSTGRES_HOST
 
   post_build:
     commands:

@@ -15,20 +15,20 @@ spec:
     spec:
       containers:
         - name: go-app-container
-          image: 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-prod:latest
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 8080
           env:
             - name: POSTGRES_HOST
-              value: "postgres-0.postgres-service.prod.svc.cluster.local"
+              value: "{{ .Values.postgresHost }}"
             - name: POSTGRES_PORT
-              value: "5432"
+              value: "{{ .Values.postgresPort }}"
             - name: POSTGRES_USER
-              value: "yukihiro"
+              value: "{{ .Values.postgresUser }}"
             - name: POSTGRES_PASSWORD
-              value: "1234"
+              value: "{{ .Values.postgresPassword }}"
             - name: POSTGRES_DB
-              value: "yukihiro"
+              value: "{{ .Values.postgresDb }}"
           resources:
             requests:
               memory: "128Mi"
@@ -36,4 +36,3 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-      restartPolicy: Always
