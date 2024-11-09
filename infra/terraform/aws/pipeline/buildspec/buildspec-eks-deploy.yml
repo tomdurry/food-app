@@ -23,9 +23,14 @@ phases:
       - echo "Retrieving RDS endpoint from Parameter Store"
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
       - echo "Adding Helm labels and annotations to existing ConfigMap"
-      - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app || echo "ConfigMap aws-auth not found"
-      - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod || echo "ConfigMap aws-auth not found"
-      - kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm || echo "ConfigMap aws-auth not found"
+      - |
+        if kubectl get configmap aws-auth -n kube-system; then
+          kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app
+          kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod
+          kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm
+        else
+          echo "ConfigMap aws-auth not found, it will be created by Helm"
+        fi
 
   build:
     commands:
