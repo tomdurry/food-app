@@ -26,7 +26,7 @@ phases:
       - |
         if kubectl get configmap aws-auth -n kube-system; then
           kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app --overwrite
-          kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=default --overwrite
+          kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod --overwrite
           kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm --overwrite
         else
           echo "ConfigMap aws-auth not found, it will be created by Helm"
@@ -35,7 +35,7 @@ phases:
   build:
     commands:
       - echo "Deploying application to EKS with Helm"
-      - helm upgrade --install go-app ./k8s --namespace default --set postgresHost=$POSTGRES_HOST
+      - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST
 
   post_build:
     commands:
