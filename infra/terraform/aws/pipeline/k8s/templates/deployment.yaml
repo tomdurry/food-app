@@ -13,11 +13,6 @@ spec:
       labels:
         app: go-app
     spec:
-      tolerations:
-        - key: "eks.amazonaws.com/compute-type"
-          operator: "Equal"
-          value: "fargate"
-          effect: "NoSchedule"
       containers:
         - name: go-app-container
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
