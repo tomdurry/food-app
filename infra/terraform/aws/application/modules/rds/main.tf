@@ -41,6 +41,6 @@ resource "aws_db_subnet_group" "rds_subnet" {
 resource "aws_ssm_parameter" "rds_endpoint" {
   name        = "/prod/rds_endpoint"
   type        = "String"
-  value       = aws_db_instance.postgres.endpoint
+  value       = aws_db_instance.postgres.address
   description = "RDS endpoint for PostgreSQL instance in production"
 }
