@@ -43,14 +43,3 @@ resource "aws_ssm_parameter" "rds_endpoint" {
   value       = aws_db_instance.postgres.address
   description = "RDS endpoint for PostgreSQL instance in production"
 }
-
-resource "null_resource" "init_db" {
-  provisioner "local-exec" {
-    command = "psql -h ${aws_db_instance.postgres.address} -U yukihiro -c 'CREATE DATABASE yukihiro;'"
-    environment = {
-      PGPASSWORD = "Yuki3769"
-    }
-  }
-
-  depends_on = [aws_db_instance.postgres]
-}
