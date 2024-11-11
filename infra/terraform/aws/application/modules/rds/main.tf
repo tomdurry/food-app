@@ -31,7 +31,6 @@ resource "aws_db_instance" "postgres" {
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.id
 }
 
-
 resource "aws_db_subnet_group" "rds_subnet" {
   name        = "rds-subnet-group"
   subnet_ids  = var.subnet_ids
@@ -43,4 +42,15 @@ resource "aws_ssm_parameter" "rds_endpoint" {
   type        = "String"
   value       = aws_db_instance.postgres.address
   description = "RDS endpoint for PostgreSQL instance in production"
+}
+
+resource "null_resource" "init_db" {
+  provisioner "local-exec" {
+    command = "psql -h ${aws_db_instance.postgres.address} -U yukihiro -c 'CREATE DATABASE yukihiro;'"
+    environment = {
+      PGPASSWORD = "Yuki3769"
+    }
+  }
+
+  depends_on = [aws_db_instance.postgres]
 }
