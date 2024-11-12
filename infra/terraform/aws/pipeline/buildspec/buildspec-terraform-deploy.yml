@@ -1,6 +1,11 @@
 version: 0.2
 
 phases: 
+  install:
+    commands:
+      - sudo apt-get update
+      - sudo apt-get install -y postgresql-client
+
   build:
     commands:
       - cd infra/terraform/aws/application/envs/${ENV}
