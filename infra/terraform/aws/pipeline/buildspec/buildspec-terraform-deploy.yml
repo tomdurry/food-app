@@ -3,8 +3,8 @@ version: 0.2
 phases: 
   install:
     commands:
-      - apt-get update
-      - apt-get install -y postgresql-client
+      - yum update -y
+      - yum install -y postgresql
 
   build:
     commands:
