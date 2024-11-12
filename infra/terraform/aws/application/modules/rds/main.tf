@@ -20,6 +20,7 @@
 resource "aws_security_group" "rds_sg" {
   name   = "rds-sg"
   vpc_id = var.vpc_id
+
   ingress {
     from_port   = 0
     to_port     = 0
@@ -69,7 +70,7 @@ resource "null_resource" "create_database" {
   provisioner "local-exec" {
     command = <<EOT
       export PGPASSWORD=${aws_db_instance.postgres.password}
-      psql -h ${aws_db_instance.postgres.address} -U ${aws_db_instance.postgres.username} -c "CREATE DATABASE yukihiro;"
+      psql -h ${aws_db_instance.postgres.address} -U ${aws_db_instance.postgres.username} -d postgres -c "CREATE DATABASE yukihiro;"
     EOT
   }
 }
