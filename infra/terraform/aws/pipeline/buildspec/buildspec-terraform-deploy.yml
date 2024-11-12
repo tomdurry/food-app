@@ -3,8 +3,8 @@ version: 0.2
 phases: 
   install:
     commands:
-      - yum update -y
-      - yum install -y postgresql
+      - apk update
+      - apk add postgresql-client
 
   build:
     commands:
