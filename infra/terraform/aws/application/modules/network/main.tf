@@ -92,7 +92,6 @@ resource "aws_route_table" "private" {
   }
 }
 
-# Route for private subnets to use NAT Gateway for internet access
 resource "aws_route" "private_nat" {
   count                  = var.private_route_table_count
   route_table_id         = aws_route_table.private[count.index].id
@@ -187,9 +186,9 @@ resource "aws_security_group" "allow_http" {
   name   = "${var.project}-vpc-security-group-${var.environment}"
 
   ingress {
-    from_port   = var.http_port
-    to_port     = var.http_port
-    protocol    = var.ingress_protocol
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
     cidr_blocks = var.ingress_cidr_blocks
   }
 
