@@ -97,6 +97,9 @@ module "lambda-database-creation" {
   source     = "../../modules/lambda/database-creation"
   vpc_id     = module.network.vpc_id
   subnet_ids = module.network.private_subnets
+  depends_on = [
+    module.rds
+  ]
 }
 
 module "api_gateway" {

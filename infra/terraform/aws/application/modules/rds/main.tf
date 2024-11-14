@@ -7,6 +7,7 @@ resource "aws_security_group" "rds_sg" {
     to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    # security_groups = [aws_security_group.lambda_sg.id]
   }
 
   egress {
@@ -44,13 +45,13 @@ resource "aws_ssm_parameter" "rds_endpoint" {
   description = "RDS endpoint for PostgreSQL instance in production"
 }
 
-resource "null_resource" "create_database" {
-  depends_on = [aws_db_instance.postgres]
+# resource "null_resource" "create_database" {
+#   depends_on = [aws_db_instance.postgres]
 
-  provisioner "local-exec" {
-    command = <<EOT
-      export PGPASSWORD=${aws_db_instance.postgres.password}
-      psql -h ${aws_db_instance.postgres.address} -U ${aws_db_instance.postgres.username} -d postgres -c "CREATE DATABASE yukihiro;"
-    EOT
-  }
-}
+#   provisioner "local-exec" {
+#     command = <<EOT
+#       export PGPASSWORD=${aws_db_instance.postgres.password}
+#       psql -h ${aws_db_instance.postgres.address} -U ${aws_db_instance.postgres.username} -d postgres -c "CREATE DATABASE yukihiro;"
+#     EOT
+#   }
+# }
