@@ -121,6 +121,6 @@ module "api_gateway" {
   ssm_parameter_name     = var.ssm_parameter_name
   ssm_parameter_type     = var.ssm_parameter_type
   depends_on = [
-    module.lambda
+    module.lambda-recipe-generation
   ]
 }
