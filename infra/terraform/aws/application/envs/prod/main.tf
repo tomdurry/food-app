@@ -80,8 +80,8 @@ module "eks-policy" {
   ]
 }
 
-module "lambda" {
-  source               = "../../modules/lambda"
+module "lambda-recipe-generation" {
+  source               = "../../modules/lambda/recipe-generation"
   lambda_key           = var.lambda_key
   lambda_bucket_name   = var.lambda_bucket_name
   lambda_role_name     = var.lambda_role_name
@@ -91,6 +91,12 @@ module "lambda" {
   lambda_timeout       = var.lambda_timeout
   lambda_architectures = var.lambda_architectures
   openai_api_key       = var.openai_api_key
+}
+
+module "lambda-database-creation" {
+  source     = "../../modules/lambda/database-creation"
+  vpc_id     = module.network.vpc_id
+  subnet_ids = module.network.private_subnets
 }
 
 module "api_gateway" {
@@ -103,14 +109,14 @@ module "api_gateway" {
   cors_allow_headers     = var.cors_allow_headers
   cors_max_age           = var.cors_max_age
   integration_type       = var.integration_type
-  integration_uri        = module.lambda.lambda_invoke_arn
+  integration_uri        = module.lambda-recipe-generation.lambda_invoke_arn
   payload_format_version = var.payload_format_version
   route_key              = var.route_key
   stage_name             = var.stage_name
   auto_deploy            = var.auto_deploy
   statement_id           = var.statement_id
   lambda_action          = var.lambda_action
-  function_name          = module.lambda.lambda_function_name
+  function_name          = module.lambda-recipe-generation.lambda_function_name
   principal              = var.principal
   ssm_parameter_name     = var.ssm_parameter_name
   ssm_parameter_type     = var.ssm_parameter_type
