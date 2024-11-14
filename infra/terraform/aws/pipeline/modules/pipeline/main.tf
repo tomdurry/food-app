@@ -27,6 +27,14 @@ resource "aws_codebuild_project" "food_app_deployer" {
       name  = var.environment_variable_name
       value = var.environment
     }
+    environment_variable {
+      name  = "DOCKER_HUB_USERNAME"
+      value = "tomdurry"
+    }
+    environment_variable {
+      name  = "DOCKER_HUB_PASSWORD"
+      value = "neCQYjwQJJcft9KcBC.e"
+    }
   }
 
   artifacts {
