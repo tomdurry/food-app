@@ -76,7 +76,7 @@ resource "aws_lambda_function" "create_database_lambda" {
     variables = {
       DB_USERNAME  = "yukihiro"
       DB_PASSWORD  = "Yuki3769"
-      RDS_ENDPOINT = aws_ssm_parameter.rds_endpoint.value
+      RDS_ENDPOINT = data.aws_ssm_parameter.rds_endpoint.value
     }
   }
 
