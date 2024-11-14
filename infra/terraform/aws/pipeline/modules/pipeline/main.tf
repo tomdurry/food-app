@@ -18,9 +18,10 @@ resource "aws_codebuild_project" "food_app_deployer" {
   }
 
   environment {
-    compute_type = var.compute_type
-    image        = var.codebuild_image
-    type         = var.environment_type
+    compute_type    = var.compute_type
+    image           = var.codebuild_image
+    type            = var.environment_type
+    privileged_mode = true
 
     environment_variable {
       name  = var.environment_variable_name
