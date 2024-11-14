@@ -70,7 +70,7 @@ resource "aws_lambda_function" "create_database_lambda" {
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.lambda_repository.repository_url}:latest"
   timeout       = 30
-  architectures = "arm64"
+  architectures = ["arm64"]
 
   environment {
     variables = {
