@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_role" {
-  name = "lambda-rds-access-role"
+  name = "create_database-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -58,8 +58,8 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-resource "aws_iam_role_policy" "lambda_logs_policy_create_log_group" {
-  name = "lambda-logs-policy-create-log-group"
+resource "aws_iam_role_policy" "lambda_logs_policy" {
+  name = "lambda-logs-policy"
   role = aws_iam_role.lambda_role.id
 
   policy = jsonencode({
@@ -73,18 +73,7 @@ resource "aws_iam_role_policy" "lambda_logs_policy_create_log_group" {
         Resource = [
           "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
         ]
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy" "lambda_logs_policy_log_stream_events" {
-  name = "lambda-logs-policy-log-stream-events"
-  role = aws_iam_role.lambda_role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
+      },
       {
         Effect = "Allow",
         Action = [
@@ -131,7 +120,7 @@ resource "null_resource" "docker_push" {
 }
 
 resource "aws_lambda_function" "create_database_lambda" {
-  function_name = "CreateDatabaseLambda"
+  function_name = "create_database"
   role          = aws_iam_role.lambda_role.arn
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.lambda_repository.repository_url}:latest"
