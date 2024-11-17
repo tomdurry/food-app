@@ -54,6 +54,28 @@ resource "aws_iam_role_policy" "lambda_vpc_policy" {
   })
 }
 
+resource "aws_iam_role_policy" "lambda_logs_policy" {
+  name = "lambda-logs-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = [
+          "arn:aws:logs:*:*:log-group:/aws/lambda/${aws_lambda_function.create_database_lambda.function_name}:*"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_security_group" "lambda_sg" {
   name   = "lambda-sg"
   vpc_id = var.vpc_id
