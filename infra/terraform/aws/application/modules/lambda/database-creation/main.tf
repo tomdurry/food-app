@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "lambda_logs_policy_create_log_group" {
         Action = [
           "logs:CreateLogGroup"
         ],
-        resources = [
+        Resource = [
           "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
         ]
       }
@@ -98,6 +98,7 @@ resource "aws_iam_role_policy" "lambda_logs_policy_log_stream_events" {
     ]
   })
 }
+
 
 
 resource "aws_security_group" "lambda_sg" {
