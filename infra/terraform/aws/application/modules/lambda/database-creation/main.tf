@@ -110,7 +110,7 @@ resource "null_resource" "docker_push" {
   provisioner "local-exec" {
     command = <<EOT
       aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin ${aws_ecr_repository.lambda_repository.repository_url}
-      docker build-t create_database-function ../../modules/lambda/database-creation/src
+      docker build -t create_database-function ../../modules/lambda/database-creation/src
       docker tag create_database-function:latest ${aws_ecr_repository.lambda_repository.repository_url}:latest
       docker push ${aws_ecr_repository.lambda_repository.repository_url}:latest
     EOT
