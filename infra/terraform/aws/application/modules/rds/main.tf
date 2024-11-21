@@ -1,13 +1,24 @@
+resource "aws_security_group" "lambda_sg" {
+  name   = "lambda-create_database-sg"
+  vpc_id = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_security_group" "rds_sg" {
   name   = "rds-sg"
   vpc_id = var.vpc_id
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    # security_groups = [aws_security_group.lambda_sg.id]
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lambda_sg.id]
   }
 
   egress {
@@ -39,19 +50,8 @@ resource "aws_db_subnet_group" "rds_subnet" {
 }
 
 resource "aws_ssm_parameter" "rds_endpoint" {
-  name        = "/prod/rds_endpoint"
+  name        = "/${var.environment}/rds_endpoint"
   type        = "String"
   value       = aws_db_instance.postgres.address
   description = "RDS endpoint for PostgreSQL instance in production"
 }
-
-# resource "null_resource" "create_database" {
-#   depends_on = [aws_db_instance.postgres]
-
-#   provisioner "local-exec" {
-#     command = <<EOT
-#       export PGPASSWORD=${aws_db_instance.postgres.password}
-#       psql -h ${aws_db_instance.postgres.address} -U ${aws_db_instance.postgres.username} -d postgres -c "CREATE DATABASE yukihiro;"
-#     EOT
-#   }
-# }

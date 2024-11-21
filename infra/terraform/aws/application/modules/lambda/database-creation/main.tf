@@ -88,20 +88,6 @@ resource "aws_iam_role_policy" "lambda_logs_policy" {
   })
 }
 
-
-
-resource "aws_security_group" "lambda_sg" {
-  name   = "lambda-sg"
-  vpc_id = var.vpc_id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_ecr_repository" "lambda_repository" {
   name = "create_database-function"
 }
@@ -136,7 +122,7 @@ resource "aws_lambda_function" "create_database_lambda" {
   }
 
   vpc_config {
-    security_group_ids = [aws_security_group.lambda_sg.id]
+    security_group_ids = [var.lambda_sg_id]
     subnet_ids         = var.subnet_ids
   }
 
