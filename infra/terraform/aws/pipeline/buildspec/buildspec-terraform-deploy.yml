@@ -23,7 +23,7 @@ phases:
       - terraform init
       - terraform apply -var="aws_profile=" -auto-approve
       - FUNCTION_NAME=$(terraform output -raw create_database_function_name)
-      - echo "FUNCTION_NAME: $FUNCTION_NAME"
+      - echo "$FUNCTION_NAME"
       - aws lambda invoke \
           --function-name "$FUNCTION_NAME" \
           --payload '{}' \
