@@ -98,7 +98,6 @@ module "lambda-recipe-generation" {
 
 module "lambda-database-creation" {
   source       = "../../modules/lambda/database-creation"
-  vpc_id       = module.network.vpc_id
   subnet_ids   = module.network.private_subnets
   lambda_sg_id = module.rds.lambda_sg_id
   depends_on = [
