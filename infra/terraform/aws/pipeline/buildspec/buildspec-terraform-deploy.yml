@@ -23,7 +23,7 @@ phases:
       - terraform init
       - terraform apply -var="aws_profile=" -auto-approve
       - aws lambda invoke \
-        --function-name "create_database-${ENV}" \
+        --function-name create_database-${ENV} \
         --payload '{}' \
         response.json
 
