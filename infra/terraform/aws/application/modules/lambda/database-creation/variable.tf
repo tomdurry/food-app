@@ -1,3 +1,8 @@
+variable "environment" {
+  type    = string
+  default = "prod"
+}
+
 variable "subnet_ids" {
   description = "List of subnets"
   type        = list(string)

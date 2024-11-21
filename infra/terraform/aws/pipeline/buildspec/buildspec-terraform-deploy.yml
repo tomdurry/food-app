@@ -22,6 +22,11 @@ phases:
       - cd infra/terraform/aws/application/envs/${ENV}
       - terraform init
       - terraform apply -var="aws_profile=" -auto-approve
+      - FUNCTION_NAME=$(terraform output -raw create_database_function_name)
+      - aws lambda invoke \
+          --function-name "$FUNCTION_NAME" \
+          --payload '{}' \
+          response.json
 
 artifacts:
   files:
