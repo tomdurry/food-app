@@ -54,18 +54,6 @@ module "eks-cluster" {
   ]
 }
 
-module "rds" {
-  source            = "../../modules/rds"
-  environment       = var.environment
-  vpc_id            = module.network.vpc_id
-  subnet_ids        = module.network.private_subnets
-  eks_cluster_sg_id = module.eks-cluster.cluster_security_group_id
-  depends_on = [
-    module.network,
-    # module.eks-cluster
-  ]
-}
-
 module "fargate_profile" {
   source                 = "../../modules/container/fargate-profile"
   project                = var.project
@@ -97,6 +85,17 @@ module "lambda-recipe-generation" {
   lambda_timeout       = var.lambda_timeout
   lambda_architectures = var.lambda_architectures
   openai_api_key       = var.openai_api_key
+}
+
+module "rds" {
+  source            = "../../modules/rds"
+  environment       = var.environment
+  vpc_id            = module.network.vpc_id
+  subnet_ids        = module.network.private_subnets
+  eks_cluster_sg_id = module.eks-cluster.cluster_security_group_id
+  depends_on = [
+    module.network
+  ]
 }
 
 module "lambda-database-creation" {
