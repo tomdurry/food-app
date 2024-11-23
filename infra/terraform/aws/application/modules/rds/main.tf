@@ -15,19 +15,6 @@ resource "aws_security_group" "eks_sg" {
   description = "Security group for EKS cluster to access PostgreSQL"
   vpc_id      = var.vpc_id
 
-  ingress {
-    # from_port = 5432
-    # to_port   = 5432
-    # protocol  = "tcp"
-    # security_groups = [
-    #   aws_security_group.rds_sg.id,
-    # ]
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -44,23 +31,44 @@ resource "aws_security_group" "rds_sg" {
   name   = "rds-sg"
   vpc_id = var.vpc_id
 
-  ingress {
-    from_port = 5432
-    to_port   = 5432
-    protocol  = "tcp"
-    security_groups = [
-      aws_security_group.lambda_sg.id,
-      aws_security_group.eks_sg.id,
-    ]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "rds-sg"
+  }
 }
+
+resource "aws_security_group_rule" "lambda_to_rds" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.lambda_sg.id
+  security_group_id        = aws_security_group.rds_sg.id
+}
+
+resource "aws_security_group_rule" "eks_to_rds" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.eks_sg.id
+  security_group_id        = aws_security_group.rds_sg.id
+}
+
+# resource "aws_security_group_rule" "rds_to_eks" {
+#   type                     = "ingress"
+#   from_port                = 5432
+#   to_port                  = 5432
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.rds_sg.id
+#   security_group_id        = aws_security_group.eks_sg.id
+# }
 
 resource "aws_db_instance" "postgres" {
   allocated_storage      = 20
