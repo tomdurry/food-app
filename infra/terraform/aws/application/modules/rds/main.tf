@@ -40,8 +40,8 @@ resource "aws_security_group_rule" "eks_to_rds" {
   from_port                = 5432
   to_port                  = 5432
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
   source_security_group_id = var.eks_cluster_sg_id
+  security_group_id        = aws_security_group.rds_sg.id
 }
 
 resource "aws_db_instance" "postgres" {

@@ -62,7 +62,7 @@ module "rds" {
   eks_cluster_sg_id = module.eks-cluster.cluster_security_group_id
   depends_on = [
     module.network,
-    module.eks-cluster
+    # module.eks-cluster
   ]
 }
 
