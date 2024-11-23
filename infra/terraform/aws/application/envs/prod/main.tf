@@ -93,7 +93,8 @@ module "rds" {
   subnet_ids        = module.network.private_subnets
   eks_cluster_sg_id = module.eks-cluster.cluster_security_group_id
   depends_on = [
-    module.network
+    module.network,
+    module.eks-cluster
   ]
 }
 
