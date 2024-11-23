@@ -2,7 +2,8 @@ resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = var.eks_role_arn
   vpc_config {
-    subnet_ids = var.subnet_ids
+    subnet_ids         = var.subnet_ids
+    security_group_ids = [var.eks_sg_id]
   }
   version                   = var.cluster_version
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]

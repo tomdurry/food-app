@@ -58,6 +58,7 @@ module "eks-cluster" {
   cluster_version = var.cluster_version
   vpc_id          = module.network.vpc_id
   subnet_ids      = module.network.private_subnets
+  eks_sg_id       = module.rds.eks_sg_id
   depends_on = [
     module.role
   ]
