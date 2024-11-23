@@ -25,16 +25,6 @@ module "network" {
   egress_cidr_blocks        = var.egress_cidr_blocks
 }
 
-module "rds" {
-  source      = "../../modules/rds"
-  environment = var.environment
-  vpc_id      = module.network.vpc_id
-  subnet_ids  = module.network.private_subnets
-  depends_on = [
-    module.network
-  ]
-}
-
 module "role" {
   source                                = "../../modules/role"
   project                               = var.project
@@ -61,6 +51,18 @@ module "eks-cluster" {
   eks_sg_id       = module.rds.eks_sg_id
   depends_on = [
     module.role
+  ]
+}
+
+module "rds" {
+  source            = "../../modules/rds"
+  environment       = var.environment
+  vpc_id            = module.network.vpc_id
+  subnet_ids        = module.network.private_subnets
+  eks_cluster_sg_id = module.eks-cluster.cluster_security_group_id
+  depends_on = [
+    module.network,
+    module.eks-cluster
   ]
 }
 
