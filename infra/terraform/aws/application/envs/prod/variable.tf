@@ -3,7 +3,7 @@
 ########################################
 variable "aws_profile" {
   type    = string
-  default = "terraform"
+  default = "default"
 }
 
 variable "project" {
@@ -62,6 +62,12 @@ variable "private_subnet_count" {
   description = "Number of private subnets"
   type        = number
   default     = 2
+}
+
+variable "nat_gateway_count" {
+  description = "The number of NAT Gateways to create for the VPC."
+  type        = number
+  default     = 1
 }
 
 variable "public_route_table_count" {

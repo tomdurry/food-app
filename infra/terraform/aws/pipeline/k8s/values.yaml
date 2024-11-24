@@ -1,0 +1,9 @@
+image:
+  repository: "039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-prod"
+  tag: "latest"
+
+postgresHost: "<RDS endpoint>"
+postgresPort: "5432"
+postgresUser: "yukihiro"
+postgresPassword: "Yuki3769"
+postgresDb: "yukihiro"

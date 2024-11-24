@@ -6,9 +6,13 @@ resource "aws_eks_fargate_profile" "this" {
   subnet_ids = var.subnet_ids
 
   selector {
-    namespace = "${var.project}-${var.environment}"
+    namespace = var.environment
     labels = {
-      app = "serverless"
+      app = "go-app"
     }
+  }
+
+  selector {
+    namespace = "kube-system"
   }
 }
