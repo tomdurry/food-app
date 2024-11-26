@@ -63,7 +63,7 @@ resource "aws_s3_bucket_policy" "frontend_policy" {
           AWS = var.oai_iam_arn
         }
         Action   = "s3:GetObject"
-        Resource = "${var.frontend_bucket.arn}/*"
+        Resource = "${var.frontend_bucket_arn}/*"
       }
     ]
   })
