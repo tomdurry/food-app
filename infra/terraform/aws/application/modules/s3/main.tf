@@ -43,7 +43,7 @@ resource "aws_s3_bucket_policy" "frontend_policy" {
         Sid    = "AllowCloudFrontAccess"
         Effect = "Allow"
         Principal = {
-          AWS = var.cloudfront_oai.iam_arn
+          AWS = var.oai_iam_arn
         }
         Action   = "s3:GetObject"
         Resource = "${aws_s3_bucket.frontend_bucket.arn}/*"

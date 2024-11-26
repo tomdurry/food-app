@@ -4,7 +4,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     origin_id   = "S3-Frontend-Origin"
 
     s3_origin_config {
-      origin_access_identity = var.cloudfront_oai.cloudfront_access_identity_path
+      origin_access_identity = var.oai_cloudfront_access_identity_path
     }
   }
 
@@ -60,7 +60,7 @@ resource "aws_s3_bucket_policy" "frontend_policy" {
         Sid    = "AllowCloudFrontAccess"
         Effect = "Allow"
         Principal = {
-          AWS = var.cloudfront_oai.iam_arn
+          AWS = var.oai_iam_arn
         }
         Action   = "s3:GetObject"
         Resource = "${aws_s3_bucket.frontend_bucket.arn}/*"

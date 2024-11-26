@@ -143,19 +143,20 @@ module "acm" {
 }
 
 module "s3" {
-  source         = "../../modules/s3"
-  cloudfront_oai = module.oai.cloudfront_oai
+  source      = "../../modules/s3"
+  oai_iam_arn = module.oai.oai_iam_arn
   depends_on = [
     module.oai
   ]
 }
 
 module "cloudfront" {
-  source             = "../../modules/cloudfront"
-  cloudfront_oai     = module.oai.cloudfront_oai
-  certificate_arn    = module.acm.certificate_arn
-  frontend_bucket_id = module.s3.frontend_bucket_id
-  bucket_domain_name = module.s3.bucket_domain_name
+  source                              = "../../modules/cloudfront"
+  oai_cloudfront_access_identity_path = module.oai.oai_cloudfront_access_identity_path
+  oai_iam_arn                         = module.oai.oai_iam_arn
+  certificate_arn                     = module.acm.certificate_arn
+  frontend_bucket_id                  = module.s3.frontend_bucket_id
+  bucket_domain_name                  = module.s3.bucket_domain_name
 }
 
 module "route53" {

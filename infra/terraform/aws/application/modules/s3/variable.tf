@@ -1,4 +1,4 @@
-variable "cloudfront_oai" {
-  description = "CloudFront Origin Access Identity"
+variable "oai_iam_arn" {
+  description = "The ARN of the IAM associated with the CloudFront origin access identity"
   type        = string
 }
