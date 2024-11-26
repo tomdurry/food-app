@@ -135,7 +135,7 @@ module "api_gateway" {
 }
 
 module "acm" {
-  source = "./modules/acm"
+  source = "../../modules/acm"
   providers = {
     aws = aws.us_east_1
   }
