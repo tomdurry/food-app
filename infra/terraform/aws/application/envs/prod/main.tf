@@ -156,11 +156,20 @@ module "cloudfront" {
   oai_iam_arn                         = module.oai.oai_iam_arn
   certificate_arn                     = module.acm.certificate_arn
   frontend_bucket_id                  = module.s3.frontend_bucket_id
+  frontend_bucket_arn                 = module.s3.frontend_bucket_arn
   bucket_domain_name                  = module.s3.bucket_domain_name
+  depends_on = [
+    module.oai,
+    module.acm,
+    module.s3
+  ]
 }
 
 module "route53" {
   source                    = "../../modules/route53"
   cloudfront_domain_name    = module.cloudfront.cloudfront_domain_name
   cloudfront_hosted_zone_id = module.cloudfront.cloudfront_hosted_zone_id
+  depends_on = [
+    module.cloudfront
+  ]
 }
