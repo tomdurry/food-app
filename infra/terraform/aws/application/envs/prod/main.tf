@@ -134,9 +134,13 @@ module "api_gateway" {
   ]
 }
 
-module "oai" {
-  source = "../../modules/oai"
+module "acm" {
+  source = "./modules/acm"
+  providers = {
+    aws = aws.us_east_1
+  }
 }
+
 
 module "acm" {
   source = "../../modules/acm"
