@@ -133,3 +133,33 @@ module "api_gateway" {
     module.lambda-recipe-generation
   ]
 }
+
+module "oai" {
+  source = "../../modules/oai"
+}
+
+module "acm" {
+  source = "../../modules/acm"
+}
+
+module "s3" {
+  source         = "../../modules/s3"
+  cloudfront_oai = module.oai.cloudfront_oai
+  depends_on = [
+    module.oai
+  ]
+}
+
+module "cloudfront" {
+  source             = "../../modules/cloudfront"
+  cloudfront_oai     = module.oai.cloudfront_oai
+  certificate_arn    = module.acm.certificate_arn
+  frontend_bucket_id = module.s3.frontend_bucket_id
+  bucket_domain_name = module.s3.bucket_domain_name
+}
+
+module "route53" {
+  source                    = "../../modules/route53"
+  cloudfront_domain_name    = module.cloudfront.cloudfront_domain_name
+  cloudfront_hosted_zone_id = module.cloudfront.cloudfront_hosted_zone_id
+}
