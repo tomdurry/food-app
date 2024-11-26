@@ -141,11 +141,6 @@ module "acm" {
   }
 }
 
-
-module "acm" {
-  source = "../../modules/acm"
-}
-
 module "s3" {
   source      = "../../modules/s3"
   oai_iam_arn = module.oai.oai_iam_arn
