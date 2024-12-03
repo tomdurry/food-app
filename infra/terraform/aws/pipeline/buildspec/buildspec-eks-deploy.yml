@@ -35,3 +35,8 @@ phases:
   post_build:
     commands:
       - echo "Deployment complete"
+      
+artifacts:
+  files:
+    - "**/*"
+
