@@ -5,11 +5,17 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
+      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/
       - cd frontend
       - npm install
 
   build:
     commands:
+      - REACT_APP_API_URL=$(kubectl get service go-app-service -n prod -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+      - echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env
+      - cat .env
       - npm run build
       - aws s3 sync build/ s3://food-app-frontend-bucket --delete
 
