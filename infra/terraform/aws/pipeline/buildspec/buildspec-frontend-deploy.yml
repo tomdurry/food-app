@@ -1,9 +1,12 @@
 version: 0.2
 
 phases:
-  pre_build:
+  install:
+    runtime-versions:
+      nodejs: 20
     commands:
       - cd frontend
+      - npm install
 
   build:
     commands:
