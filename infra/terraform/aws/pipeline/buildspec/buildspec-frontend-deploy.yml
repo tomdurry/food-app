@@ -10,7 +10,7 @@ phases:
 
   build:
     commands:
-      - REACT_APP_API_URL=$(aws ssm get-parameter --name "REACT_APP_API_URL_${ENVIRONMENT}" --query "Parameter.Value" --output text)
+      - REACT_APP_API_URL=$(aws ssm get-parameter --name "/prod/react_app_api_url" --query "Parameter.Value" --output text)
       - echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env
       - cat .env
       - npm run build
