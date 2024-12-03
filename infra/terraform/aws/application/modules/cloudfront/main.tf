@@ -34,9 +34,10 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    cloudfront_default_certificate = true
+    # # acm_certificate_arn      = var.certificate_validation_arn
+    # ssl_support_method       = "sni-only"
+    # minimum_protocol_version = "TLSv1.2_2021"
   }
 
   restrictions {
@@ -50,21 +51,16 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   }
 }
 
-resource "aws_s3_bucket_policy" "frontend_policy" {
-  bucket = var.frontend_bucket_id
+resource "aws_route53_record" "frontend_alias" {
+  zone_id = var.route53_zone_id
+  name    = "food-app-generation.com"
+  type    = "A"
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "AllowCloudFrontAccess"
-        Effect = "Allow"
-        Principal = {
-          AWS = var.oai_iam_arn
-        }
-        Action   = "s3:GetObject"
-        Resource = "${var.frontend_bucket_arn}/*"
-      }
-    ]
-  })
+  alias {
+    name                   = aws_cloudfront_distribution.frontend_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.frontend_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
 }
+
+

@@ -1,18 +1,29 @@
-resource "aws_route53_zone" "example_zone" {
+resource "aws_route53_zone" "food_app_zone" {
   name = "food-app-generation.com"
   tags = {
     Environment = "prod"
   }
 }
 
-resource "aws_route53_record" "frontend_alias" {
-  zone_id = aws_route53_zone.example_zone.zone_id
-  name    = "food-app-generation.com"
-  type    = "A"
-
-  alias {
-    name                   = var.cloudfront_domain_name
-    zone_id                = var.cloudfront_hosted_zone_id
-    evaluate_target_health = false
+resource "aws_route53_record" "frontend_certificate_validation" {
+  for_each = {
+    for dvo in var.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
   }
+
+  zone_id = aws_route53_zone.food_app_zone.id
+  name    = each.value.name
+  type    = each.value.type
+  records = [each.value.record]
+  ttl     = 60
 }
+
+# resource "aws_acm_certificate_validation" "frontend_certificate_validation" {
+#   certificate_arn         = var.certificate_arn
+#   validation_record_fqdns = [for record in aws_route53_record.frontend_certificate_validation : record.fqdn]
+#   depends_on              = [aws_route53_record.frontend_certificate_validation]
+# }
+

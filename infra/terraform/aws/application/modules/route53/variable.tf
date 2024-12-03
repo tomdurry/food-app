@@ -1,11 +1,15 @@
-variable "cloudfront_domain_name" {
-  description = "The domain name of the CloudFront distribution"
+
+variable "certificate_arn" {
+  description = "The ARN of the ACM certificate"
   type        = string
-  default     = ""
 }
 
-variable "cloudfront_hosted_zone_id" {
-  description = "The hosted zone ID for the CloudFront distribution"
-  type        = string
-  default     = ""
+variable "domain_validation_options" {
+  description = "List of domain validation options for creating Route53 records"
+  type = list(object({
+    domain_name           = string
+    resource_record_name  = string
+    resource_record_value = string
+    resource_record_type  = string
+  }))
 }

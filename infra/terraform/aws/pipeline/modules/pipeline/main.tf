@@ -113,6 +113,26 @@ resource "aws_codebuild_project" "eks_deploy_project" {
   }
 }
 
+resource "aws_codebuild_project" "frontend_deploy_project" {
+  name         = "${var.project}-frontend-deployer"
+  service_role = aws_iam_role.codebuild_role.arn
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = "infra/terraform/aws/pipeline/buildspec/buildspec-frontend-deploy.yml"
+  }
+
+  environment {
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image        = "aws/codebuild/standard:7.0"
+    type         = "LINUX_CONTAINER"
+  }
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+}
+
 resource "aws_s3_bucket" "food_app_artifact_bucket" {
   bucket        = var.artifact_bucket_name
   force_destroy = var.force_destroy
