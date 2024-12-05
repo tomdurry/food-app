@@ -1,10 +1,3 @@
-resource "aws_route53_zone" "food_app_zone" {
-  name = "food-app-generation.com"
-  tags = {
-    Environment = "prod"
-  }
-}
-
 resource "aws_route53_record" "frontend_certificate_validation" {
   for_each = {
     for dvo in var.domain_validation_options : dvo.domain_name => {
@@ -14,7 +7,7 @@ resource "aws_route53_record" "frontend_certificate_validation" {
     }
   }
 
-  zone_id = aws_route53_zone.food_app_zone.id
+  zone_id = data.aws_route53_zone.food_app_zone.id
   name    = each.value.name
   type    = each.value.type
   records = [each.value.record]
