@@ -21,9 +21,9 @@ resource "aws_route53_record" "frontend_certificate_validation" {
   ttl     = 60
 }
 
-# resource "aws_acm_certificate_validation" "frontend_certificate_validation" {
-#   certificate_arn         = var.certificate_arn
-#   validation_record_fqdns = [for record in aws_route53_record.frontend_certificate_validation : record.fqdn]
-#   depends_on              = [aws_route53_record.frontend_certificate_validation]
-# }
+resource "aws_acm_certificate_validation" "frontend_certificate_validation" {
+  certificate_arn         = var.certificate_arn
+  validation_record_fqdns = [for record in aws_route53_record.frontend_certificate_validation : record.fqdn]
+  depends_on              = [aws_route53_record.frontend_certificate_validation]
+}
 

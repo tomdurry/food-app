@@ -167,8 +167,8 @@ module "cloudfront" {
   oai_iam_arn                         = module.oai.oai_iam_arn
   frontend_bucket_arn                 = module.s3.frontend_bucket_arn
   bucket_domain_name                  = module.s3.bucket_domain_name
-  # certificate_validation_arn          = module.route53.certificate_validation_arn
-  route53_zone_id = module.route53.route53_zone_id
+  certificate_validation_arn          = module.route53.certificate_validation_arn
+  route53_zone_id                     = module.route53.route53_zone_id
 
   depends_on = [
     module.oai,

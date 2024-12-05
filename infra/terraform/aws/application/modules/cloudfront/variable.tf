@@ -1,7 +1,7 @@
-# variable "certificate_validation_arn" {
-#   description = "The ARN of the ACM certificate validation arn"
-#   type        = string
-# }
+variable "certificate_validation_arn" {
+  description = "The ARN of the ACM certificate validation arn"
+  type        = string
+}
 
 variable "frontend_bucket_arn" {
   description = "The ARN of the S3 bucket"
