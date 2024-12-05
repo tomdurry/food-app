@@ -36,7 +36,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     # cloudfront_default_certificate = true
     acm_certificate_arn      = var.certificate_validation_arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.3"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
 
