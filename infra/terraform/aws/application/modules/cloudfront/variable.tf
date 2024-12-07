@@ -1,4 +1,4 @@
-variable "certificate_validation_arn" {
+variable "certificate_arn" {
   description = "The ARN of the ACM certificate validation arn"
   type        = string
 }
