@@ -7,3 +7,5 @@ postgresPort: "5432"
 postgresUser: "yukihiro"
 postgresPassword: "Yuki3769"
 postgresDb: "yukihiro"
+
+acmCertArn: "<acmCertArn>"

@@ -30,9 +30,10 @@ phases:
   build:
     commands:
       - echo "Deploying application to EKS with Helm"
-      - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST
+      - ACM_CERT_ARN=$(terraform output -raw certificate_arn)
+      - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST --set acmCertArn=$ACM_CERT_ARN
       - REACT_APP_API_URL=$(kubectl get service go-app-service -n prod -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-      - aws ssm put-parameter --name "/prod/react_app_api_url" --value "http://${REACT_APP_API_URL}" --type "String" --overwrite
+      - aws ssm put-parameter --name "/prod/react_app_api_url" --value "https://${REACT_APP_API_URL}" --type "String" --overwrite
 
   post_build:
     commands:
