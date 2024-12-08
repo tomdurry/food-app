@@ -139,7 +139,8 @@ module "oai" {
 }
 
 module "acm" {
-  source = "../../modules/acm"
+  source      = "../../modules/acm"
+  environment = var.environment
 }
 
 module "s3" {
