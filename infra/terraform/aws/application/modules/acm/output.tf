@@ -4,5 +4,5 @@ output "certificate_arn" {
 }
 
 output "domain_validation_options" {
-  value = aws_acm_certificate.frontend_certificate.domain_validation_options
+  value = aws_acm_certificate.acm_certificate.domain_validation_options
 }
