@@ -17,4 +17,7 @@ resource "aws_route53_record" "frontend_certificate_validation" {
 resource "aws_acm_certificate_validation" "acm_validation" {
   certificate_arn         = var.certificate_arn
   validation_record_fqdns = [for r in aws_route53_record.frontend_certificate_validation : r.fqdn]
+  depends_on = [
+    aws_route53_record.frontend_certificate_validation
+  ]
 }
