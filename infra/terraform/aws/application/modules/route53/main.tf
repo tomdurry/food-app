@@ -13,3 +13,8 @@ resource "aws_route53_record" "frontend_certificate_validation" {
   records = [each.value.record]
   ttl     = 60
 }
+
+resource "aws_acm_certificate_validation" "acm_validation" {
+  certificate_arn         = var.certificate_arn
+  validation_record_fqdns = [for r in aws_route53_record.frontend_certificate_validation : r.fqdn]
+}
