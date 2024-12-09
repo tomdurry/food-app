@@ -15,7 +15,7 @@ resource "aws_route53_record" "frontend_certificate_validation" {
 }
 
 resource "aws_acm_certificate_validation" "acm_validation" {
-  provider                = "us-east-1"
+  provider                = aws.us-east-1
   certificate_arn         = var.certificate_arn
   validation_record_fqdns = [for r in aws_route53_record.frontend_certificate_validation : r.fqdn]
 }
