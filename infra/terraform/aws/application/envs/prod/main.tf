@@ -152,7 +152,10 @@ module "s3" {
 }
 
 module "route53" {
-  source                    = "../../modules/route53"
+  source = "../../modules/route53"
+  providers = {
+    aws = aws.us_east_1
+  }
   certificate_arn           = module.acm.certificate_arn
   domain_validation_options = module.acm.domain_validation_options
 
