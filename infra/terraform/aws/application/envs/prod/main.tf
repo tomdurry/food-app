@@ -151,13 +151,23 @@ module "s3" {
   ]
 }
 
-module "route53" {
-  source = "../../modules/route53"
+module "route53_us_east_1" {
+  source = "../../modules/route53/us_east_1"
   providers = {
     aws = aws.us_east_1
   }
-  certificate_arn           = module.acm.certificate_arn
-  domain_validation_options = module.acm.domain_validation_options
+  cloudfront_certificate_arn = module.acm.cloudfront_certificate_arn
+  domain_validation_options  = module.acm.cloudfront_domain_validation_options
+
+  depends_on = [
+    module.acm
+  ]
+}
+
+module "route53_ap-northeast-1" {
+  source                     = "../../modules/route53/ap-northeast-1"
+  cloudfront_certificate_arn = module.acm.lb_certificate_arn
+  domain_validation_options  = module.acm.lb_domain_validation_options
 
   depends_on = [
     module.acm
@@ -171,7 +181,7 @@ module "cloudfront" {
   oai_iam_arn                         = module.oai.oai_iam_arn
   frontend_bucket_arn                 = module.s3.frontend_bucket_arn
   bucket_domain_name                  = module.s3.bucket_domain_name
-  certificate_arn                     = module.acm.certificate_arn
+  cloudfront_certificate_arn          = module.acm.cloudfront_certificate_arn
   route53_zone_id                     = module.route53.route53_zone_id
 
   depends_on = [

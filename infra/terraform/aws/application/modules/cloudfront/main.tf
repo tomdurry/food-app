@@ -36,7 +36,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     response_page_path = "/index.html"
   }
   viewer_certificate {
-    acm_certificate_arn      = var.certificate_arn
+    acm_certificate_arn      = var.cloudfront_certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }

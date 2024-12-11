@@ -20,7 +20,7 @@ phases:
       - aws eks update-kubeconfig --region ap-northeast-1 --name $CLUSTER_NAME
       - kubectl get namespace prod || kubectl create namespace prod
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
-      - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/acm_certificate_arn" --query "Parameter.Value" --output text)
+      - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/lb_certificate_arn" --query "Parameter.Value" --output text)
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app || echo "ConfigMap aws-auth not found"
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod || echo "ConfigMap aws-auth not found"
       - kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm || echo "ConfigMap aws-auth not found"
