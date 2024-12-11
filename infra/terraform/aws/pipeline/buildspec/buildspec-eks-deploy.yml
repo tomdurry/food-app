@@ -13,6 +13,11 @@ phases:
       - mv aws-iam-authenticator /usr/local/bin/
       - echo "Installing Helm"
       - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      - echo "Installing CertManager"
+      - kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.2/cert-manager.yaml
+      - echo "Adding Helm repository for AWS Load Balancer Controller"
+      - helm repo add eks https://aws.github.io/eks-charts
+      - helm repo update
 
   pre_build:
     commands:
@@ -24,6 +29,12 @@ phases:
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app || echo "ConfigMap aws-auth not found"
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod || echo "ConfigMap aws-auth not found"
       - kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm || echo "ConfigMap aws-auth not found"
+      - echo "Installing AWS Load Balancer Controller"
+      - helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+          -n kube-system \
+          --set clusterName=$CLUSTER_NAME \
+          --set serviceAccount.create=false \
+          --set serviceAccount.name=aws-load-balancer-controller
 
   build:
     commands:
