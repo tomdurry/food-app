@@ -188,6 +188,6 @@ module "cloudfront" {
     module.oai,
     module.acm,
     module.s3,
-    route53_us_east_1
+    module.route53_us_east_1
   ]
 }
