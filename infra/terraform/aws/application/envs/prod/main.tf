@@ -182,7 +182,7 @@ module "cloudfront" {
   frontend_bucket_arn                 = module.s3.frontend_bucket_arn
   bucket_domain_name                  = module.s3.bucket_domain_name
   cloudfront_certificate_arn          = module.acm.cloudfront_certificate_arn
-  route53_zone_id                     = module.route53.route53_zone_id
+  route53_zone_id                     = module.route53_us_east_1.route53_zone_id
 
   depends_on = [
     module.oai,
