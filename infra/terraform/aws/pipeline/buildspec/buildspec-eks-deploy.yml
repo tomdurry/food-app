@@ -19,6 +19,14 @@ phases:
     commands:
       - cd infra/terraform/aws/pipeline
       - aws eks update-kubeconfig --region ap-northeast-1 --name $CLUSTER_NAME
+      - |
+        eksctl create iamserviceaccount \
+          --name aws-load-balancer-controller \
+          --namespace kube-system \
+          --cluster $CLUSTER_NAME \
+          --region ap-northeast-1 \
+          --attach-policy-arn arn:aws:iam::039725305879:role/CodeBuildRole \
+          --approve
       - kubectl get namespace prod || kubectl create namespace prod
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
       - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/lb_certificate_arn" --query "Parameter.Value" --output text)
@@ -34,7 +42,7 @@ phases:
         helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
           -n kube-system \
           --set clusterName=$CLUSTER_NAME \
-          --set serviceAccount.create=true \
+          --set serviceAccount.create=false \
           --set serviceAccount.name=aws-load-balancer-controller
 
   build:
