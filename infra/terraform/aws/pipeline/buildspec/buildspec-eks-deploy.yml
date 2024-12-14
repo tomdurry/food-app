@@ -31,7 +31,8 @@ phases:
           --cluster $CLUSTER_NAME \
           --region ap-northeast-1 \
           --attach-policy-arn arn:aws:iam::039725305879:policy/AWSLoadBalancerControllerIAMPolicy \
-          --approve
+          --approve \
+          --override-existing-serviceaccounts
       - kubectl get namespace prod || kubectl create namespace prod
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
       - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/lb_certificate_arn" --query "Parameter.Value" --output text)
