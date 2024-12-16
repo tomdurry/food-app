@@ -52,7 +52,7 @@ phases:
           --set serviceAccount.name=aws-load-balancer-controller \
           --set region=ap-northeast-1 \
           --set vpcId=vpc-062c5dcb836aab0ea \
-          --set nodeSelector."kubernetes\.io/role"=node
+          --set targetType=ip
 
   build:
     commands:
