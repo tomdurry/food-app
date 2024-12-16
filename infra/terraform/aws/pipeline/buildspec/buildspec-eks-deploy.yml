@@ -53,6 +53,7 @@ phases:
           --set region=ap-northeast-1 \
           --set vpcId=vpc-06e6cb7ad63983a59 \
           --set targetType=ip
+          --set logLevel=debug
 
   build:
     commands:
