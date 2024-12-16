@@ -34,7 +34,6 @@ phases:
           --region ap-northeast-1 \
           --cluster food-app-cluster-prod \
           --approve
-      - kubectl delete serviceaccount aws-load-balancer-controller -n kube-system
       - |
         eksctl create iamserviceaccount \
           --name aws-load-balancer-controller \
