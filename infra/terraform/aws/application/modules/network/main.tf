@@ -19,10 +19,14 @@ resource "aws_subnet" "public" {
   cidr_block              = var.public_subnet_cidrs[count.index]
   map_public_ip_on_launch = var.map_public_ip_on_launch
   availability_zone       = var.availability_zones[count.index]
+
   tags = {
-    Name = "${var.project}-public-subnet-${count.index + 1}-${var.environment}"
+    Name                                          = "${var.project}-public-subnet-${count.index + 1}-${var.environment}"
+    "kubernetes.io/role/elb"                      = "1"
+    "kubernetes.io/cluster/food-app-cluster-prod" = "owned"
   }
 }
+
 
 resource "aws_subnet" "private" {
   count             = var.private_subnet_count
