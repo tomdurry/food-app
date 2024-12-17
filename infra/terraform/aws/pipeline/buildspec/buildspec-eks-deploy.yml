@@ -51,7 +51,7 @@ phases:
           --set serviceAccount.create=false \
           --set serviceAccount.name=aws-load-balancer-controller \
           --set region=ap-northeast-1 \
-          --set vpcId=vpc-0f2a037c72ef9d2d5 \
+          --set vpcId=vpc-078a15821410f5825 \
           --set targetType=ip \
           --set logLevel=debug
 
