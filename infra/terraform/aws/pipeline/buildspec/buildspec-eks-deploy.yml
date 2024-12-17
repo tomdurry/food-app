@@ -70,7 +70,7 @@ phases:
       #     fi
       #   done
       # - echo "REACT_APP_API_URL=${REACT_APP_API_URL}"
-      - REACT_APP_API_URL=https://api.food-app-generation.com
+      - REACT_APP_API_URL=api.food-app-generation.com
       - aws ssm put-parameter --name "/prod/react_app_api_url" --value "https://${REACT_APP_API_URL}" --type "String" --overwrite
 
   post_build:
