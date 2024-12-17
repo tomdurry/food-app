@@ -60,7 +60,7 @@ phases:
       - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST --set acmCertArn=$ACM_CERT_ARN --debug
       - |
         while true; do
-          REACT_APP_API_URL=$(aws elbv2 describe-load-balancers --query "LoadBalancers[*].DNSName" --output text)
+          REACT_APP_API_URL=$(aws elbv2 describe-load-balancers --query "LoadBalancers[?contains(LoadBalancerName, 'k8s-prod')].DNSName" --output text)
           if [ -n "$REACT_APP_API_URL" ]; then
             echo "Load balancer is ready: $REACT_APP_API_URL"
             break
