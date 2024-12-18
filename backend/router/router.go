@@ -17,10 +17,14 @@ func NewRouter(uc controller.IUserController, rc controller.IRecipeController) *
 		AllowOrigins: []string{
 			"http://localhost:3000",
 			"https://food-app-generation.com",
-			os.Getenv("FE_URL"),
 		},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept,
-			echo.HeaderAccessControlAllowHeaders, echo.HeaderXCSRFToken},
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			echo.HeaderAccessControlAllowHeaders,
+			"X-CSRF-TOKEN",
+		},
 		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE"},
 		AllowCredentials: true,
 	}))
