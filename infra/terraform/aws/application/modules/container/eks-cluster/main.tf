@@ -1,3 +1,8 @@
+resource "aws_eks_addon" "cloudwatch-observability" {
+  addon_name   = "amazon-cloudwatch-observability"
+  cluster_name = aws_eks_cluster.this.name
+}
+
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = var.eks_role_arn
@@ -30,7 +35,6 @@ resource "aws_iam_role_policy_attachment" "ecr_readonly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.node_group_role.name
 }
-
 
 resource "aws_eks_node_group" "this_node_group" {
   cluster_name    = aws_eks_cluster.this.name
