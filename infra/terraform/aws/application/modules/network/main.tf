@@ -207,3 +207,16 @@ resource "aws_security_group" "allow_http" {
     Name = "${var.project}-vpc-security-group-${var.environment}"
   }
 }
+
+########################################
+# Parameter Store
+########################################
+resource "aws_ssm_parameter" "vpc_id" {
+  name  = "/${var.project}/${var.environment}/vpc-id"
+  type  = "String"
+  value = aws_vpc.main.id
+  tags = {
+    Environment = var.environment
+    Project     = var.project
+  }
+}
