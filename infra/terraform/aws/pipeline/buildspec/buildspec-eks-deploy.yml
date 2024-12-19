@@ -28,9 +28,9 @@ phases:
       - kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm || echo "ConfigMap aws-auth not found"
       - kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.2/cert-manager.yaml
 
-        kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager
-        kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-cainjector
-        kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-webhook
+      - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager
+      - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-cainjector
+      - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-webhook
 
       - echo "Adding Helm repository for AWS Load Balancer Controller"
       - helm repo add eks https://aws.github.io/eks-charts
