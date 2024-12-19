@@ -32,14 +32,16 @@ phases:
       - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-cainjector
       - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-webhook
 
-      - echo "Adding Helm repository for AWS Load Balancer Controller"
-      - helm repo add eks https://aws.github.io/eks-charts
-      - helm repo update
       - |
         eksctl utils associate-iam-oidc-provider \
           --region ap-northeast-1 \
           --cluster food-app-cluster-prod \
           --approve
+      - curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+      - | 
+        aws iam create-policy \
+          --policy-name AWSLoadBalancerControllerIAMPolicy \
+          --policy-document file://iam_policy.json
       - |
         eksctl create iamserviceaccount \
           --name aws-load-balancer-controller \
@@ -50,6 +52,10 @@ phases:
           --approve \
           --override-existing-serviceaccounts
       - kubectl get serviceaccount aws-load-balancer-controller -n kube-system
+
+      - helm repo add eks https://aws.github.io/eks-charts
+      - helm repo update
+      - kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
       - |
         helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
           -n kube-system \
@@ -58,8 +64,7 @@ phases:
           --set serviceAccount.name=aws-load-balancer-controller \
           --set region=ap-northeast-1 \
           --set vpcId=$VPC_ID \
-          --set targetType=ip \
-          --set logLevel=debug
+          --set targetType=ip
 
       - kubectl wait --namespace kube-system --for=condition=ready --timeout=120s pod -l app.kubernetes.io/name=aws-load-balancer-controller
 
