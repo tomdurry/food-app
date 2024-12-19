@@ -44,7 +44,7 @@ phases:
           aws iam create-policy \
           --policy-name "$POLICY_NAME" \
           --policy-document file://iam_policy.json
-
+        fi
       - |
         eksctl create iamserviceaccount \
           --name aws-load-balancer-controller \
