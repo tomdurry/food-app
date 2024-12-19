@@ -39,9 +39,12 @@ phases:
           --approve
       - curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
       - | 
-        aws iam create-policy \
-          --policy-name AWSLoadBalancerControllerIAMPolicy \
+        EXISTING_POLICY=$(aws iam list-policies --scope Local --query "Policies[?PolicyName=='AWSLoadBalancerControllerIAMPolicy'].Arn" --output text)
+        if [ -z "$EXISTING_POLICY" ]; then
+          aws iam create-policy \
+          --policy-name "$POLICY_NAME" \
           --policy-document file://iam_policy.json
+
       - |
         eksctl create iamserviceaccount \
           --name aws-load-balancer-controller \
