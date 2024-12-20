@@ -42,7 +42,7 @@ phases:
         EXISTING_POLICY=$(aws iam list-policies --scope Local --query "Policies[?PolicyName=='AWSLoadBalancerControllerIAMPolicy'].Arn" --output text)
         if [ -z "$EXISTING_POLICY" ]; then
           aws iam create-policy \
-          --policy-name "$POLICY_NAME" \
+          --policy-name "AWSLoadBalancerControllerIAMPolicy" \
           --policy-document file://iam_policy.json
         fi
       - |
