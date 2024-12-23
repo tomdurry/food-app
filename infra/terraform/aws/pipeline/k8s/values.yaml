@@ -9,3 +9,5 @@ postgresPassword: "Yuki3769"
 postgresDb: "yukihiro"
 
 acmCertArn: "<acmCertArn>"
+
+domainName: "api.food-app-generation.com"

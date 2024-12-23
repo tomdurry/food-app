@@ -12,7 +12,6 @@ phases:
     commands:
       - REACT_APP_API_URL=$(aws ssm get-parameter --name "/prod/react_app_api_url" --query "Parameter.Value" --output text)
       - echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env
-      - cat .env
       - npm run build
       - aws s3 sync build/ s3://food-app-frontend-bucket --delete
 
