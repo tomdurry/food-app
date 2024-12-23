@@ -36,6 +36,9 @@ func NewRouter(uc controller.IUserController, rc controller.IRecipeController) *
 		//CookieSameSite: http.SameSiteDefaultMode,
 		//CookieMaxAge:   60,
 	}))
+	e.GET("/health", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Healthy")
+	})
 	e.POST("/signup", uc.SignUp)
 	e.POST("/login", uc.LogIn)
 	e.POST("/logout", uc.LogOut)
