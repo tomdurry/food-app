@@ -11,7 +11,7 @@ phases:
         cat <<EOL > .env
         PORT=8080
         POSTGRES_USER=yukihiro
-        POSTGRES_PW=1234
+        POSTGRES_PW=Yuki3769
         POSTGRES_DB=yukihiro
         POSTGRES_PORT=5432
         POSTGRES_HOST=postgres
