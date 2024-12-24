@@ -9,7 +9,10 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
 FROM debian:10-slim
 RUN apt update && apt install -y ca-certificates
 
+WORKDIR /app
 COPY --from=builder /app/main /app/main
+COPY .env /app/.env
+
 EXPOSE 8080
 
 ENTRYPOINT [ "/app/main" ]
