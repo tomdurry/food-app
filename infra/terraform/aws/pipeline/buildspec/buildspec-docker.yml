@@ -27,7 +27,7 @@ phases:
       - docker push 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-${ENV}:latest
       - |
         docker run --rm \
-        --env-file .env \
+        --env-file ./backend/.env \
         039725305879.dkr.ecr.ap-northeast-1.amazonaws.com/food-app-ecr-repository-${ENV}:latest \
         go run migrate.go
 
