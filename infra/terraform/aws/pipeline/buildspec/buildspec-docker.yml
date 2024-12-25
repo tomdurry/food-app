@@ -1,5 +1,6 @@
 version: 0.2
 
+
 phases:
   pre_build:
     commands:
@@ -7,6 +8,7 @@ phases:
 
   build:
     commands:
+      - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
       - |
         cat <<EOL > .env
         PORT=8080
@@ -14,7 +16,7 @@ phases:
         POSTGRES_PW=Yuki3769
         POSTGRES_DB=yukihiro
         POSTGRES_PORT=5432
-        POSTGRES_HOST=postgres
+        POSTGRES_HOST=${POSTGRES_HOST}
         SECRET=hwueir7289rhfkhwe8
         API_DOMAIN=food-app-generation.com
         FE_URL=https://food-app-generation.com
