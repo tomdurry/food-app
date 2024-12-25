@@ -1,4 +1,4 @@
-package main
+package migrate
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/tomdurry/food-app/model"
 )
 
-func main() {
+func Run() {
 	dbConn := db.NewDB()
 	defer fmt.Println("Successfully Migrated")
 	defer db.CloseDB(dbConn)
