@@ -12,7 +12,10 @@ RUN apt update && apt install -y ca-certificates
 WORKDIR /app
 COPY --from=builder /app/main /app/main
 COPY .env /app/.env
+COPY entrypoint.sh /app/entrypoint.sh
+
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080
 
-ENTRYPOINT [ "/app/main" ]
+ENTRYPOINT [ "/app/entrypoint.sh" ]

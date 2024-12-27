@@ -1,4 +1,4 @@
-package migrate
+package main
 
 import (
 	"fmt"
@@ -7,9 +7,10 @@ import (
 	"github.com/tomdurry/food-app/model"
 )
 
-func Run() {
+func main() {
 	dbConn := db.NewDB()
-	defer fmt.Println("Successfully Migrated")
 	defer db.CloseDB(dbConn)
+	fmt.Println("Running migrations...")
 	dbConn.AutoMigrate(&model.User{}, &model.Recipe{})
+	fmt.Println("Successfully Migrated")
 }

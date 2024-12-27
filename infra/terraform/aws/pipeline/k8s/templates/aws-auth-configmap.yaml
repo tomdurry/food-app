@@ -6,8 +6,7 @@ metadata:
 data:
   mapRoles: |
     - rolearn: arn:aws:iam::039725305879:role/food-app-fargate-pod-execution-role-prod
-      # username: system:node:{{`{{SessionName}}`}}
-      username: system:node:{{SessionName}}
+      username: system:node:{{`{{SessionName}}`}}
       groups:
         - system:bootstrappers
         - system:nodes

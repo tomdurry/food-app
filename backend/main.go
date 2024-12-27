@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/tomdurry/food-app/controller"
 	"github.com/tomdurry/food-app/db"
-	"github.com/tomdurry/food-app/migrate"
 	"github.com/tomdurry/food-app/repository"
 	"github.com/tomdurry/food-app/router"
 	"github.com/tomdurry/food-app/usecase"
@@ -11,7 +10,6 @@ import (
 )
 
 func main() {
-	migrate.Run()
 	db := db.NewDB()
 	userValidator := validator.NewUserValidator()
 	recipeValidator := validator.NewRecipeValidator()
