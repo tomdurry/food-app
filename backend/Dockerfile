@@ -5,6 +5,7 @@ ADD ./ ./
 
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+RUN go run migrate/migrate.go
 
 FROM debian:10-slim
 RUN apt update && apt install -y ca-certificates
