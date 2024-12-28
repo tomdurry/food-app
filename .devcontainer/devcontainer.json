@@ -31,7 +31,6 @@
 		}
 	},
     "runArgs": [
-        "--network=backend_lesson",
 		"--env-file",
         ".devcontainer/.env"
     ],
