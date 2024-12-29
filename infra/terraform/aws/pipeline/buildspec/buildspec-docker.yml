@@ -18,7 +18,7 @@ phases:
         POSTGRES_PORT=5432
         POSTGRES_HOST=${POSTGRES_HOST}
         SECRET=hwueir7289rhfkhwe8
-        API_DOMAIN=food-app-generation.com
+        API_DOMAIN=api.food-app-generation.com
         FE_URL=https://food-app-generation.com
         EOL
       - echo "$DOCKER_HUB_PASSWORD" | docker login --username "$DOCKER_HUB_USERNAME" --password-stdin
