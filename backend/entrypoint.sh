@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-go run migrate/migrate.go || {
-    echo "Migration failed! Exiting."
-    exit 1
-}
-/app/main
+export $(grep -v '^#' .env | xargs)
+
+while ! pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER"; do
+  echo "Waiting for database connection..."
+  sleep 5
+done
+
+go run migrate/migrate.go
+exec /app/main

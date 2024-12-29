@@ -1,6 +1,6 @@
-version: "3.8"
 services:
   go-app:
+    container_name: go-app
     build: .
     ports:
       - "8080:8080"
@@ -16,6 +16,7 @@ services:
       - lesson
 
   postgres:
+    container_name: postgres
     image: postgres:15.1-alpine
     environment:
       - POSTGRES_USER=yukihiro
@@ -28,3 +29,4 @@ services:
 
 networks:
   lesson:
+    name: lesson

@@ -1,22 +1,14 @@
-FROM golang:1.23-bullseye as builder
+FROM golang:1.23-bullseye
 
 WORKDIR /app
 ADD ./ ./
 
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
-RUN go run migrate/migrate.go
 
-FROM debian:10-slim
-RUN apt update && apt install -y ca-certificates
-
-WORKDIR /app
-COPY --from=builder /app/main /app/main
-COPY .env /app/.env
-COPY entrypoint.sh /app/entrypoint.sh
-
-RUN chmod +x /app/entrypoint.sh
+RUN apt update && apt install -y ca-certificates netcat postgresql-client
 
 EXPOSE 8080
 
+RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT [ "/app/entrypoint.sh" ]
