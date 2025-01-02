@@ -47,11 +47,16 @@ egress_cidr_blocks  = ["0.0.0.0/0"]
 
 
 ########################################
-# iam setting
+# role setting
 ########################################
 eks_cluster_policy_arns = [
   "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
   "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+]
+eks_cluster_node_policy_arns = [
+  "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+  "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+  "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 ]
 fargate_pod_execution_role_policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
 
@@ -98,5 +103,14 @@ scan_on_push         = false
 ########################################
 # EKS Cluster setting
 ########################################
-cluster_name    = "food-app-cluster-prod"
-cluster_version = "1.31"
+addon_name          = "amazon-cloudwatch-observability"
+cluster_name        = "food-app-cluster-prod"
+cluster_version     = "1.31"
+authentication_mode = "API_AND_CONFIG_MAP"
+bootstrap_cluster_creator_admin_permissions = true
+desired_size        = 2
+max_size            = 3
+min_size            = 1
+instance_types      = ["t3.medium"]
+ami_type            = "AL2_x86_64"
+force_delete        = true

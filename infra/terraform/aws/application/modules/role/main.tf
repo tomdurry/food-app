@@ -9,6 +9,16 @@ resource "aws_iam_role_policy_attachment" "eks_policies" {
   role       = aws_iam_role.eks_cluster_role.name
 }
 
+resource "aws_iam_role" "node_group_role" {
+  assume_role_policy = data.aws_iam_policy_document.node_assume_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "node_group_policies" {
+  for_each   = { for idx, policy_arn in var.eks_cluster_node_policy_arns : idx => policy_arn }
+  policy_arn = each.value
+  role       = aws_iam_role.node_group_role.name
+}
+
 
 resource "aws_iam_role" "fargate_pod_execution_role" {
   name               = "${var.project}-fargate-pod-execution-role-${var.environment}"

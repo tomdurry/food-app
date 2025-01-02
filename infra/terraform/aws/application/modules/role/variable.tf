@@ -9,11 +9,21 @@ variable "environment" {
 }
 
 variable "eks_cluster_policy_arns" {
-  description = "A list of IAM policy ARNs to attach to the role."
+  description = "A list of IAM policy ARNs of eks_cluster_policy_arns"
   type        = list(string)
   default = [
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
     "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  ]
+}
+
+variable "eks_cluster_node_policy_arns" {
+  description = "A list of IAM policy ARNs of eks_cluster_node_policy_arns"
+  type        = list(string)
+  default = [
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ]
 }
 

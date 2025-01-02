@@ -30,6 +30,7 @@ module "role" {
   project                               = var.project
   environment                           = var.environment
   eks_cluster_policy_arns               = var.eks_cluster_policy_arns
+  eks_cluster_node_policy_arns          = var.eks_cluster_node_policy_arns
   fargate_pod_execution_role_policy_arn = var.fargate_pod_execution_role_policy_arn
 }
 
@@ -38,20 +39,31 @@ module "ecr" {
   project              = var.project
   environment          = var.environment
   image_tag_mutability = var.image_tag_mutability
+  force_delete         = var.force_delete
   scan_on_push         = var.scan_on_push
 }
 
 module "eks-cluster" {
-  source          = "../../modules/container/eks-cluster"
-  cluster_name    = var.cluster_name
-  eks_role_arn    = module.role.eks_cluster_role_arn
-  cluster_version = var.cluster_version
-  vpc_id          = module.network.vpc_id
-  subnet_ids      = module.network.private_subnets
+  source                                      = "../../modules/container/eks-cluster"
+  addon_name                                  = var.addon_name
+  cluster_name                                = var.cluster_name
+  eks_role_arn                                = module.role.eks_cluster_role_arn
+  node_group_role_arn                         = module.role.node_group_role_arn
+  cluster_version                             = var.cluster_version
+  authentication_mode                         = var.authentication_mode
+  bootstrap_cluster_creator_admin_permissions = var.bootstrap_cluster_creator_admin_permissions
+  vpc_id                                      = module.network.vpc_id
+  subnet_ids                                  = module.network.private_subnets
+  desired_size                                = var.desired_size
+  max_size                                    = var.max_size
+  min_size                                    = var.min_size
+  instance_types                              = var.instance_types
+  ami_type                                    = var.ami_type
   depends_on = [
     module.role
   ]
 }
+
 
 module "fargate_profile" {
   source                 = "../../modules/container/fargate-profile"
@@ -67,7 +79,9 @@ module "fargate_profile" {
 }
 
 module "eks-policy" {
-  source = "../../modules/container/eks-policy"
+  source      = "../../modules/container/eks-policy"
+  project     = var.project
+  environment = var.environment
   depends_on = [
     module.eks-cluster
   ]

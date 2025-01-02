@@ -19,3 +19,9 @@ variable "scan_on_push" {
   type        = bool
   default     = true
 }
+
+variable "force_delete" {
+  description = "Force delete of aws_ecr_repository"
+  type        = bool
+  default     = true
+}

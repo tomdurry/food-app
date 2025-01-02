@@ -146,11 +146,21 @@ variable "egress_cidr_blocks" {
 ########################################
 
 variable "eks_cluster_policy_arns" {
-  description = "A list of IAM policy ARNs to attach to the role."
+  description = "A list of IAM policy ARNs of eks_cluster_policy_arns"
   type        = list(string)
   default = [
     "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
     "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  ]
+}
+
+variable "eks_cluster_node_policy_arns" {
+  description = "A list of IAM policy ARNs of eks_cluster_node_policy_arns"
+  type        = list(string)
+  default = [
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ]
 }
 
@@ -311,6 +321,11 @@ variable "scan_on_push" {
 ########################################
 # EKS  variable
 ########################################
+variable "addon_name" {
+  description = "The name of the addon name"
+  type        = string
+}
+
 variable "cluster_name" {
   description = "The name of the EKS cluster"
   type        = string
@@ -318,5 +333,45 @@ variable "cluster_name" {
 
 variable "cluster_version" {
   description = "The Kubernetes version for the EKS cluster"
+  type        = string
+}
+
+variable "authentication_mode" {
+  description = "The name of the authentication mode"
+  type        = string
+}
+
+variable "bootstrap_cluster_creator_admin_permissions" {
+  description = "The name of the bootstrap cluster creator admin permissions"
+  type        = string
+}
+
+variable "desired_size" {
+  description = "The desired number of nodes in the EKS node group"
+  type        = number
+}
+
+variable "max_size" {
+  description = "The maximum number of nodes in the EKS node group"
+  type        = number
+}
+
+variable "min_size" {
+  description = "The minimum number of nodes in the EKS node group"
+  type        = number
+}
+
+variable "instance_types" {
+  description = "List of EC2 instance types for the EKS node group"
+  type        = list(string)
+}
+
+variable "ami_type" {
+  description = "The force delete for the EKS node group"
+  type        = string
+}
+
+variable "force_delete" {
+  description = "The AMI type for the EKS node group"
   type        = string
 }
