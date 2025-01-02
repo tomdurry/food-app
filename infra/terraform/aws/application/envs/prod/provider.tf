@@ -11,14 +11,20 @@ terraform {
   }
 }
 
-
 # ---------------------------------------------
-# Provider
+# Providers
 # ---------------------------------------------
 provider "aws" {
+  alias   = "default"
   profile = var.aws_profile != "" ? var.aws_profile : null
   region  = "ap-northeast-1"
 }
+
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
+
 provider "kubernetes" {
   host                   = module.eks-cluster.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks-cluster.cluster_ca_cert)
@@ -33,3 +39,4 @@ provider "kubernetes" {
     ]
   }
 }
+

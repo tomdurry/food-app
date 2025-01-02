@@ -1,5 +1,6 @@
 version: 0.2
 
+
 phases:
   pre_build:
     commands:
@@ -7,6 +8,19 @@ phases:
 
   build:
     commands:
+      - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
+      - |
+        cat <<EOL > .env
+        PORT=8080
+        POSTGRES_USER=yukihiro
+        POSTGRES_PW=Yuki3769
+        POSTGRES_DB=yukihiro
+        POSTGRES_PORT=5432
+        POSTGRES_HOST=${POSTGRES_HOST}
+        SECRET=hwueir7289rhfkhwe8
+        API_DOMAIN=api.food-app-generation.com
+        FE_URL=https://food-app-generation.com
+        EOL
       - echo "$DOCKER_HUB_PASSWORD" | docker login --username "$DOCKER_HUB_USERNAME" --password-stdin
       - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 039725305879.dkr.ecr.ap-northeast-1.amazonaws.com
       - aws ecr put-image-tag-mutability --repository-name food-app-ecr-repository-${ENV} --image-tag-mutability MUTABLE --region ap-northeast-1

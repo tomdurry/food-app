@@ -13,25 +13,111 @@ phases:
       - mv aws-iam-authenticator /usr/local/bin/
       - echo "Installing Helm"
       - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      - echo "Installing CertManager"
 
   pre_build:
     commands:
       - cd infra/terraform/aws/pipeline
-      - echo "Authenticating with AWS EKS cluster"
       - aws eks update-kubeconfig --region ap-northeast-1 --name $CLUSTER_NAME
       - kubectl get namespace prod || kubectl create namespace prod
-      - echo "Retrieving RDS endpoint from Parameter Store"
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
-      - echo "Adding Helm labels and annotations to existing ConfigMap"
+      - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/lb_certificate_arn" --query "Parameter.Value" --output text)
+      - export VPC_ID=$(aws ssm get-parameter --name "/food-app/prod/vpc-id" --query "Parameter.Value" --output text)
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app || echo "ConfigMap aws-auth not found"
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod || echo "ConfigMap aws-auth not found"
       - kubectl label configmap aws-auth -n kube-system app.kubernetes.io/managed-by=Helm || echo "ConfigMap aws-auth not found"
+      - kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.2/cert-manager.yaml
+
+      - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager
+      - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-cainjector
+      - kubectl wait --namespace cert-manager --for=condition=available --timeout=120s deployment/cert-manager-webhook
+
+      - |
+        eksctl utils associate-iam-oidc-provider \
+          --region ap-northeast-1 \
+          --cluster food-app-cluster-prod \
+          --approve
+      - curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+      - | 
+        EXISTING_POLICY=$(aws iam list-policies --scope Local --query "Policies[?PolicyName=='AWSLoadBalancerControllerIAMPolicy'].Arn" --output text)
+        if [ -z "$EXISTING_POLICY" ]; then
+          aws iam create-policy \
+          --policy-name "AWSLoadBalancerControllerIAMPolicy" \
+          --policy-document file://iam_policy.json
+        fi
+      - |
+        eksctl create iamserviceaccount \
+          --name aws-load-balancer-controller \
+          --namespace kube-system \
+          --cluster $CLUSTER_NAME \
+          --region ap-northeast-1 \
+          --attach-policy-arn arn:aws:iam::039725305879:policy/AWSLoadBalancerControllerIAMPolicy \
+          --approve \
+          --override-existing-serviceaccounts
+      - kubectl get serviceaccount aws-load-balancer-controller -n kube-system
+
+      - helm repo add eks https://aws.github.io/eks-charts
+      - helm repo update
+      - kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
+
+
+      - |
+        helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
+          -n kube-system \
+          --set clusterName=$CLUSTER_NAME \
+          --set serviceAccount.create=false \
+          --set serviceAccount.name=aws-load-balancer-controller \
+          --set region=ap-northeast-1 \
+          --set vpcId=$VPC_ID \
+          --set targetType=ip
+
+      - kubectl wait --namespace kube-system --for=condition=ready --timeout=120s pod -l app.kubernetes.io/name=aws-load-balancer-controller
+
 
   build:
     commands:
-      - echo "Deploying application to EKS with Helm"
-      - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST
+      - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST --set acmCertArn=$ACM_CERT_ARN --debug
+      - |
+        echo "Waiting for the load balancer to be ready..."
+        while true; do
+          LB_URL=$(aws elbv2 describe-load-balancers --query "LoadBalancers[?contains(LoadBalancerName, 'k8s-prod')].DNSName" --output text)
+          if [ -n "$LB_URL" ]; then
+            echo "Load balancer is ready: $LB_URL"
+            break
+          else
+            echo "Load balancer is not ready yet. Retrying in 10 seconds..."
+            sleep 10
+          fi
+        done
+      - |
+        cat << EOF > record-set.json
+        {
+          "Comment": "Create CNAME record for api",
+          "Changes": [
+            {
+              "Action": "UPSERT",
+              "ResourceRecordSet": {
+                "Name": "api.food-app-generation.com",
+                "Type": "CNAME",
+                "TTL": 300,
+                "ResourceRecords": [
+                  {
+                    "Value": "$LB_URL"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+        EOF
+      - HOSTED_ZONE_ID=$(aws route53 list-hosted-zones-by-name --dns-name "food-app-generation.com" --query "HostedZones[0].Id" --output text | cut -d'/' -f3)
+      - aws route53 change-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID --change-batch file://record-set.json
+      - aws ssm put-parameter --name "/prod/react_app_api_url" --value "https://api.food-app-generation.com" --type "String" --overwrite
 
   post_build:
     commands:
       - echo "Deployment complete"
+
+artifacts:
+  files:
+    - "**/*"

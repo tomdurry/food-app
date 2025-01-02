@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - cd frontend
+      - npm install
+
+  build:
+    commands:
+      - REACT_APP_API_URL=$(aws ssm get-parameter --name "/prod/react_app_api_url" --query "Parameter.Value" --output text)
+      - echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env
+      - npm run build
+      - aws s3 sync build/ s3://food-app-frontend-bucket --delete
+
+artifacts:
+  files:
+    - "**/*"

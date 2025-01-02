@@ -133,3 +133,61 @@ module "api_gateway" {
     module.lambda-recipe-generation
   ]
 }
+
+module "oai" {
+  source = "../../modules/oai"
+}
+
+module "acm" {
+  source      = "../../modules/acm"
+  environment = var.environment
+}
+
+module "s3" {
+  source      = "../../modules/s3"
+  oai_iam_arn = module.oai.oai_iam_arn
+  depends_on = [
+    module.oai
+  ]
+}
+
+module "route53_us_east_1" {
+  source = "../../modules/route53/us_east_1"
+  providers = {
+    aws = aws.us_east_1
+  }
+  cloudfront_certificate_arn = module.acm.cloudfront_certificate_arn
+  domain_validation_options  = module.acm.cloudfront_domain_validation_options
+
+  depends_on = [
+    module.acm
+  ]
+}
+
+module "route53_ap-northeast-1" {
+  source                     = "../../modules/route53/ap-northeast-1"
+  cloudfront_certificate_arn = module.acm.lb_certificate_arn
+  domain_validation_options  = module.acm.lb_domain_validation_options
+
+  depends_on = [
+    module.acm
+  ]
+}
+
+
+module "cloudfront" {
+  source                              = "../../modules/cloudfront"
+  oai_cloudfront_access_identity_path = module.oai.oai_cloudfront_access_identity_path
+  oai_iam_arn                         = module.oai.oai_iam_arn
+  frontend_bucket_arn                 = module.s3.frontend_bucket_arn
+  bucket_domain_name                  = module.s3.bucket_domain_name
+  cloudfront_certificate_arn          = module.acm.cloudfront_certificate_arn
+  route53_zone_id                     = module.route53_us_east_1.route53_zone_id
+
+  depends_on = [
+    module.oai,
+    module.acm,
+    module.s3,
+    module.route53_us_east_1
+  ]
+}

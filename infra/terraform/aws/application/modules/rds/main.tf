@@ -44,6 +44,15 @@ resource "aws_security_group_rule" "eks_to_rds" {
   security_group_id        = aws_security_group.rds_sg.id
 }
 
+resource "aws_security_group_rule" "rds_ingress_all" {
+  type              = "ingress"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.rds_sg.id
+}
+
 resource "aws_db_instance" "postgres" {
   allocated_storage      = 20
   engine                 = "postgres"

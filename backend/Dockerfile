@@ -1,4 +1,4 @@
-FROM golang:1.23-bullseye as builder
+FROM golang:1.23-alpine
 
 WORKDIR /app
 ADD ./ ./
@@ -6,10 +6,12 @@ ADD ./ ./
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
 
-FROM debian:10-slim
-RUN apt update && apt install -y ca-certificates
+RUN apk --no-cache update && apk add --no-cache \
+    ca-certificates \
+    netcat-openbsd \
+    postgresql-client
 
-COPY --from=builder /app/main /app/main
 EXPOSE 8080
 
-ENTRYPOINT [ "/app/main" ]
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT [ "/app/entrypoint.sh" ]

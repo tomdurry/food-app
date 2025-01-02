@@ -3,10 +3,13 @@ kind: Service
 metadata:
   name: go-app-service
   namespace: prod
+  labels:
+    app: go-app
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 8080
   selector:
     app: go-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
