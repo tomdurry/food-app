@@ -83,16 +83,6 @@ variable "instance_class" {
   type        = string
 }
 
-variable "username" {
-  description = "The master username for the database."
-  type        = string
-}
-
-variable "password" {
-  description = "The master password for the database."
-  type        = string
-}
-
 variable "parameter_group_name" {
   description = "The parameter group name for the RDS instance."
   type        = string
