@@ -58,14 +58,6 @@ resource "aws_lambda_function" "create_database_lambda" {
   timeout       = 30
   architectures = ["x86_64"]
 
-  environment {
-    variables = {
-      DB_USERNAME  = var.db_username
-      DB_PASSWORD  = var.db_password
-      RDS_ENDPOINT = data.aws_ssm_parameter.rds_endpoint.value
-    }
-  }
-
   vpc_config {
     security_group_ids = [var.lambda_sg_id]
     subnet_ids         = var.subnet_ids

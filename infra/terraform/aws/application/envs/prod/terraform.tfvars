@@ -130,8 +130,6 @@ allocated_storage       = 20
 engine                  = "postgres"
 engine_version          = "16.3"
 instance_class          = "db.t4g.micro"
-username                = "yukihiro"
-password                = "Yuki3769"
 parameter_group_name    = "default.postgres16"
 skip_final_snapshot     = true
 publicly_accessible     = false
@@ -147,9 +145,7 @@ eks_to_rds_protocol     = "tcp"
 ########################################
 # Lambda Function
 ########################################
-region      = "ap-northeast-1"
-db_username = "yukihiro"
-db_password = "Yuki3769"
+region = "ap-northeast-1"
 
 ########################################
 # S3

@@ -58,8 +58,8 @@ resource "aws_db_instance" "postgres" {
   engine                 = var.engine
   engine_version         = var.engine_version
   instance_class         = var.instance_class
-  username               = var.username
-  password               = var.password
+  username               = data.aws_ssm_parameter.db_username.value
+  password               = data.aws_ssm_parameter.db_password.value
   parameter_group_name   = var.parameter_group_name
   skip_final_snapshot    = var.skip_final_snapshot
   publicly_accessible    = var.publicly_accessible

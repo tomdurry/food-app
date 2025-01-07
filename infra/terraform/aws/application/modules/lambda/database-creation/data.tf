@@ -1,7 +1,3 @@
-data "aws_ssm_parameter" "rds_endpoint" {
-  name = "/prod/rds_endpoint"
-}
-
 data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
