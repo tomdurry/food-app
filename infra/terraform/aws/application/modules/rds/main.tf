@@ -3,10 +3,16 @@ resource "aws_security_group" "lambda_sg" {
   vpc_id = var.vpc_id
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = var.lambda_sg_from_port
+    to_port     = var.lambda_sg_to_port
+    protocol    = var.lambda_sg_protocol
+    cidr_blocks = var.lambda_sg_cidr_blocks
+  }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "Lambda Security Group"
   }
 }
 
@@ -15,53 +21,68 @@ resource "aws_security_group" "rds_sg" {
   vpc_id = var.vpc_id
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = var.rds_sg_from_port
+    to_port     = var.rds_sg_to_port
+    protocol    = var.rds_sg_protocol
+    cidr_blocks = var.rds_sg_cidr_blocks
   }
 
   tags = {
-    Name = "rds-sg"
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "RDS Security Group"
+    Name        = "rds-sg"
   }
 }
 
 resource "aws_security_group_rule" "lambda_to_rds" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
+  type                     = var.lambda_to_rds_type
+  from_port                = var.lambda_to_rds_from_port
+  to_port                  = var.lambda_to_rds_to_port
+  protocol                 = var.lambda_to_rds_protocol
   source_security_group_id = aws_security_group.lambda_sg.id
   security_group_id        = aws_security_group.rds_sg.id
 }
 
 resource "aws_security_group_rule" "eks_to_rds" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
+  type                     = var.eks_to_rds_rds_type
+  from_port                = var.eks_to_rds_from_port
+  to_port                  = var.eks_to_rds_to_port
+  protocol                 = var.eks_to_rds_protocol
   source_security_group_id = var.eks_cluster_sg_id
   security_group_id        = aws_security_group.rds_sg.id
 }
 
 resource "aws_db_instance" "postgres" {
-  allocated_storage      = 20
-  engine                 = "postgres"
-  engine_version         = "16.3"
-  instance_class         = "db.t4g.micro"
-  username               = "yukihiro"
-  password               = "Yuki3769"
-  parameter_group_name   = "default.postgres16"
-  skip_final_snapshot    = true
-  publicly_accessible    = false
+  allocated_storage      = var.allocated_storage
+  engine                 = var.engine
+  engine_version         = var.engine_version
+  instance_class         = var.instance_class
+  username               = var.username
+  password               = var.password
+  parameter_group_name   = var.parameter_group_name
+  skip_final_snapshot    = var.skip_final_snapshot
+  publicly_accessible    = var.publicly_accessible
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.id
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "PostgreSQL DB Instance"
+  }
 }
 
 resource "aws_db_subnet_group" "rds_subnet" {
   name        = "rds-subnet-group"
   subnet_ids  = var.subnet_ids
   description = "Subnet group for RDS instance"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "RDS Subnet Group"
+  }
 }
 
 resource "aws_ssm_parameter" "rds_endpoint" {
@@ -69,4 +90,10 @@ resource "aws_ssm_parameter" "rds_endpoint" {
   type        = "String"
   value       = aws_db_instance.postgres.address
   description = "RDS endpoint for PostgreSQL instance in production"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "RDS Endpoint Parameter"
+  }
 }

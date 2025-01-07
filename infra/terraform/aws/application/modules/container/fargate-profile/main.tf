@@ -15,4 +15,10 @@ resource "aws_eks_fargate_profile" "this" {
   selector {
     namespace = "kube-system"
   }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "Fargate Profile"
+  }
 }

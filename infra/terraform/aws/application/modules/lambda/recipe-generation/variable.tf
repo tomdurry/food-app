@@ -1,3 +1,13 @@
+variable "project" {
+  type    = string
+  default = "food-app"
+}
+
+variable "environment" {
+  type    = string
+  default = "prod"
+}
+
 variable "lambda_bucket_name" {
   description = "Name of the S3 bucket for Lambda functions"
   type        = string

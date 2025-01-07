@@ -8,6 +8,12 @@ resource "aws_apigatewayv2_api" "recipe_generate_api" {
     allow_headers = var.cors_allow_headers
     max_age       = var.cors_max_age
   }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "API Gateway"
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -27,6 +33,12 @@ resource "aws_apigatewayv2_stage" "api_stage" {
   api_id      = aws_apigatewayv2_api.recipe_generate_api.id
   name        = var.stage_name
   auto_deploy = var.auto_deploy
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "API Gateway Stage"
+  }
 }
 
 resource "aws_lambda_permission" "api_gateway_invoke_permission" {
@@ -41,4 +53,10 @@ resource "aws_ssm_parameter" "api_url_parameter" {
   name  = var.ssm_parameter_name
   type  = var.ssm_parameter_type
   value = "${aws_apigatewayv2_api.recipe_generate_api.api_endpoint}/${var.environment}/generate-recipe"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "SSM Parameter"
+  }
 }

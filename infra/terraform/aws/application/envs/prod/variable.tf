@@ -375,3 +375,270 @@ variable "force_delete" {
   description = "The AMI type for the EKS node group"
   type        = string
 }
+
+########################################
+# RDS  variable
+########################################
+variable "lambda_sg_from_port" {
+  description = "The starting port for the Lambda security group."
+  type        = number
+}
+
+variable "lambda_sg_to_port" {
+  description = "The ending port for the Lambda security group."
+  type        = number
+}
+
+variable "lambda_sg_protocol" {
+  description = "The protocol for the Lambda security group."
+  type        = string
+}
+
+variable "lambda_sg_cidr_blocks" {
+  description = "The CIDR blocks allowed for the Lambda security group."
+  type        = list(string)
+}
+
+variable "rds_sg_from_port" {
+  description = "The starting port for the RDS security group."
+  type        = number
+}
+
+variable "rds_sg_to_port" {
+  description = "The ending port for the RDS security group."
+  type        = number
+}
+
+variable "rds_sg_protocol" {
+  description = "The protocol for the RDS security group."
+  type        = string
+}
+
+variable "rds_sg_cidr_blocks" {
+  description = "The CIDR blocks allowed for the RDS security group."
+  type        = list(string)
+}
+
+variable "allocated_storage" {
+  description = "The amount of storage allocated to the RDS instance in GB."
+  type        = number
+}
+
+variable "engine" {
+  description = "The database engine to use."
+  type        = string
+}
+
+variable "engine_version" {
+  description = "The version of the database engine."
+  type        = string
+}
+
+variable "instance_class" {
+  description = "The instance class for the RDS instance."
+  type        = string
+}
+
+variable "username" {
+  description = "The master username for the database."
+  type        = string
+}
+
+variable "password" {
+  description = "The master password for the database."
+  type        = string
+}
+
+variable "parameter_group_name" {
+  description = "The parameter group name for the RDS instance."
+  type        = string
+}
+
+variable "skip_final_snapshot" {
+  description = "Whether to skip the final snapshot on instance deletion."
+  type        = bool
+}
+
+variable "publicly_accessible" {
+  description = "Whether the RDS instance should be publicly accessible."
+  type        = bool
+}
+
+variable "lambda_to_rds_type" {
+  description = "Type of the connection between Lambda and RDS."
+  type        = string
+}
+
+variable "lambda_to_rds_from_port" {
+  description = "The starting port for the Lambda to RDS connection."
+  type        = number
+}
+
+variable "lambda_to_rds_to_port" {
+  description = "The ending port for the Lambda to RDS connection."
+  type        = number
+}
+
+variable "lambda_to_rds_protocol" {
+  description = "Protocol used for Lambda to RDS connection."
+  type        = string
+}
+
+variable "eks_to_rds_rds_type" {
+  description = "Type of the connection between EKS and RDS."
+  type        = string
+}
+
+variable "eks_to_rds_from_port" {
+  description = "The starting port for the EKS to RDS connection."
+  type        = number
+}
+
+variable "eks_to_rds_to_port" {
+  description = "The ending port for the EKS to RDS connection."
+  type        = number
+}
+
+variable "eks_to_rds_protocol" {
+  description = "Protocol used for EKS to RDS connection."
+  type        = string
+}
+
+########################################
+# Lambda Function variable
+########################################
+variable "region" {
+  description = "The AWS region"
+}
+
+variable "db_username" {
+  description = "Database username"
+}
+
+variable "db_password" {
+  description = "Database password"
+}
+
+########################################
+# S3 variable
+########################################
+variable "block_public_acls" {
+  description = "Specifies whether Amazon S3 should block public ACLs for this bucket"
+  type        = bool
+}
+
+variable "block_public_policy" {
+  description = "Specifies whether Amazon S3 should block public bucket policies for this bucket"
+  type        = bool
+}
+
+variable "ignore_public_acls" {
+  description = "Specifies whether Amazon S3 should ignore public ACLs for this bucket"
+  type        = bool
+}
+
+variable "restrict_public_buckets" {
+  description = "Specifies whether Amazon S3 should restrict public bucket policies for this bucket"
+  type        = bool
+}
+
+########################################
+# Route53 variable
+########################################
+variable "ttl" {
+  description = "Specifies the TTL (Time To Live) value for resources"
+  type        = number
+}
+
+########################################
+# Cloudfront variable
+########################################
+variable "origin_id" {
+  description = "The origin ID of the distribution."
+  type        = string
+}
+
+variable "enabled" {
+  description = "Specifies whether the distribution is enabled."
+  type        = bool
+}
+
+variable "default_root_object" {
+  description = "The object that CloudFront serves when the root URL is requested."
+  type        = string
+}
+
+variable "domain_name" {
+  description = "The domain name for the CloudFront distribution and Route 53 record"
+  type        = string
+}
+
+variable "allowed_methods" {
+  description = "List of allowed HTTP methods for the distribution."
+  type        = list(string)
+}
+
+variable "cached_methods" {
+  description = "List of HTTP methods that will be cached."
+  type        = list(string)
+}
+
+variable "target_origin_id" {
+  description = "The target origin ID for the cache behavior."
+  type        = string
+}
+
+variable "query_string" {
+  description = "Specifies whether to forward query strings to the origin."
+  type        = bool
+}
+
+variable "forward" {
+  description = "Specifies the headers, cookies, or query strings to forward to the origin."
+  type        = string
+}
+
+variable "viewer_protocol_policy" {
+  description = "The protocol policy for the viewer."
+  type        = string
+}
+
+variable "error_code" {
+  description = "The HTTP error code for custom error responses."
+  type        = number
+}
+
+variable "response_code" {
+  description = "The HTTP response code to return for custom error responses."
+  type        = number
+}
+
+variable "response_page_path" {
+  description = "The path to the custom error response page."
+  type        = string
+}
+
+variable "ssl_support_method" {
+  description = "Specifies the SSL/TLS support method."
+  type        = string
+}
+
+variable "minimum_protocol_version" {
+  description = "The minimum SSL/TLS protocol version that CloudFront can use."
+  type        = string
+}
+
+variable "restriction_type" {
+  description = "The restriction type for geographic restrictions."
+  type        = string
+}
+
+variable "type" {
+  description = "The type of cache behavior."
+  type        = string
+}
+
+variable "evaluate_target_health" {
+  description = "Indicates whether to evaluate the target health of an origin."
+  type        = bool
+}

@@ -1,3 +1,7 @@
+variable "ttl" {
+  description = "Specifies the TTL (Time To Live) value for resources"
+  type        = number
+}
 
 variable "cloudfront_certificate_arn" {
   description = "The ARN of the cloudfront certificate"

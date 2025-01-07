@@ -1,3 +1,13 @@
+variable "project" {
+  type    = string
+  default = "food-app"
+}
+
+variable "environment" {
+  type    = string
+  default = "prod"
+}
+
 variable "addon_name" {
   description = "Name of the addon_name"
   type        = string
