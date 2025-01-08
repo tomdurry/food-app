@@ -25,10 +25,10 @@ spec:
               value: "{{ .Values.postgresPort }}"
             - name: POSTGRES_USER
               value: "{{ .Values.postgresUser }}"
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRES_PW
               value: "{{ .Values.postgresPassword }}"
             - name: POSTGRES_DB
-              value: "{{ .Values.postgresDb }}"
+              value: "{{ .Values.postgresDB }}"
           resources:
             requests:
               memory: "128Mi"

@@ -1,7 +1,7 @@
 ########################################
 # VPC
 ########################################
-resource "aws_vpc" "main" {
+resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = var.enable_dns_support
   enable_dns_hostnames = var.enable_dns_hostnames
@@ -15,7 +15,7 @@ resource "aws_vpc" "main" {
 ########################################
 resource "aws_subnet" "public" {
   count                   = var.public_subnet_count
-  vpc_id                  = aws_vpc.main.id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_cidrs[count.index]
   map_public_ip_on_launch = var.map_public_ip_on_launch
   availability_zone       = var.availability_zones[count.index]
@@ -30,7 +30,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   count             = var.private_subnet_count
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index]
   tags = {
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
 # Internet Gateway
 ########################################
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "${var.project}-igw-${var.environment}"
   }
@@ -72,7 +72,7 @@ resource "aws_nat_gateway" "nat" {
 ########################################
 resource "aws_route_table" "public" {
   count  = var.public_route_table_count
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = var.internet_route_cidr
     gateway_id = aws_internet_gateway.gw.id
@@ -90,7 +90,7 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_route_table" "private" {
   count  = var.private_route_table_count
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "${var.project}-private-route-table-${count.index + 1}-${var.environment}"
   }
@@ -113,7 +113,7 @@ resource "aws_route_table_association" "private" {
 # VPC Endpoints
 ########################################
 resource "aws_vpc_endpoint" "api_gateway" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = var.service_endpoints.api_gateway
   vpc_endpoint_type = "Interface"
   subnet_ids        = aws_subnet.private[*].id
@@ -125,7 +125,7 @@ resource "aws_vpc_endpoint" "api_gateway" {
 }
 
 resource "aws_vpc_endpoint" "lambda" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = var.service_endpoints.lambda
   vpc_endpoint_type = "Interface"
   subnet_ids        = aws_subnet.private[*].id
@@ -137,7 +137,7 @@ resource "aws_vpc_endpoint" "lambda" {
 }
 
 resource "aws_vpc_endpoint" "ecr" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = var.service_endpoints.ecr
   vpc_endpoint_type = "Interface"
   subnet_ids        = aws_subnet.private[*].id
@@ -149,7 +149,7 @@ resource "aws_vpc_endpoint" "ecr" {
 }
 
 resource "aws_vpc_endpoint" "cloudwatch" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = var.service_endpoints.cloudwatch
   vpc_endpoint_type = "Interface"
   subnet_ids        = aws_subnet.private[*].id
@@ -161,7 +161,7 @@ resource "aws_vpc_endpoint" "cloudwatch" {
 }
 
 resource "aws_vpc_endpoint" "rds" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = var.service_endpoints.rds
   vpc_endpoint_type = "Interface"
   subnet_ids        = aws_subnet.private[*].id
@@ -173,7 +173,7 @@ resource "aws_vpc_endpoint" "rds" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = var.service_endpoints.s3
   vpc_endpoint_type = "Gateway"
   route_table_ids   = aws_route_table.private[*].id
@@ -186,7 +186,7 @@ resource "aws_vpc_endpoint" "s3" {
 # Security Group
 ########################################
 resource "aws_security_group" "allow_http" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
   name   = "${var.project}-vpc-security-group-${var.environment}"
 
   ingress {
@@ -214,7 +214,7 @@ resource "aws_security_group" "allow_http" {
 resource "aws_ssm_parameter" "vpc_id" {
   name  = "/${var.project}/${var.environment}/vpc-id"
   type  = "String"
-  value = aws_vpc.main.id
+  value = aws_vpc.vpc.id
   tags = {
     Environment = var.environment
     Project     = var.project
