@@ -28,21 +28,18 @@ export const Generate = () => {
       quantity: '',
     }))
 
-    const response = await fetch(
-      'https://0bq5egflid.execute-api.ap-northeast-1.amazonaws.com/generate-recipe',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ingredients,
-          cooking_time: cookingTime,
-          taste,
-          use_only_selected_ingredients: useOnlySelectedIngredients,
-        }),
-      }
-    )
+    const response = await fetch(`${process.env.RECIPE_GENERATE_API_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ingredients,
+        cooking_time: cookingTime,
+        taste,
+        use_only_selected_ingredients: useOnlySelectedIngredients,
+      }),
+    })
 
     const generateData = await response.json()
     GenerateRecipe(generateData.recipe)

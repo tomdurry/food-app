@@ -297,12 +297,6 @@ variable "lambda_architectures" {
   default     = ["arm64"]
 }
 
-variable "openai_api_key" {
-  description = "API key for OpenAI"
-  type        = string
-  sensitive   = true
-}
-
 ########################################
 # ECR  variable
 ########################################

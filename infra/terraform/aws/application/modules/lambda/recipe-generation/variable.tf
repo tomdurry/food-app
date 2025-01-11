@@ -47,9 +47,3 @@ variable "lambda_architectures" {
   description = "Architectures for the Lambda function"
   default     = ["arm64"]
 }
-
-variable "openai_api_key" {
-  description = "API key for OpenAI"
-  type        = string
-  sensitive   = true
-}

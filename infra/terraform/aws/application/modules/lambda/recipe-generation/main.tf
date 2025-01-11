@@ -48,7 +48,7 @@ resource "aws_lambda_function" "recipe_generate_function" {
 
   environment {
     variables = {
-      OPENAI_API_KEY = var.openai_api_key
+      OPENAI_API_KEY = data.aws_ssm_parameter.openai_api_key.value
     }
   }
 

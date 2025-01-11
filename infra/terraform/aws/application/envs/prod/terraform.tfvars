@@ -71,7 +71,6 @@ lambda_handler       = "recipe_generate.lambda_handler"
 lambda_runtime       = "python3.12"
 lambda_timeout       = 60
 lambda_architectures = ["arm64"]
-openai_api_key       = "sk-proj-xMOUvQHg1HcwnP9OZKJUT3BlbkFJqXbDGM2Gdr23UwDlqQK0"
 
 ########################################
 # API Gateway setting

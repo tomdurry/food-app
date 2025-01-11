@@ -101,7 +101,6 @@ module "lambda-recipe-generation" {
   lambda_runtime       = var.lambda_runtime
   lambda_timeout       = var.lambda_timeout
   lambda_architectures = var.lambda_architectures
-  openai_api_key       = var.openai_api_key
 }
 
 module "rds" {
