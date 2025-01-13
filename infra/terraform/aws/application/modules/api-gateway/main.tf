@@ -52,7 +52,7 @@ resource "aws_lambda_permission" "api_gateway_invoke_permission" {
 resource "aws_ssm_parameter" "api_url_parameter" {
   name  = var.ssm_parameter_name
   type  = var.ssm_parameter_type
-  value = "${aws_apigatewayv2_api.recipe_generate_api.api_endpoint}/${var.environment}/generate-recipe"
+  value = "${aws_apigatewayv2_api.recipe_generate_api.api_endpoint}/generate-recipe"
 
   tags = {
     Project     = var.project
