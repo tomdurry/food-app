@@ -1,10 +1,11 @@
 package validator
 
 import (
+	"regexp"
+
 	"github.com/tomdurry/food-app/model"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/go-ozzo/ozzo-validation/v4/is"
 )
 
 type IUserValidator interface {
@@ -18,12 +19,13 @@ func NewUserValidator() IUserValidator {
 }
 
 func (uv *userValidator) UserValidate(user model.User) error {
+	userIDRegex := regexp.MustCompile(`^[a-zA-Z0-9_]+$`)
 	return validation.ValidateStruct(&user,
 		validation.Field(
-			&user.Email,
-			validation.Required.Error("email is required"),
+			&user.UserID,
+			validation.Required.Error("user_id is required"),
 			validation.RuneLength(1, 30).Error("limited max 30 char"),
-			is.Email.Error("is not valid email format"),
+			validation.Match(userIDRegex).Error("is not valid user_id format"),
 		),
 		validation.Field(
 			&user.Password,
