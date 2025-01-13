@@ -23,9 +23,9 @@ func (uv *userValidator) UserValidate(user model.User) error {
 	return validation.ValidateStruct(&user,
 		validation.Field(
 			&user.LoginId,
-			validation.Required.Error("loginid is required"),
+			validation.Required.Error("login_id is required"),
 			validation.RuneLength(1, 30).Error("limited max 30 char"),
-			validation.Match(loginIdRegex).Error("is not valid loginid format"),
+			validation.Match(loginIdRegex).Error("is not valid login_id format"),
 		),
 		validation.Field(
 			&user.Password,

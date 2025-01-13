@@ -25,13 +25,13 @@ export const useError = () => {
         navigate('/')
         break
       case 'duplicated key not allowed':
-        alert('loginid already exist, please use another one')
+        alert('login_id already exist, please use another one')
         break
       case 'crypto/bcrypt: hashedPassword is not the hash of the given password':
         alert('password is not correct')
         break
       case 'record not found':
-        alert('loginid is not correct')
+        alert('login_id is not correct')
         break
       default:
         alert(msg)
