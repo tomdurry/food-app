@@ -9,15 +9,18 @@ phases:
   build:
     commands:
       - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
+      - export POSTGRES_USER=$(aws ssm get-parameter --name "/prod/db_username" --query "Parameter.Value" --output text)
+      - export POSTGRES_PW=$(aws ssm get-parameter --name "/prod/db_password" --with-decryption --query "Parameter.Value" --output text)
+      - export SECRET=$(aws ssm get-parameter --name "/prod/secret" --with-decryption --query "Parameter.Value" --output text)
       - |
         cat <<EOL > .env
         PORT=8080
-        POSTGRES_USER=yukihiro
-        POSTGRES_PW=Yuki3769
+        POSTGRES_USER=${POSTGRES_USER}
+        POSTGRES_PW=${POSTGRES_PW}
         POSTGRES_DB=yukihiro
         POSTGRES_PORT=5432
         POSTGRES_HOST=${POSTGRES_HOST}
-        SECRET=hwueir7289rhfkhwe8
+        SECRET=${SECRET}
         API_DOMAIN=api.food-app-generation.com
         FE_URL=https://food-app-generation.com
         EOL

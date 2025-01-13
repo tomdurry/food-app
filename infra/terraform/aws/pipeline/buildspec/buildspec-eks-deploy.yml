@@ -20,8 +20,6 @@ phases:
       - cd infra/terraform/aws/pipeline
       - aws eks update-kubeconfig --region ap-northeast-1 --name $CLUSTER_NAME
       - kubectl get namespace prod || kubectl create namespace prod
-      - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
-      - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/lb_certificate_arn" --query "Parameter.Value" --output text)
       - export VPC_ID=$(aws ssm get-parameter --name "/food-app/prod/vpc-id" --query "Parameter.Value" --output text)
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-name=go-app || echo "ConfigMap aws-auth not found"
       - kubectl annotate configmap aws-auth -n kube-system meta.helm.sh/release-namespace=prod || echo "ConfigMap aws-auth not found"
@@ -76,7 +74,19 @@ phases:
 
   build:
     commands:
-      - helm upgrade --install go-app ./k8s --namespace prod --set postgresHost=$POSTGRES_HOST --set acmCertArn=$ACM_CERT_ARN --debug
+      - export POSTGRES_HOST=$(aws ssm get-parameter --name "/prod/rds_endpoint" --query "Parameter.Value" --output text)
+      - export POSTGRES_USER=$(aws ssm get-parameter --name "/prod/db_username" --query "Parameter.Value" --output text)
+      - export POSTGRES_PASSWORD=$(aws ssm get-parameter --name "/prod/db_password" --with-decryption --query "Parameter.Value" --output text)
+      - export ACM_CERT_ARN=$(aws ssm get-parameter --name "/prod/lb_certificate_arn" --query "Parameter.Value" --output text)
+      - |
+        helm upgrade --install go-app ./k8s \
+          --namespace prod \
+          --set postgresHost=$POSTGRES_HOST \
+          --set postgresUser=$POSTGRES_USER \
+          --set postgresPassword=$POSTGRES_PASSWORD \
+          --set acmCertArn=$ACM_CERT_ARN \
+          --debug
+
       - |
         echo "Waiting for the load balancer to be ready..."
         while true; do

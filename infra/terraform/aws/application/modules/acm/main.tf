@@ -4,6 +4,7 @@ resource "aws_acm_certificate" "cloudfront_certificate" {
   validation_method = "DNS"
 
   tags = {
+    Project     = var.project
     Environment = var.environment
   }
 }
@@ -13,6 +14,7 @@ resource "aws_acm_certificate" "lb_certificate" {
   validation_method = "DNS"
 
   tags = {
+    Project     = var.project
     Environment = var.environment
   }
 }
@@ -23,6 +25,7 @@ resource "aws_ssm_parameter" "lb_certificate_arn" {
   value = aws_acm_certificate.lb_certificate.arn
 
   tags = {
+    Project     = var.project
     Environment = var.environment
   }
 }

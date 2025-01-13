@@ -6,10 +6,9 @@ ssm = boto3.client('ssm')
 
 def lambda_handler(event, context):
     rds_endpoint = ssm.get_parameter(Name='/prod/rds_endpoint', WithDecryption=True)['Parameter']['Value']
-    
     db_name = "postgres"
-    db_user = "yukihiro"
-    db_password = "Yuki3769"
+    db_user = ssm.get_parameter(Name='/prod/db_username', WithDecryption=False)['Parameter']['Value']
+    db_password = ssm.get_parameter(Name='/prod/db_password', WithDecryption=True)['Parameter']['Value']
     db_port = 5432
     
     try:

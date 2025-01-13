@@ -11,7 +11,7 @@ resource "aws_route53_record" "frontend_certificate_validation" {
   name    = each.value.name
   type    = each.value.type
   records = [each.value.record]
-  ttl     = 60
+  ttl     = var.ttl
 }
 
 resource "aws_acm_certificate_validation" "cloudfront_certificate_validation" {

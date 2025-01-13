@@ -1,3 +1,13 @@
+variable "project" {
+  type    = string
+  default = "food-app"
+}
+
+variable "environment" {
+  type    = string
+  default = "prod"
+}
+
 variable "lambda_bucket_name" {
   description = "Name of the S3 bucket for Lambda functions"
   type        = string
@@ -36,10 +46,4 @@ variable "lambda_timeout" {
 variable "lambda_architectures" {
   description = "Architectures for the Lambda function"
   default     = ["arm64"]
-}
-
-variable "openai_api_key" {
-  description = "API key for OpenAI"
-  type        = string
-  sensitive   = true
 }

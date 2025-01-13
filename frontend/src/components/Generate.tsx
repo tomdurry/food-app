@@ -29,7 +29,7 @@ export const Generate = () => {
     }))
 
     const response = await fetch(
-      'https://0bq5egflid.execute-api.ap-northeast-1.amazonaws.com/generate-recipe',
+      `${process.env.REACT_APP_RECIPE_GENERATE_API_URL}`,
       {
         method: 'POST',
         headers: {

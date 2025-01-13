@@ -47,3 +47,8 @@ data "aws_iam_policy_document" "lambda_policy" {
     ]
   }
 }
+
+data "aws_ssm_parameter" "openai_api_key" {
+  name            = "/openai/api_key"
+  with_decryption = true
+}

@@ -47,11 +47,16 @@ egress_cidr_blocks  = ["0.0.0.0/0"]
 
 
 ########################################
-# iam setting
+# role setting
 ########################################
 eks_cluster_policy_arns = [
   "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
   "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+]
+eks_cluster_node_policy_arns = [
+  "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+  "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+  "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 ]
 fargate_pod_execution_role_policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
 
@@ -66,7 +71,6 @@ lambda_handler       = "recipe_generate.lambda_handler"
 lambda_runtime       = "python3.12"
 lambda_timeout       = 60
 lambda_architectures = ["arm64"]
-openai_api_key       = "sk-proj-xMOUvQHg1HcwnP9OZKJUT3BlbkFJqXbDGM2Gdr23UwDlqQK0"
 
 ########################################
 # API Gateway setting
@@ -98,5 +102,81 @@ scan_on_push         = false
 ########################################
 # EKS Cluster setting
 ########################################
-cluster_name    = "food-app-cluster-prod"
-cluster_version = "1.31"
+addon_name                                  = "amazon-cloudwatch-observability"
+cluster_name                                = "food-app-cluster-prod"
+cluster_version                             = "1.31"
+authentication_mode                         = "API_AND_CONFIG_MAP"
+bootstrap_cluster_creator_admin_permissions = true
+desired_size                                = 2
+max_size                                    = 3
+min_size                                    = 1
+instance_types                              = ["t3.medium"]
+ami_type                                    = "AL2_x86_64"
+force_delete                                = true
+
+########################################
+# RDS
+########################################
+lambda_sg_from_port     = 0
+lambda_sg_to_port       = 0
+lambda_sg_protocol      = "-1"
+lambda_sg_cidr_blocks   = ["0.0.0.0/0"]
+rds_sg_from_port        = 0
+rds_sg_to_port          = 0
+rds_sg_protocol         = "-1"
+rds_sg_cidr_blocks      = ["0.0.0.0/0"]
+allocated_storage       = 20
+engine                  = "postgres"
+engine_version          = "16.3"
+instance_class          = "db.t4g.micro"
+parameter_group_name    = "default.postgres16"
+skip_final_snapshot     = true
+publicly_accessible     = false
+lambda_to_rds_type      = "ingress"
+lambda_to_rds_from_port = 5432
+lambda_to_rds_to_port   = 5432
+lambda_to_rds_protocol  = "tcp"
+eks_to_rds_rds_type     = "ingress"
+eks_to_rds_from_port    = 5432
+eks_to_rds_to_port      = 5432
+eks_to_rds_protocol     = "tcp"
+
+########################################
+# Lambda Function
+########################################
+region = "ap-northeast-1"
+
+########################################
+# S3
+########################################
+block_public_acls       = true
+block_public_policy     = true
+ignore_public_acls      = true
+restrict_public_buckets = true
+
+########################################
+# Route53
+########################################
+ttl = 60
+
+########################################
+# Cloudfront
+########################################
+origin_id                = "S3-Frontend-Origin"
+enabled                  = true
+default_root_object      = "index.html"
+domain_name              = "food-app-generation.com"
+allowed_methods          = ["GET", "HEAD"]
+cached_methods           = ["GET", "HEAD"]
+target_origin_id         = "S3-Frontend-Origin"
+query_string             = false
+forward                  = "none"
+viewer_protocol_policy   = "redirect-to-https"
+error_code               = 404
+response_code            = 200
+response_page_path       = "/index.html"
+ssl_support_method       = "sni-only"
+minimum_protocol_version = "TLSv1.2_2021"
+restriction_type         = "none"
+type                     = "A"
+evaluate_target_health   = false

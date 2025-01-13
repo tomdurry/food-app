@@ -16,7 +16,6 @@ func NewRouter(uc controller.IUserController, rc controller.IRecipeController) *
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{
 			os.Getenv("FE_URL"),
-			"https://food-app-generation.com",
 		},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept,
 			echo.HeaderAccessControlAllowHeaders, echo.HeaderXCSRFToken},

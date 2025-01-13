@@ -2,7 +2,9 @@ resource "aws_s3_bucket" "frontend_bucket" {
   bucket = "food-app-frontend-bucket"
 
   tags = {
-    Environment = "prod"
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "Frontend S3 Bucket"
   }
 }
 
@@ -27,27 +29,15 @@ resource "aws_s3_bucket_versioning" "frontend_versioning" {
 resource "aws_s3_bucket_public_access_block" "frontend_bucket_block" {
   bucket = aws_s3_bucket.frontend_bucket.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = var.block_public_acls
+  block_public_policy     = var.block_public_policy
+  ignore_public_acls      = var.ignore_public_acls
+  restrict_public_buckets = var.restrict_public_buckets
 }
 
 resource "aws_s3_bucket_policy" "frontend_policy" {
   bucket = aws_s3_bucket.frontend_bucket.id
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "AllowCloudFrontAccess"
-        Effect = "Allow"
-        Principal = {
-          AWS = var.oai_iam_arn
-        }
-        Action   = "s3:GetObject"
-        Resource = "${aws_s3_bucket.frontend_bucket.arn}/*"
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.frontend_policy.json
 }
+
