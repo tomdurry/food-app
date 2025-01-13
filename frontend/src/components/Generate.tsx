@@ -28,18 +28,21 @@ export const Generate = () => {
       quantity: '',
     }))
 
-    const response = await fetch(`${process.env.RECIPE_GENERATE_API_URL}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ingredients,
-        cooking_time: cookingTime,
-        taste,
-        use_only_selected_ingredients: useOnlySelectedIngredients,
-      }),
-    })
+    const response = await fetch(
+      `${process.env.REACT_APP_RECIPE_GENERATE_API_URL}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ingredients,
+          cooking_time: cookingTime,
+          taste,
+          use_only_selected_ingredients: useOnlySelectedIngredients,
+        }),
+      }
+    )
 
     const generateData = await response.json()
     GenerateRecipe(generateData.recipe)
