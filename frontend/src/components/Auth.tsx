@@ -4,7 +4,7 @@ import { useMutateAuth } from '../hooks/useMutateAuth'
 import useStore from '../store'
 
 export const Auth = () => {
-  const [email, setEmail] = useState('')
+  const [loginid, setLoginId] = useState('')
   const [pw, setPw] = useState('')
   const { isLoginForm } = useStore((state) => ({
     isLoginForm: state.isLoginForm,
@@ -16,18 +16,18 @@ export const Auth = () => {
     try {
       if (isLoginForm) {
         loginMutation.mutate({
-          email: email,
+          loginid: loginid,
           password: pw,
         })
       } else {
         await registerMutation
           .mutateAsync({
-            email: email,
+            loginid: loginid,
             password: pw,
           })
           .then(() =>
             loginMutation.mutate({
-              email: email,
+              loginid: loginid,
               password: pw,
             })
           )
@@ -46,12 +46,12 @@ export const Auth = () => {
         <div>
           <input
             className="mb-3 px-3 text-sm py-2 border border-gray-300"
-            name="email"
-            type="email"
+            name="loginid"
+            type="loginid"
             autoFocus
-            placeholder="Email address"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            placeholder="LoginId"
+            onChange={(e) => setLoginId(e.target.value)}
+            value={loginid}
           />
         </div>
         <div>
@@ -67,7 +67,7 @@ export const Auth = () => {
         <div className="flex justify-center my-2">
           <button
             className="disabled:opacity-40 py-2 px-4 rounded text-white bg-indigo-600"
-            disabled={!email || !pw}
+            disabled={!loginid || !pw}
             type="submit"
           >
             {isLoginForm ? 'ログイン' : 'ユーザー作成'}
