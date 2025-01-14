@@ -24,7 +24,7 @@ func (uv *userValidator) UserValidate(user model.User) error {
 		validation.Field(
 			&user.LoginId,
 			validation.Required.Error("login_id is required"),
-			validation.RuneLength(1, 30).Error("limited max 30 char"),
+			validation.RuneLength(1, 16).Error("limited max 16 char"),
 			validation.Match(loginIdRegex).Error("is not valid login_id format"),
 		),
 		validation.Field(
