@@ -34,13 +34,13 @@ func (uu *userUsecase) SignUp(user model.User) (model.UserResponse, error) {
 	if err != nil {
 		return model.UserResponse{}, err
 	}
-	newUser := model.User{Email: user.Email, Password: string(hash)}
+	newUser := model.User{LoginId: user.LoginId, Password: string(hash)}
 	if err := uu.ur.CreateUser(&newUser); err != nil {
 		return model.UserResponse{}, err
 	}
 	resUser := model.UserResponse{
-		ID:    newUser.ID,
-		Email: newUser.Email,
+		ID:      newUser.ID,
+		LoginId: newUser.LoginId,
 	}
 	return resUser, nil
 }
@@ -50,7 +50,7 @@ func (uu *userUsecase) Login(user model.User) (string, error) {
 		return "", err
 	}
 	storedUser := model.User{}
-	if err := uu.ur.GetUserByEmail(&storedUser, user.Email); err != nil {
+	if err := uu.ur.GetUserByLoginId(&storedUser, user.LoginId); err != nil {
 		return "", err
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password))
