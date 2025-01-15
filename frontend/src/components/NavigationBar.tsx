@@ -42,9 +42,11 @@ export const NavigationBar = () => {
             <Link to="/generate" className="mx-2 text-lg">
               レシピ生成
             </Link>
-            <button onClick={handleFavoriteClick} className="mx-2 text-lg">
-              お気に入りレシピ
-            </button>
+            {isLogin && (
+              <button onClick={handleFavoriteClick} className="mx-2 text-lg">
+                お気に入りレシピ
+              </button>
+            )}
             {isLogin ? (
               <>
                 <button onClick={logout} className="mx-2 text-lg">
