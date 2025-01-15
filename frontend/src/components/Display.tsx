@@ -3,19 +3,20 @@ import { useState } from 'react'
 import { useMutateRecipe } from '../hooks/useMutateRecipe'
 
 export const Display = () => {
-  const { Recipe } = useStore()
+  const { Recipe, isLogin } = useStore() // ログイン状態を取得
   const [isFavorite, setIsFavorite] = useState(false)
   const { favoriteMutation } = useMutateRecipe()
 
   const handleFavoriteClick = () => {
-    if (isFavorite === false)
+    if (!isFavorite) {
       favoriteMutation.mutate({
         recipe_name: Recipe.recipe_name,
         ingredients: Recipe.ingredients,
         instructions: Recipe.instructions,
         image_url: Recipe.image_url,
       })
-    setIsFavorite(true)
+      setIsFavorite(true)
+    }
   }
 
   return (
@@ -26,14 +27,16 @@ export const Display = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               生成されたレシピ
             </h2>
-            <button
-              onClick={handleFavoriteClick}
-              className={`p-2 rounded ${
-                isFavorite ? 'bg-yellow-400' : 'bg-gray-200'
-              }`}
-            >
-              {isFavorite ? 'お気に入りに追加済み' : 'お気に入りに追加'}
-            </button>
+            {isLogin && (
+              <button
+                onClick={handleFavoriteClick}
+                className={`p-2 rounded ${
+                  isFavorite ? 'bg-yellow-400' : 'bg-gray-200'
+                }`}
+              >
+                {isFavorite ? 'お気に入りに追加済み' : 'お気に入りに追加'}
+              </button>
+            )}
           </div>
           <h3 className="text-xl font-semibold text-orange-600 mb-4">
             {Recipe.recipe_name}

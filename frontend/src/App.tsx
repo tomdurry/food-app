@@ -26,23 +26,10 @@ function App() {
       <NavigationBar />
       <div className="pt-16">
         <Routes>
-          <Route path="/" element={<Auth />} />
-          <Route
-            path="/generate"
-            element={
-              <PrivateRoute>
-                <Generate />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/display"
-            element={
-              <PrivateRoute>
-                <Display />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/" element={<Generate />} />
+          <Route path="/generate" element={<Generate />} />
+          <Route path="/display" element={<Display />} />
+          <Route path="/auth" element={<Auth />} />
           <Route
             path="/favorite"
             element={
