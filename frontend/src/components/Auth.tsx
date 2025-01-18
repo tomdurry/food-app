@@ -1,5 +1,4 @@
 import { useState, FormEvent } from 'react'
-import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 import { useMutateAuth } from '../hooks/useMutateAuth'
 import useStore from '../store'
 
@@ -36,44 +35,49 @@ export const Auth = () => {
       console.error('An error occurred during authentication:', err)
     }
   }
+
   return (
-    <div className="flex justify-center items-center flex-col min-h-screen text-gray-600 font-mono">
-      <div className="flex items-center mb-8">
-        <CheckBadgeIcon className="h-8 w-8 mr-2 text-blue-500" />
-        <span className="text-center text-3xl font-extrabold">Login Page</span>
-      </div>
-      <form onSubmit={submitAuthHandler}>
-        <div>
-          <input
-            className="mb-3 px-3 text-sm py-2 border border-gray-300"
-            name="login_id"
-            type="login_id"
-            autoFocus
-            placeholder="LoginId"
-            onChange={(e) => setLoginId(e.target.value)}
-            value={login_id}
-          />
-        </div>
-        <div>
-          <input
-            className="mb-3 px-3 text-sm py-2 border border-gray-300"
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPw(e.target.value)}
-            value={pw}
-          />
-        </div>
-        <div className="flex justify-center my-2">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-yellow-100 to-orange-100 font-mono">
+      <div className="bg-white p-6 rounded-xl shadow-lg max-w-md w-full">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          {isLoginForm ? 'ログイン' : 'ユーザー作成'}
+        </h1>
+        <form onSubmit={submitAuthHandler}>
+          <div className="mb-4">
+            <input
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-700"
+              name="login_id"
+              type="login_id"
+              placeholder="ユーザーID"
+              autoFocus
+              onChange={(e) => setLoginId(e.target.value)}
+              value={login_id}
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-700"
+              name="password"
+              type="password"
+              placeholder="パスワード"
+              onChange={(e) => setPw(e.target.value)}
+              value={pw}
+            />
+          </div>
           <button
-            className="disabled:opacity-40 py-2 px-4 rounded text-white bg-indigo-600"
+            className="w-full py-3 px-4 bg-orange-500 text-white rounded-lg font-semibold text-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:opacity-50"
             disabled={!login_id || !pw}
             type="submit"
           >
             {isLoginForm ? 'ログイン' : 'ユーザー作成'}
           </button>
-        </div>
-      </form>
+        </form>
+        <p className="text-center text-sm text-gray-500 mt-4">
+          {isLoginForm
+            ? 'アカウントをお持ちでないですか？ ユーザー登録をしてください。'
+            : '既にアカウントをお持ちですか？ ログインしてください。'}
+        </p>
+      </div>
     </div>
   )
 }

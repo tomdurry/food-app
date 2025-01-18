@@ -22,25 +22,27 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter>
-      <NavigationBar />
-      <div className="pt-16">
-        <Routes>
-          <Route path="/" element={<Generate />} />
-          <Route path="/generate" element={<Generate />} />
-          <Route path="/display" element={<Display />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route
-            path="/favorite"
-            element={
-              <PrivateRoute>
-                <Favorite />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <div style={{ backgroundColor: '#FFE6DD', minHeight: '100vh' }}>
+      <BrowserRouter>
+        <NavigationBar />
+        <div className="pt-16">
+          <Routes>
+            <Route path="/" element={<Generate />} />
+            <Route path="/generate" element={<Generate />} />
+            <Route path="/display" element={<Display />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route
+              path="/favorite"
+              element={
+                <PrivateRoute>
+                  <Favorite />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
   )
 }
 
