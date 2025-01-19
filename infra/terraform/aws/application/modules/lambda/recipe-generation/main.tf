@@ -37,7 +37,7 @@ resource "null_resource" "docker_push" {
   depends_on = [aws_ecr_repository.lambda_repository]
 }
 
-resource "aws_lambda_function" "recipe_generate_lambda" {
+resource "aws_lambda_function" "recipe_generate_function" {
   function_name = "recipe-generate-${var.environment}"
   role          = aws_iam_role.lambda_role.arn
   package_type  = "Image"
