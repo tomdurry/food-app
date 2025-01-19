@@ -8,6 +8,11 @@ variable "environment" {
   default = "prod"
 }
 
+variable "region" {
+  description = "The AWS region"
+  default     = "ap-northeast-1"
+}
+
 variable "lambda_bucket_name" {
   description = "Name of the S3 bucket for Lambda functions"
   type        = string
