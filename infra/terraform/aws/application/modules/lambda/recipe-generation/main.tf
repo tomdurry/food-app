@@ -33,9 +33,12 @@ resource "null_resource" "docker_push" {
       docker push ${aws_ecr_repository.lambda_repository.repository_url}:latest
     EOT
   }
-
+  triggers = {
+    build_time = timestamp()
+  }
   depends_on = [aws_ecr_repository.lambda_repository]
 }
+
 
 resource "aws_lambda_function" "recipe_generate_function" {
   function_name = "recipe-generate-${var.environment}"
