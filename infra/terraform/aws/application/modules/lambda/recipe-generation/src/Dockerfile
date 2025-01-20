@@ -9,7 +9,7 @@
 
 # CMD ["python3", "-m", "awslambdaric", "recipe_generate.lambda_handler"]
 
-FROM public.ecr.aws/lambda/python:3.12
+FROM --platform=linux/amd64 public.ecr.aws/lambda/python:3.12
 
 WORKDIR /var/task
 
