@@ -294,7 +294,7 @@ variable "lambda_timeout" {
 
 variable "lambda_architectures" {
   description = "Architectures for the Lambda function"
-  default     = ["arm64"]
+  default     = ["x86_64"]
 }
 
 ########################################
