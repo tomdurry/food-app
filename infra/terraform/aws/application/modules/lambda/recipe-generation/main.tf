@@ -27,8 +27,8 @@ resource "aws_ecr_repository" "lambda_repository" {
 resource "null_resource" "docker_push" {
   provisioner "local-exec" {
     command = <<EOT
-      aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.lambda_repository.repository_url}
-      docker build --platform=linux/amd64 -t recipe-generate-function-${var.environment} ../../modules/lambda/recipe-generation/src
+      aws ecr get-login-passwordlinux/amd64 --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.lambda_repository.repository_url}
+      docker build --platform= -t recipe-generate-function-${var.environment} ../../modules/lambda/recipe-generation/src
       docker tag recipe-generate-function-${var.environment}:latest ${aws_ecr_repository.lambda_repository.repository_url}:latest
       docker push ${aws_ecr_repository.lambda_repository.repository_url}:latest
     EOT

@@ -70,7 +70,7 @@ lambda_function_name = "recipe-generate"
 lambda_handler       = "recipe_generate.lambda_handler"
 lambda_runtime       = "python3.12"
 lambda_timeout       = 60
-lambda_architectures = ["arm64"]
+lambda_architectures = ["x86_64"]
 
 ########################################
 # API Gateway setting
