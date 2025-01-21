@@ -34,7 +34,21 @@ data "aws_iam_policy_document" "lambda_policy" {
       "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.lambda_function_name}-${var.environment}:*"
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::food-app-racipe-image-${var.environment}",
+      "arn:aws:s3:::food-app-racipe-image-${var.environment}/*"
+    ]
+  }
 }
+
 
 data "aws_ssm_parameter" "openai_api_key" {
   name            = "/openai/api_key"
