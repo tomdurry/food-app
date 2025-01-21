@@ -274,7 +274,7 @@ variable "lambda_role_name" {
 
 variable "lambda_function_name" {
   description = "Name of the Lambda function"
-  default     = "recipe_generate"
+  default     = "recipe-generate"
 }
 
 variable "lambda_handler" {
@@ -294,7 +294,7 @@ variable "lambda_timeout" {
 
 variable "lambda_architectures" {
   description = "Architectures for the Lambda function"
-  default     = ["arm64"]
+  default     = ["x86_64"]
 }
 
 ########################################

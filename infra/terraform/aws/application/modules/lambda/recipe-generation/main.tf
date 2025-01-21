@@ -1,25 +1,3 @@
-resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = var.lambda_bucket_name
-
-  tags = {
-    Project     = var.project
-    Environment = var.environment
-    Resource    = "Lambda Bucket"
-  }
-}
-
-resource "aws_s3_object" "lambda_zip" {
-  bucket = aws_s3_bucket.lambda_bucket.bucket
-  key    = var.lambda_key
-  source = "../../modules/lambda/artefact/${var.lambda_key}"
-
-  tags = {
-    Project     = var.project
-    Environment = var.environment
-    Resource    = "Lambda Zip"
-  }
-}
-
 resource "aws_iam_role" "lambda_role" {
   name               = var.lambda_role_name
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
@@ -36,25 +14,49 @@ resource "aws_iam_role_policy" "lambda_role_policy" {
   policy = data.aws_iam_policy_document.lambda_policy.json
 }
 
+resource "aws_ecr_repository" "lambda_repository" {
+  name = "recipe-generate-function-${var.environment}"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "ECR Repository"
+  }
+}
+
+resource "null_resource" "docker_push" {
+  provisioner "local-exec" {
+    command = <<EOT
+      aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.lambda_repository.repository_url}
+      docker build --platform=linux/amd64 -t recipe-generate-function-${var.environment} ../../modules/lambda/recipe-generation/src
+      docker tag recipe-generate-function-${var.environment}:latest ${aws_ecr_repository.lambda_repository.repository_url}:latest
+      docker push ${aws_ecr_repository.lambda_repository.repository_url}:latest
+    EOT
+  }
+  triggers = {
+    build_time = timestamp()
+  }
+  depends_on = [aws_ecr_repository.lambda_repository]
+}
+
+
 resource "aws_lambda_function" "recipe_generate_function" {
-  function_name = var.lambda_function_name
+  function_name = "recipe-generate-${var.environment}"
   role          = aws_iam_role.lambda_role.arn
-  handler       = var.lambda_handler
-  runtime       = var.lambda_runtime
-  s3_bucket     = aws_s3_bucket.lambda_bucket.bucket
-  s3_key        = aws_s3_object.lambda_zip.key
+  package_type  = "Image"
+  image_uri     = "${aws_ecr_repository.lambda_repository.repository_url}:latest"
   timeout       = var.lambda_timeout
   architectures = var.lambda_architectures
-
   environment {
     variables = {
       OPENAI_API_KEY = data.aws_ssm_parameter.openai_api_key.value
     }
   }
-
   tags = {
     Project     = var.project
     Environment = var.environment
     Resource    = "Lambda Function"
   }
+
+  depends_on = [null_resource.docker_push]
 }

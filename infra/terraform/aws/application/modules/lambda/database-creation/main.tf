@@ -46,7 +46,9 @@ resource "null_resource" "docker_push" {
       docker push ${aws_ecr_repository.lambda_repository.repository_url}:latest
     EOT
   }
-
+  triggers = {
+    build_time = timestamp()
+  }
   depends_on = [aws_ecr_repository.lambda_repository]
 }
 
