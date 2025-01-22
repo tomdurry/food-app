@@ -8,9 +8,11 @@ import boto3
 from datetime import datetime
 import os
 
-client = OpenAI()
-s3_client = boto3.client("s3")
+AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-1")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "food-app-racipe-image-prod")
+
+client = OpenAI()
+s3_client = boto3.client("s3", region_name=AWS_REGION)
 
 class Ingredient(BaseModel):
     ingredient: str
