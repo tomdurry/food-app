@@ -77,7 +77,6 @@ resource "aws_lambda_function" "recipe_generate_function" {
   architectures = var.lambda_architectures
   environment {
     variables = {
-      AWS_REGION     = "ap-northeast-1",
       OPENAI_API_KEY = data.aws_ssm_parameter.openai_api_key.value,
       S3_BUCKET_NAME = "food-app-racipe-image-${var.environment}"
     }
