@@ -10,7 +10,7 @@ import os
 
 client = OpenAI()
 s3_client = boto3.client("s3")
-S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "food-app-racipe-image")
+S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "food-app-racipe-image-prod")
 
 class Ingredient(BaseModel):
     ingredient: str
