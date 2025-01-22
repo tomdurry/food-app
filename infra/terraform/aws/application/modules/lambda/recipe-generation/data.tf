@@ -49,6 +49,20 @@ data "aws_iam_policy_document" "lambda_policy" {
   }
 }
 
+data "aws_iam_policy_document" "recipe_images_policy" {
+  statement {
+    sid    = "AllowPublicRead"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.recipe_images.arn}/*"]
+  }
+}
+
+
 
 data "aws_ssm_parameter" "openai_api_key" {
   name            = "/openai/api_key"

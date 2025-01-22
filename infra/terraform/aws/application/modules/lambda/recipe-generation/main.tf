@@ -37,7 +37,24 @@ resource "null_resource" "docker_push" {
     build_time = timestamp()
   }
   depends_on = [aws_ecr_repository.lambda_repository]
+
 }
+
+resource "aws_s3_bucket" "recipe_images" {
+  bucket = "food-app-racipe-image-${var.environment}"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "S3 Bucket"
+  }
+}
+
+resource "aws_s3_bucket_policy" "recipe_images_policy" {
+  bucket = aws_s3_bucket.recipe_images.id
+  policy = data.aws_iam_policy_document.recipe_images_policy.json
+}
+
 
 
 resource "aws_lambda_function" "recipe_generate_function" {
