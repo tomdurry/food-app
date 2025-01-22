@@ -7,13 +7,23 @@ import requests
 import boto3
 from datetime import datetime
 import os
+import logging
+import traceback
 
+# AWS設定
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-1")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "food-app-racipe-image-prod")
 
+# クライアント初期化
 client = OpenAI()
 s3_client = boto3.client("s3", region_name=AWS_REGION)
 
+# ログ設定
+boto3.set_stream_logger('boto3', level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("uvicorn")
+
+# データモデル
 class Ingredient(BaseModel):
     ingredient: str
     quantity: str
@@ -46,7 +56,8 @@ app = FastAPI()
 
 @app.post("/generate-recipe")
 async def generate_recipe(recipe_request: RecipeRequest):
-    
+
+    # プロンプト生成
     prompt = f"以下の材料があります:\n"
     for ingredient in recipe_request.ingredients:
         prompt += f"- {ingredient.ingredient} ({ingredient.quantity})\n"
@@ -54,7 +65,7 @@ async def generate_recipe(recipe_request: RecipeRequest):
     prompt += f"味のテイスト: {recipe_request.taste}\n"
     prompt += "これらの材料を使って、何かおいしい料理を提案してください。"
 
-
+    # OpenAIリクエスト
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
@@ -71,12 +82,15 @@ async def generate_recipe(recipe_request: RecipeRequest):
 
     recipe = json.loads(function_call_args)
 
+    # DALL·Eプロンプト生成
     dalle_prompt = f"Create an image of the dish named '{recipe['recipe_name']}' with the following ingredients: "
     for ingredient in recipe['ingredients']:
         dalle_prompt += f"{ingredient['ingredient']} ({ingredient['quantity']}), "
     dalle_prompt = dalle_prompt.rstrip(", ") + "."
 
-    print(f"DALL·E prompt: {dalle_prompt}")
+    logger.debug(f"DALL·E prompt: {dalle_prompt}")
+
+    # DALL·E APIリクエスト
     dalle_response = client.images.generate(
         model="dall-e-3",
         prompt=dalle_prompt,
@@ -92,19 +106,40 @@ async def generate_recipe(recipe_request: RecipeRequest):
     s3_key = f"{current_date}/recipes/{recipe['recipe_name'].replace(' ', '_')}.png"
 
     try:
-        s3_client.put_object(
+        # データ検証
+        if not image_data:
+            logger.error("Image data is empty or invalid.")
+            return {"error": "Image data is empty or invalid."}
+
+        if not S3_BUCKET_NAME:
+            logger.error("S3_BUCKET_NAME is not set.")
+            return {"error": "S3_BUCKET_NAME is not configured."}
+
+        if not s3_key:
+            logger.error("S3 key is invalid.")
+            return {"error": "S3 key generation failed."}
+
+        # S3アップロード
+        response = s3_client.put_object(
             Bucket=S3_BUCKET_NAME,
             Key=s3_key,
             Body=image_data,
             ContentType="image/png"
         )
+        logger.debug(f"S3 upload response: {response}")
+
         s3_url = f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{s3_key}"
         recipe['image_url'] = s3_url
+
     except Exception as e:
+        error_trace = traceback.format_exc()
+        logger.error(f"Failed to upload to S3. Error: {str(e)}")
+        logger.error(f"Traceback: {error_trace}")
         return {"error": f"Failed to upload to S3: {str(e)}"}
 
     return {"recipe": recipe}
 
+# AWS Lambdaハンドラー
 def lambda_handler(event, context):
     from mangum import Mangum
     handler = Mangum(app)
