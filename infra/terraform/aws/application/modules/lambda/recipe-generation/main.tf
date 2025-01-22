@@ -59,19 +59,6 @@ resource "aws_s3_bucket_public_access_block" "recipe_images_block" {
   restrict_public_buckets = false
 }
 
-data "aws_iam_policy_document" "recipe_images_policy" {
-  statement {
-    sid    = "AllowPublicRead"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-    actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.recipe_images.arn}/*"]
-  }
-}
-
 resource "aws_s3_bucket_policy" "recipe_images_policy" {
   bucket = aws_s3_bucket.recipe_images.id
   policy = data.aws_iam_policy_document.recipe_images_policy.json
