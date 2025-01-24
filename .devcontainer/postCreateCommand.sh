@@ -7,6 +7,14 @@ git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 git config --global push.autoSetupRemote true
 
+# Python and pip
+sudo apt-get update
+sudo apt-get install -y python3 python3-pip
+pip3 install --upgrade pip  
+
+# Python Black
+pip3 install black
+
 # Delve
 go install github.com/go-delve/delve/cmd/dlv@latest
 

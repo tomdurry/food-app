@@ -26,7 +26,6 @@ export const Generate = () => {
 
     const ingredients = allIngredients.map((i) => ({
       ingredient: i,
-      quantity: '',
     }))
 
     const response = await fetch(
@@ -142,7 +141,7 @@ export const Generate = () => {
                   }
                   className="mr-3"
                 />
-                指定した食材と調味料のみでレシピを生成する
+                指定した食材のみでレシピを生成する
               </label>
             </div>
 
