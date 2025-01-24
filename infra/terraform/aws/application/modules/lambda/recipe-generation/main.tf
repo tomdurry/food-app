@@ -37,8 +37,36 @@ resource "null_resource" "docker_push" {
     build_time = timestamp()
   }
   depends_on = [aws_ecr_repository.lambda_repository]
+
 }
 
+resource "aws_s3_bucket" "recipe_images" {
+  bucket = "food-app-racipe-image-${var.environment}"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Resource    = "S3 Bucket"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "recipe_images_block" {
+  bucket = aws_s3_bucket.recipe_images.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_policy" "recipe_images_policy" {
+  bucket = aws_s3_bucket.recipe_images.id
+  policy = data.aws_iam_policy_document.recipe_images_policy.json
+
+  depends_on = [
+    aws_s3_bucket_public_access_block.recipe_images_block
+  ]
+}
 
 resource "aws_lambda_function" "recipe_generate_function" {
   function_name = "recipe-generate-${var.environment}"
@@ -49,7 +77,8 @@ resource "aws_lambda_function" "recipe_generate_function" {
   architectures = var.lambda_architectures
   environment {
     variables = {
-      OPENAI_API_KEY = data.aws_ssm_parameter.openai_api_key.value
+      OPENAI_API_KEY = data.aws_ssm_parameter.openai_api_key.value,
+      S3_BUCKET_NAME = "food-app-racipe-image-${var.environment}"
     }
   }
   tags = {

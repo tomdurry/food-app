@@ -2,3 +2,5 @@ fastapi
 pydantic
 openai
 mangum
+boto3
+requests
