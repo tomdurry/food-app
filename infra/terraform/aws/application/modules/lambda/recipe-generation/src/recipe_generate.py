@@ -86,18 +86,11 @@ async def generate_recipe(recipe_request: RecipeRequest):
 
     recipe = json.loads(function_call_args)
 
-    dalle_prompt = (
-        f"Create a highly realistic and photo-realistic image of the dish named '{recipe['recipe_name']}' "
-        f"with the following ingredients: "
-    )
+    dalle_prompt = f"以下の材料を使った、実物の写真のように見える料理の写真を作成してください。料理名は「{recipe['recipe_name']}」です: "
     for ingredient in recipe["ingredients"]:
         dalle_prompt += f"{ingredient['ingredient']} ({ingredient['quantity']}), "
-    dalle_prompt = (
-        dalle_prompt.rstrip(", ")
-        + ". The dish should look freshly cooked, served in a real-life setting, with natural lighting and detailed textures."
-    )
 
-    print(f"DALL\u00b7E prompt: {dalle_prompt}")
+    print(f"DALL·E プロンプト: {dalle_prompt}")
 
     dalle_response = client.images.generate(
         model="dall-e-3",

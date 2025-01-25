@@ -262,11 +262,6 @@ variable "lambda_bucket_name" {
   type        = string
 }
 
-variable "lambda_key" {
-  description = "Key of the Lambda function zip file in the S3 bucket"
-  type        = string
-}
-
 variable "lambda_role_name" {
   description = "Name of the IAM role for the Lambda function"
   default     = "lambda-role"

@@ -1,6 +1,6 @@
-import { useState, FormEvent } from 'react'
-import useStore from '../store'
+import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useStore from '../store'
 
 export const Generate = () => {
   const [cookingTime, setCookingTime] = useState('')
@@ -104,6 +104,7 @@ export const Generate = () => {
                 <option value="">指定なし</option>
                 <option value="ダイエット向け">ダイエット向け</option>
                 <option value="インターナショナル">インターナショナル</option>
+                <option value="日本料理">日本料理</option>
                 <option value="スタミナ料理">スタミナ料理</option>
                 <option value="男飯">男飯</option>
               </select>
