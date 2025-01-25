@@ -64,12 +64,11 @@ fargate_pod_execution_role_policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargat
 # Lambda setting
 ########################################
 lambda_bucket_name   = "food-app-generate-lambda-bucket"
-lambda_key           = "mypackage.zip"
 lambda_role_name     = "lambda-role"
 lambda_function_name = "recipe-generate"
 lambda_handler       = "recipe_generate.lambda_handler"
 lambda_runtime       = "python3.12"
-lambda_timeout       = 60
+lambda_timeout       = 180
 lambda_architectures = ["x86_64"]
 
 ########################################

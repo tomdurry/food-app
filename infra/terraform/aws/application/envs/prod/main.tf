@@ -94,7 +94,6 @@ module "lambda-recipe-generation" {
   project              = var.project
   environment          = var.environment
   region               = var.region
-  lambda_key           = var.lambda_key
   lambda_bucket_name   = var.lambda_bucket_name
   lambda_role_name     = var.lambda_role_name
   lambda_function_name = var.lambda_function_name

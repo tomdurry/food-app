@@ -8,11 +8,11 @@
 		"ghcr.io/devcontainers-contrib/features/tfcdk-cli:1": {},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
-    "initializeCommand": "bash ./.devcontainer/initializeCommand.sh",
-    "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
+	"initializeCommand": "bash ./.devcontainer/initializeCommand.sh",
+	"postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
 	"mounts": [
-        "source=${localWorkspaceFolder}/.devcontainer/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
-    ],
+		"source=${localWorkspaceFolder}/.devcontainer/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -26,15 +26,18 @@
 				"yzhang.markdown-all-in-one",
 				"ms-vscode.go",
 				"ms-kubernetes-tools.vscode-kubernetes-tools",
-				"hashicorp.terraform"
+				"hashicorp.terraform",
+				"ms-python.python",
+				"mikoz.black-py",
+				"ms-python.black-formatter"
 			]
 		}
 	},
-    "runArgs": [
+	"runArgs": [
 		"--env-file",
-        ".devcontainer/.env"
-    ],
-    "containerEnv": {
-        "AWS_PROFILE": "default"
-    }
+		".devcontainer/.env"
+	],
+	"containerEnv": {
+		"AWS_PROFILE": "default"
+	}
 }
