@@ -84,11 +84,10 @@ export const Generate = () => {
                 onChange={(e) => setCookingTime(e.target.value)}
                 className="block w-full p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400"
               >
-                <option value="">選択してください</option>
+                <option value="指定なし">指定なし</option>
                 <option value="10分未満">10分未満</option>
-                <option value="10-20分">10-20分</option>
-                <option value="20-30分">20-30分</option>
-                <option value="30分以上">30分以上</option>
+                <option value="20分未満">20分未満</option>
+                <option value="30分未満">30分未満</option>
               </select>
             </div>
 
@@ -150,7 +149,10 @@ export const Generate = () => {
               <button
                 type="submit"
                 className="w-full py-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition disabled:opacity-50"
-                disabled={loading}
+                disabled={
+                  loading ||
+                  (ingredient.trim() === '' && selectedIngredients.length === 0)
+                }
               >
                 レシピを生成
               </button>
