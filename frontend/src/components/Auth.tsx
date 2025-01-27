@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import { useMutateAuth } from '../hooks/useMutateAuth'
 import useStore from '../store'
 
@@ -72,11 +72,7 @@ export const Auth = () => {
             {isLoginForm ? 'ログイン' : 'ユーザー作成'}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
-          {isLoginForm
-            ? 'アカウントをお持ちでないですか？ ユーザー登録をしてください。'
-            : '既にアカウントをお持ちですか？ ログインしてください。'}
-        </p>
+        <p className="text-center text-sm text-gray-500 mt-4"></p>
       </div>
     </div>
   )

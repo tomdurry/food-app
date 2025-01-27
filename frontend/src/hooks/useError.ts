@@ -24,18 +24,21 @@ export const useError = () => {
         alert('access token is not valid, please login')
         navigate('/')
         break
-      case 'duplicated key not allowed':
-        alert('login_id already exist, please use another one')
-        break
       case 'crypto/bcrypt: hashedPassword is not the hash of the given password':
-        alert('password is not correct')
+        alert('ログインIDまたはパスワードが正しくありません。')
         break
       case 'record not found':
-        alert('login_id is not correct')
+        alert('ログインIDまたはパスワードが正しくありません。')
+        break
+      case 'ERROR: duplicate key value violates unique constraint "uni_users_login_id" (SQLSTATE 23505)':
+        alert(
+          '入力されたユーザーIDは既に存在します。他のユーザーIDを利用してください。'
+        )
         break
       default:
         alert(msg)
     }
   }
+
   return { switchErrorHandling }
 }
