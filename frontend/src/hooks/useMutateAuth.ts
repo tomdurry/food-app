@@ -1,9 +1,9 @@
+import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
-import { Credential } from '../types'
 import { useError } from '../hooks/useError'
 import useStore from '../store'
+import { Credential } from '../types'
 
 export const useMutateAuth = () => {
   const navigate = useNavigate()
@@ -13,7 +13,7 @@ export const useMutateAuth = () => {
   }))
   const loginMutation = useMutation(
     async (user: Credential) =>
-      await axios.post(`${process.env.REACT_APP_API_URL}/login`, user),
+      await axios.post(`${import.meta.env.VITE_API_URL}/login`, user),
     {
       onSuccess: () => {
         setIsLogin(true)
@@ -30,7 +30,7 @@ export const useMutateAuth = () => {
   )
   const registerMutation = useMutation(
     async (user: Credential) =>
-      await axios.post(`${process.env.REACT_APP_API_URL}/signup`, user),
+      await axios.post(`${import.meta.env.VITE_API_URL}/signup`, user),
     {
       onError: (err: any) => {
         if (err.response.data.message) {
@@ -42,7 +42,7 @@ export const useMutateAuth = () => {
     }
   )
   const logoutMutation = useMutation(
-    async () => await axios.post(`${process.env.REACT_APP_API_URL}/logout`),
+    async () => await axios.post(`${import.meta.env.VITE_API_URL}/logout`),
     {
       onSuccess: () => {
         setIsLogin(false)
