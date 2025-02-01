@@ -10,10 +10,10 @@ phases:
 
   build:
     commands:
-      - REACT_APP_API_URL=$(aws ssm get-parameter --name "/prod/react_app_api_url" --query "Parameter.Value" --output text)
-      - REACT_APP_RECIPE_GENERATE_API_URL=$(aws ssm get-parameter --name "/recipe-generate/api-url" --query "Parameter.Value" --output text --with-decryption)
-      - echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env
-      - echo "REACT_APP_RECIPE_GENERATE_API_URL=${REACT_APP_RECIPE_GENERATE_API_URL}" >> .env
+      - VITE_API_URL=$(aws ssm get-parameter --name "/prod/react_app_api_url" --query "Parameter.Value" --output text)
+      - VITE_RECIPE_GENERATE_API_URL=$(aws ssm get-parameter --name "/recipe-generate/api-url" --query "Parameter.Value" --output text --with-decryption)
+      - echo "VITE_API_URL=${VITE_API_URL}" > .env
+      - echo "VITE_RECIPE_GENERATE_API_URL=${VITE_RECIPE_GENERATE_API_URL}" >> .env
       - npm run build
       - aws s3 sync build/ s3://food-app-frontend-bucket --delete
 

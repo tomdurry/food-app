@@ -1,5 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { Recipe } from '../types'
 import { useError } from './useError'
 
@@ -9,7 +9,7 @@ export const useMutateRecipe = () => {
 
   const favoriteMutation = useMutation(
     (recipe: Omit<Recipe, 'id' | 'created_at' | 'updated_at'>) =>
-      axios.post<Recipe>(`${process.env.REACT_APP_API_URL}/recipes`, recipe),
+      axios.post<Recipe>(`${import.meta.env.VITE_API_URL}/recipes`, recipe),
     {
       onSuccess: (res) => {
         const previousRecipes = queryClient.getQueryData<Recipe[]>(['recipes'])
@@ -29,7 +29,7 @@ export const useMutateRecipe = () => {
 
   const unFavoriteMutation = useMutation(
     (id: number) =>
-      axios.delete(`${process.env.REACT_APP_API_URL}/recipes/${id}`),
+      axios.delete(`${import.meta.env.VITE_API_URL}/recipes/${id}`),
     {
       onSuccess: (_, variables) => {
         const previousRecipes = queryClient.getQueryData<Recipe[]>(['recipes'])

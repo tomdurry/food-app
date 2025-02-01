@@ -29,7 +29,7 @@ export const Generate = () => {
     }))
 
     const response = await fetch(
-      `${process.env.REACT_APP_RECIPE_GENERATE_API_URL}`,
+      `${import.meta.env.VITE_RECIPE_GENERATE_API_URL}`,
       {
         method: 'POST',
         headers: {
