@@ -12,12 +12,16 @@ jobs:
   codeql:
     permissions:
       security-events: write
+      actions: read
+      contents: read
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: CodeQL Setup
         uses: github/codeql-action/init@v3
@@ -29,3 +33,5 @@ jobs:
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: codeql-analysis-${{ github.run_id }}
