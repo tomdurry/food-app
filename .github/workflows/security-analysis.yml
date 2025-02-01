@@ -1,0 +1,33 @@
+name: CodeQL Analysis
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  codeql:
+    permissions:
+      security-events: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: CodeQL Setup
+        uses: github/codeql-action/init@v3
+        with:
+          languages: go, javascript, typescript
+
+      - name: Scanning code
+        uses: github/codeql-action/analyze@v3
+
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
