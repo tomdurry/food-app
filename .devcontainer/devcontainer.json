@@ -29,7 +29,8 @@
 				"hashicorp.terraform",
 				"ms-python.python",
 				"mikoz.black-py",
-				"ms-python.black-formatter"
+				"ms-python.black-formatter",
+				"GitHub.vscode-github-actions"
 			]
 		}
 	},

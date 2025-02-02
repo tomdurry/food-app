@@ -1,0 +1,35 @@
+name: Build Application
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app: [backend, frontend]
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: Building Go Applications
+        if: matrix.app == 'backend'
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.x
+      - run: cd backend && go build ./...
+
+      - name: Building React Applications
+        if: matrix.app == 'frontend'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cd frontend && npm install && npm run build
