@@ -5,23 +5,31 @@ import { Recipe } from '../types'
 
 export const useQueryRecipes = () => {
   const { switchErrorHandling } = useError()
-  const getRecipes = async () => {
+
+  const getRecipes = async (): Promise<Recipe[]> => {
     const { data } = await axios.get<Recipe[]>(
       `${import.meta.env.VITE_API_URL}/recipes`,
       { withCredentials: true }
     )
     return data
   }
-  return useQuery<Recipe[], Error>({
-    queryKey: ['recipes'],
+
+  const query = useQuery<Recipe[], Error>({
+    queryKey: ['recipes'] as const,
     queryFn: getRecipes,
     staleTime: Infinity,
-    onError: (err: any) => {
-      if (err.response.data.message) {
-        switchErrorHandling(err.response.data.message)
-      } else {
-        switchErrorHandling(err.response.data)
-      }
-    },
   })
+
+  if (query.error) {
+    if (query.error instanceof Error && 'response' in query.error) {
+      const axiosError = query.error as any
+      switchErrorHandling(
+        axiosError.response?.data?.message || 'データ取得に失敗しました'
+      )
+    } else {
+      switchErrorHandling('データ取得に失敗しました')
+    }
+  }
+
+  return query
 }

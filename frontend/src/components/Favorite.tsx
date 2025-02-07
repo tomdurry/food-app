@@ -1,7 +1,7 @@
-import { useQueryRecipes } from '../hooks/useQueryRecipes'
-import { FavoriteItem } from './FavoriteItem'
 import { useState } from 'react'
+import { useQueryRecipes } from '../hooks/useQueryRecipes'
 import { Recipe } from '../types'
+import { FavoriteItem } from './FavoriteItem'
 import { RecipeModal } from './RecipeModal'
 
 export const Favorite = () => {
