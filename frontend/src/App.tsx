@@ -1,13 +1,13 @@
+import { Auth } from '@/components/Auth'
+import { Display } from '@/components/Display'
+import { Favorite } from '@/components/Favorite'
+import { Generate } from '@/components/Generate'
+import { NavigationBar } from '@/components/NavigationBar'
+import { PrivateRoute } from '@/components/PrivateRoute'
+import { CsrfToken } from '@/types'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Auth } from './components/Auth'
-import { Display } from './components/Display'
-import { Favorite } from './components/Favorite'
-import { Generate } from './components/Generate'
-import { NavigationBar } from './components/NavigationBar'
-import { PrivateRoute } from './components/PrivateRoute'
-import { CsrfToken } from './types'
 
 axios.defaults.withCredentials = true
 

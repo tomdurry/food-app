@@ -1,6 +1,6 @@
+import useStore from '@/store'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useStore from '../store'
 
 export const Generate = () => {
   const [cookingTime, setCookingTime] = useState('')

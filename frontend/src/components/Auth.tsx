@@ -1,6 +1,6 @@
+import { useMutateAuth } from '@/hooks/useMutateAuth'
+import useStore from '@/store'
 import { FormEvent, useState } from 'react'
-import { useMutateAuth } from '../hooks/useMutateAuth'
-import useStore from '../store'
 
 export const Auth = () => {
   const [login_id, setLoginId] = useState('')

@@ -1,7 +1,7 @@
+import { useMutateAuth } from '@/hooks/useMutateAuth'
+import useStore from '@/store'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
-import useStore from '../store'
-import { useMutateAuth } from '../hooks/useMutateAuth'
 
 export const NavigationBar = () => {
   const { logoutMutation } = useMutateAuth()

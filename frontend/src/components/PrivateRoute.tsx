@@ -1,6 +1,6 @@
+import useStore from '@/store'
 import { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
-import useStore from '../store'
 
 export const PrivateRoute = ({
   children,

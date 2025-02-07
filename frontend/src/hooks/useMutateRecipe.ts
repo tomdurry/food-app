@@ -1,6 +1,6 @@
+import { Recipe } from '@/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios, { AxiosResponse } from 'axios'
-import { Recipe } from '../types'
 import { useError } from './useError'
 
 export const useMutateRecipe = () => {

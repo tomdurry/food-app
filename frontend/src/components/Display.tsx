@@ -1,6 +1,6 @@
-import useStore from '../store'
+import { useMutateRecipe } from '@/hooks/useMutateRecipe'
+import useStore from '@/store'
 import { useState } from 'react'
-import { useMutateRecipe } from '../hooks/useMutateRecipe'
 
 export const Display = () => {
   const { Recipe, isLogin } = useStore()

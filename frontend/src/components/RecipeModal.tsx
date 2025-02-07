@@ -1,6 +1,6 @@
+import { useMutateRecipe } from '@/hooks/useMutateRecipe'
+import { Recipe } from '@/types'
 import { FC } from 'react'
-import { Recipe } from '../types'
-import { useMutateRecipe } from '../hooks/useMutateRecipe'
 
 interface RecipeModalProps {
   recipe: Recipe
