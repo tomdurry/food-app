@@ -47,7 +47,7 @@ export const Auth = () => {
             <input
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-700"
               name="login_id"
-              type="login_id"
+              type="text"
               placeholder="ユーザーID"
               autoFocus
               onChange={(e) => setLoginId(e.target.value)}
@@ -58,7 +58,7 @@ export const Auth = () => {
             <input
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-700"
               name="password"
-              type="password"
+              type="text"
               placeholder="パスワード"
               onChange={(e) => setPw(e.target.value)}
               value={pw}

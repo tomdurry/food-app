@@ -25,6 +25,8 @@ export const RecipeModal: FC<RecipeModalProps> = ({
 
   return (
     <div
+      role="dialog"
+      aria-labelledby="recipe-title"
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-6 sm:p-10"
       onClick={onClose}
     >
@@ -34,10 +36,12 @@ export const RecipeModal: FC<RecipeModalProps> = ({
       >
         <button
           onClick={onClose}
+          aria-label="閉じる"
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
         >
           ✕
         </button>
+
         <h2 className="text-2xl font-bold text-gray-800 mb-8">
           {recipe.recipe_name}
         </h2>

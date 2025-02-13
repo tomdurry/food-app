@@ -85,12 +85,14 @@ export const NavigationBar = () => {
               <button
                 onClick={() => handleAuthRedirect(true)}
                 className="text-lg py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-lg transition"
+                data-testid="login-button"
               >
                 ログイン
               </button>
               <button
                 onClick={() => handleAuthRedirect(false)}
                 className="text-lg py-2 px-4 rounded-full bg-indigo-500 text-white hover:bg-indigo-600 shadow-lg transition"
+                data-testid="signup-button"
               >
                 ユーザー登録
               </button>

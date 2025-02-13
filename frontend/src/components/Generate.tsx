@@ -54,14 +54,10 @@ export const Generate = () => {
     <div className="min-h-screen bg-gradient-to-r from-yellow-100 to-orange-100 flex justify-center items-center font-sans">
       {loading ? (
         <div className="flex flex-col items-center space-y-4">
-          {/* 鍋アニメーション */}
           <div className="relative">
-            {/* 鍋 */}
             <div className="w-16 h-16 bg-gray-700 rounded-full animate-bounce"></div>
-            {/* 湯気 */}
             <div className="absolute top-[-20px] left-6 w-8 h-8 bg-gray-300 rounded-full opacity-50 animate-ping"></div>
             <div className="absolute top-[-40px] left-8 w-6 h-6 bg-gray-300 rounded-full opacity-50 animate-ping"></div>
-            {/* 台座 */}
             <div className="w-20 h-2 bg-gray-500 rounded-full mt-2"></div>
             <p className="mt-4 text-xl font-bold text-gray-800">調理中...</p>
           </div>
@@ -76,10 +72,14 @@ export const Generate = () => {
             className="flex flex-col flex-grow"
           >
             <div className="mb-10">
-              <label className="block text-sm font-medium text-gray-700 mb-4">
+              <label
+                htmlFor="cookingTime"
+                className="block text-sm font-medium text-gray-700 mb-4"
+              >
                 ① 調理時間
               </label>
               <select
+                id="cookingTime"
                 value={cookingTime}
                 onChange={(e) => setCookingTime(e.target.value)}
                 className="block w-full p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400"
@@ -92,10 +92,14 @@ export const Generate = () => {
             </div>
 
             <div className="mb-10">
-              <label className="block text-sm font-medium text-gray-700 mb-4">
+              <label
+                htmlFor="taste"
+                className="block text-sm font-medium text-gray-700 mb-4"
+              >
                 ② コンセプト
               </label>
               <select
+                id="taste"
                 value={taste}
                 onChange={(e) => setTaste(e.target.value)}
                 className="block w-full p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400"
@@ -110,10 +114,14 @@ export const Generate = () => {
             </div>
 
             <div className="mb-10">
-              <label className="block text-sm font-medium text-gray-700 mb-4">
+              <label
+                htmlFor="ingredient"
+                className="block text-sm font-medium text-gray-700 mb-4"
+              >
                 ③ 使う食材
               </label>
               <input
+                id="ingredient"
                 value={ingredient}
                 onChange={(e) => setIngredient(e.target.value)}
                 className="block w-full p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400"
