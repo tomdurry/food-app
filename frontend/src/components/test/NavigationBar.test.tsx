@@ -1,5 +1,3 @@
-// NavigationBar.test.tsx
-
 import { NavigationBar } from '@/components/NavigationBar'
 import useStore from '@/store'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -54,7 +52,7 @@ describe('NavigationBar', () => {
   })
 
   it('When logged in, the favorite and logout buttons are displayed', () => {
-    ;(useStore as vi.Mock).mockReturnValue({
+    ;(useStore as unknown as { mockReturnValue: Function }).mockReturnValue({
       isLogin: true,
       setIsLoginForm: mockSetIsLoginForm,
     })
@@ -71,7 +69,7 @@ describe('NavigationBar', () => {
 
   it('Clicking the logout button calls the logout process', async () => {
     const mockLogoutMutation = vi.fn()
-    ;(useStore as vi.Mock).mockReturnValue({
+    ;(useStore as unknown as { mockReturnValue: Function }).mockReturnValue({
       isLogin: true,
       setIsLoginForm: mockSetIsLoginForm,
     })

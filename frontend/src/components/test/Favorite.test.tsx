@@ -41,7 +41,7 @@ const mockRecipes: Recipe[] = [
 const queryClient = new QueryClient()
 
 describe('Favorite コンポーネント', () => {
-  let mockRefetch: vi.Mock
+  let mockRefetch: jest.Mock
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -57,13 +57,13 @@ describe('Favorite コンポーネント', () => {
   }
 
   it('Display during loading.', () => {
-    ;(useQueryRecipes as vi.Mock).mockReturnValue({ isLoading: true })
+    ;(useQueryRecipes as jest.Mock).mockReturnValue({ isLoading: true })
     renderWithProviders(<Favorite />)
     expect(screen.getByText('ロード中...')).toBeInTheDocument()
   })
 
   it('Correctly display the recipe list', async () => {
-    ;(useQueryRecipes as vi.Mock).mockReturnValue({
+    ;(useQueryRecipes as jest.Mock).mockReturnValue({
       data: mockRecipes,
       isLoading: false,
     })
@@ -74,7 +74,7 @@ describe('Favorite コンポーネント', () => {
   })
 
   it('Click on a recipe to display a modal', async () => {
-    ;(useQueryRecipes as vi.Mock).mockReturnValue({
+    ;(useQueryRecipes as jest.Mock).mockReturnValue({
       data: mockRecipes,
       isLoading: false,
     })
@@ -89,7 +89,7 @@ describe('Favorite コンポーネント', () => {
   })
 
   it('Close Modal', async () => {
-    ;(useQueryRecipes as vi.Mock).mockReturnValue({
+    ;(useQueryRecipes as jest.Mock).mockReturnValue({
       data: mockRecipes,
       isLoading: false,
     })

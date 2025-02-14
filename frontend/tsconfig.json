@@ -27,11 +27,6 @@
   },
   "include": [
     "src",
-    "vitest-setup.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/components/test"
+    "vitest-setup.ts",
   ]
 }
