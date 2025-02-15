@@ -1,7 +1,7 @@
+import { useError } from '@/hooks/useError'
+import { Recipe } from '@/types'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { useError } from '../hooks/useError'
-import { Recipe } from '../types'
 
 export const useQueryRecipes = () => {
   const { switchErrorHandling } = useError()

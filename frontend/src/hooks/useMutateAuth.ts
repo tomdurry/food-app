@@ -1,9 +1,9 @@
+import { useError } from '@/hooks/useError'
+import useStore from '@/store'
+import { Credential } from '@/types'
 import { useMutation } from '@tanstack/react-query'
 import axios, { AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useError } from '../hooks/useError'
-import useStore from '../store'
-import { Credential } from '../types'
 
 export const useMutateAuth = () => {
   const navigate = useNavigate()

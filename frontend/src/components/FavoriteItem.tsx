@@ -1,5 +1,5 @@
+import { Recipe } from '@/types'
 import { FC, memo } from 'react'
-import { Recipe } from '../types'
 
 interface FavoriteItemProps {
   recipe: Recipe

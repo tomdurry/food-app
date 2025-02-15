@@ -1,6 +1,6 @@
+import { useQueryRecipes } from '@/hooks/useQueryRecipes'
+import { Recipe } from '@/types'
 import { useState } from 'react'
-import { useQueryRecipes } from '../hooks/useQueryRecipes'
-import { Recipe } from '../types'
 import { FavoriteItem } from './FavoriteItem'
 import { RecipeModal } from './RecipeModal'
 
@@ -24,7 +24,7 @@ export const Favorite = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500"></div>
             <p className="mt-4 text-orange-600 text-lg font-semibold">
               ロード中...
-            </p>
+            </p>  
           </div>
         ) : (
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">

@@ -1,7 +1,7 @@
+import { useMutateAuth } from '@/hooks/useMutateAuth'
+import useStore from '@/store'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
-import useStore from '../store'
-import { useMutateAuth } from '../hooks/useMutateAuth'
 
 export const NavigationBar = () => {
   const { logoutMutation } = useMutateAuth()
@@ -50,7 +50,6 @@ export const NavigationBar = () => {
   return (
     <div className="fixed top-0 left-0 w-full bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 shadow-lg z-10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* ブランド名 */}
         <Link
           to="/generate"
           className="text-3xl font-extrabold text-white tracking-wide"
@@ -86,12 +85,14 @@ export const NavigationBar = () => {
               <button
                 onClick={() => handleAuthRedirect(true)}
                 className="text-lg py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-lg transition"
+                data-testid="login-button"
               >
                 ログイン
               </button>
               <button
                 onClick={() => handleAuthRedirect(false)}
                 className="text-lg py-2 px-4 rounded-full bg-indigo-500 text-white hover:bg-indigo-600 shadow-lg transition"
+                data-testid="signup-button"
               >
                 ユーザー登録
               </button>

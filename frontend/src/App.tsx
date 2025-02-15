@@ -1,13 +1,13 @@
+import { Auth } from '@/components/Auth'
+import { Display } from '@/components/Display'
+import { Favorite } from '@/components/Favorite'
+import { Generate } from '@/components/Generate'
+import { NavigationBar } from '@/components/NavigationBar'
+import { PrivateRoute } from '@/components/PrivateRoute'
+import { CsrfToken } from '@/types'
 import axios from 'axios'
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Auth } from './components/Auth'
-import { Display } from './components/Display'
-import { Favorite } from './components/Favorite'
-import { Generate } from './components/Generate'
-import { NavigationBar } from './components/NavigationBar'
-import { PrivateRoute } from './components/PrivateRoute'
-import { CsrfToken } from './types'
+import { Route, Routes } from 'react-router-dom'
 
 axios.defaults.withCredentials = true
 
@@ -24,25 +24,23 @@ function App() {
 
   return (
     <div style={{ backgroundColor: '#FFE6DD', minHeight: '100vh' }}>
-      <BrowserRouter>
-        <NavigationBar />
-        <div className="pt-16">
-          <Routes>
-            <Route path="/" element={<Generate />} />
-            <Route path="/generate" element={<Generate />} />
-            <Route path="/display" element={<Display />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route
-              path="/favorite"
-              element={
-                <PrivateRoute>
-                  <Favorite />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <NavigationBar />
+      <div className="pt-16">
+        <Routes>
+          <Route path="/" element={<Generate />} />
+          <Route path="/generate" element={<Generate />} />
+          <Route path="/display" element={<Display />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route
+            path="/favorite"
+            element={
+              <PrivateRoute>
+                <Favorite />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
     </div>
   )
 }
