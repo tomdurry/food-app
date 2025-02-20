@@ -10,26 +10,41 @@ import (
 	"gorm.io/gorm"
 )
 
+var TestDB *gorm.DB
+
 func NewDB() *gorm.DB {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalln(err)
+
+	if TestDB != nil {
+		return TestDB
 	}
 
-	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PW"), os.Getenv("POSTGRES_HOST"),
-		os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_DB"))
-	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+	_ = godotenv.Load()
+
+	host := os.Getenv("POSTGRES_HOST")
+	port := os.Getenv("POSTGRES_PORT")
+	user := os.Getenv("POSTGRES_USER")
+	password := os.Getenv("POSTGRES_PW")
+	dbname := os.Getenv("POSTGRES_DB")
+
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		host, user, password, dbname, port,
+	)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("failed to connect to database: %v", err)
 	}
-	fmt.Println("Connceted")
+	fmt.Println("Connected to the database")
 	return db
 }
 
 func CloseDB(db *gorm.DB) {
-	sqlDB, _ := db.DB()
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("failed to get database instance: %v", err)
+	}
 	if err := sqlDB.Close(); err != nil {
-		log.Fatalln(err)
+		log.Fatalf("failed to close database connection: %v", err)
 	}
 }
