@@ -15,7 +15,7 @@ phases:
       - echo "VITE_API_URL=${VITE_API_URL}" > .env
       - echo "VITE_RECIPE_GENERATE_API_URL=${VITE_RECIPE_GENERATE_API_URL}" >> .env
       - npm run build
-      - aws s3 sync build/ s3://food-app-frontend-bucket --delete
+      - aws s3 sync dist/ s3://food-app-frontend-bucket --delete
 
 artifacts:
   files:
