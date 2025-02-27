@@ -66,7 +66,7 @@ resource "aws_db_instance" "postgres" {
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.id
 
-  multi_az = true
+  # multi_az = true
 
   tags = {
     Project     = var.project
