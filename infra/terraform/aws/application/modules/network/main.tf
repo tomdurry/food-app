@@ -27,7 +27,6 @@ resource "aws_subnet" "public" {
   }
 }
 
-
 resource "aws_subnet" "private" {
   count             = var.private_subnet_count
   vpc_id            = aws_vpc.vpc.id
@@ -45,25 +44,6 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "${var.project}-igw-${var.environment}"
-  }
-}
-
-########################################
-# NAT Gateway and Elastic IP
-########################################
-resource "aws_eip" "nat" {
-  count = var.nat_gateway_count
-  tags = {
-    Name = "${var.project}-nat-eip-${count.index + 1}-${var.environment}"
-  }
-}
-
-resource "aws_nat_gateway" "nat" {
-  count         = var.nat_gateway_count
-  allocation_id = aws_eip.nat[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id
-  tags = {
-    Name = "${var.project}-nat-gateway-${count.index + 1}-${var.environment}"
   }
 }
 
@@ -94,19 +74,6 @@ resource "aws_route_table" "private" {
   tags = {
     Name = "${var.project}-private-route-table-${count.index + 1}-${var.environment}"
   }
-}
-
-resource "aws_route" "private_nat" {
-  count                  = var.private_route_table_count
-  route_table_id         = aws_route_table.private[count.index].id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat[count.index % var.nat_gateway_count].id
-}
-
-resource "aws_route_table_association" "private" {
-  count          = var.private_route_table_count
-  subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private[count.index].id
 }
 
 ########################################
