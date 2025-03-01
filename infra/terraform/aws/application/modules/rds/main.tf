@@ -53,17 +53,6 @@ resource "aws_security_group_rule" "eks_to_rds" {
   security_group_id        = aws_security_group.rds_sg.id
 }
 
-resource "aws_security_group_rule" "rds_inbound_all" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.rds_sg.id
-  description       = "Allow all inbound traffic for testing"
-}
-
-
 resource "aws_db_instance" "postgres" {
   allocated_storage      = var.allocated_storage
   engine                 = var.engine
@@ -77,7 +66,7 @@ resource "aws_db_instance" "postgres" {
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.id
 
-  # multi_az = true
+  multi_az = true
 
   tags = {
     Project     = var.project
