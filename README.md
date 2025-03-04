@@ -1,4 +1,4 @@
-# サービス名：みんなの食卓
+# サービス名：[みんなの食卓](https://food-app-generation.com/)
 
 ## アプリケーションの概要
 
@@ -21,6 +21,6 @@
 | バックエンド     | Go(Echo, GORM)           　            |
 | フロントエンド   | React(Vite), TypeScript, TailwindCSS   |
 | データベース     | PostgreSQL                             |
-| インフラ        | AWS, Terraform                         |
+| インフラ        | AWS, Terraform, Python(Lambda)         |
 | CI/CD         | CodePipeline, CodeBuild, GitHub Actions |
 | テスト         | testing, Vitest, Testing Library        |
