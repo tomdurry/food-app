@@ -1,4 +1,8 @@
-# サービス名：[みんなの食卓](https://food-app-generation.com/)
+# サービス名：みんなの食卓
+
+## サービスリンク
+
+[みんなの食卓](https://food-app-generation.com/)
 
 ## アプリケーションの概要
 
