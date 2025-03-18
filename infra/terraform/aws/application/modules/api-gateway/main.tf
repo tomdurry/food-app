@@ -32,19 +32,35 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   timeout_milliseconds    = 60000
 }
 
-resource "aws_api_gateway_integration_response" "cors_integration_response" {
+resource "aws_api_gateway_method_response" "cors_response" {
   rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
   resource_id = aws_api_gateway_resource.recipe_generate_resource.id
   http_method = aws_api_gateway_method.recipe_generate_method.http_method
   status_code = "200"
 
   response_parameters = {
-    "integration.response.header.Access-Control-Allow-Origin"  = "'*'"
-    "integration.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
-    "integration.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "cors_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
+  resource_id = aws_api_gateway_resource.recipe_generate_resource.id
+  http_method = aws_api_gateway_method.recipe_generate_method.http_method
+  status_code = aws_api_gateway_method_response.cors_response.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
 
-  depends_on = [aws_api_gateway_integration.lambda_integration]
+  depends_on = [
+    aws_api_gateway_method_response.cors_response,
+    aws_api_gateway_integration.lambda_integration
+  ]
 }
 
 
