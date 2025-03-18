@@ -75,7 +75,7 @@ lambda_architectures = ["x86_64"]
 # API Gateway setting
 ########################################
 api_name               = "recipe-generate-api"
-protocol_type          = "HTTP"
+protocol_type          = "REST"
 cors_allow_origins     = ["*"]
 cors_allow_methods     = ["POST"]
 cors_allow_headers     = ["Content-Type"]

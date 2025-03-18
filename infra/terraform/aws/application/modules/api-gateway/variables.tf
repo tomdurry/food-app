@@ -15,7 +15,7 @@ variable "api_name" {
 
 variable "protocol_type" {
   description = "The protocol type for the API Gateway"
-  default     = "HTTP"
+  default     = "REST"
 }
 
 variable "cors_allow_origins" {

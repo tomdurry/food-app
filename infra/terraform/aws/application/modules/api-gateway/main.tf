@@ -1,13 +1,6 @@
-resource "aws_apigatewayv2_api" "recipe_generate_api" {
-  name          = var.api_name
-  protocol_type = var.protocol_type
-
-  cors_configuration {
-    allow_origins = var.cors_allow_origins
-    allow_methods = var.cors_allow_methods
-    allow_headers = var.cors_allow_headers
-    max_age       = var.cors_max_age
-  }
+resource "aws_api_gateway_rest_api" "recipe_generate_api" {
+  name        = var.api_name
+  description = "Recipe Generate API using REST API Gateway"
 
   tags = {
     Project     = var.project
@@ -16,43 +9,86 @@ resource "aws_apigatewayv2_api" "recipe_generate_api" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id                 = aws_apigatewayv2_api.recipe_generate_api.id
-  integration_type       = var.integration_type
-  integration_uri        = var.integration_uri
-  payload_format_version = var.payload_format_version
+resource "aws_api_gateway_resource" "recipe_generate_resource" {
+  rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
+  parent_id   = aws_api_gateway_rest_api.recipe_generate_api.root_resource_id
+  path_part   = "generate-recipe"
 }
 
-resource "aws_apigatewayv2_route" "post_route" {
-  api_id    = aws_apigatewayv2_api.recipe_generate_api.id
-  route_key = var.route_key
-  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+resource "aws_api_gateway_method" "recipe_generate_method" {
+  rest_api_id   = aws_api_gateway_rest_api.recipe_generate_api.id
+  resource_id   = aws_api_gateway_resource.recipe_generate_resource.id
+  http_method   = "POST"
+  authorization = "NONE"
 }
 
-resource "aws_apigatewayv2_stage" "api_stage" {
-  api_id      = aws_apigatewayv2_api.recipe_generate_api.id
-  name        = var.stage_name
-  auto_deploy = var.auto_deploy
+resource "aws_api_gateway_integration" "lambda_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.recipe_generate_api.id
+  resource_id             = aws_api_gateway_resource.recipe_generate_resource.id
+  http_method             = aws_api_gateway_method.recipe_generate_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = var.integration_uri
+  timeout_milliseconds    = 120000
+}
 
-  tags = {
-    Project     = var.project
-    Environment = var.environment
-    Resource    = "API Gateway Stage"
+resource "aws_api_gateway_method_response" "cors_response" {
+  rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
+  resource_id = aws_api_gateway_resource.recipe_generate_resource.id
+  http_method = aws_api_gateway_method.recipe_generate_method.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
   }
 }
 
+resource "aws_api_gateway_integration_response" "cors_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
+  resource_id = aws_api_gateway_resource.recipe_generate_resource.id
+  http_method = aws_api_gateway_method.recipe_generate_method.http_method
+  status_code = aws_api_gateway_method_response.cors_response.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
+  }
+}
+
+resource "aws_api_gateway_deployment" "recipe_generate_deployment" {
+  rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
+
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.recipe_generate_api))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "api_stage" {
+  deployment_id = aws_api_gateway_deployment.recipe_generate_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.recipe_generate_api.id
+  stage_name    = var.stage_name
+}
+
 resource "aws_lambda_permission" "api_gateway_invoke_permission" {
-  statement_id  = var.statement_id
-  action        = var.lambda_action
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
   function_name = var.function_name
-  principal     = var.principal
-  source_arn    = "${aws_apigatewayv2_api.recipe_generate_api.execution_arn}/*/*/generate-recipe"
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.recipe_generate_api.execution_arn}/*/*"
 }
 
 resource "aws_ssm_parameter" "api_url_parameter" {
   name  = var.ssm_parameter_name
   type  = var.ssm_parameter_type
-  value = "${aws_apigatewayv2_api.recipe_generate_api.api_endpoint}/generate-recipe"
+  value = "https://${aws_api_gateway_rest_api.recipe_generate_api.id}.execute-api.${data.aws_region.current.name}.amazonaws.com/${aws_api_gateway_stage.api_stage.stage_name}/generate-recipe"
 
   tags = {
     Project     = var.project
