@@ -29,33 +29,22 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = var.integration_uri
-  timeout_milliseconds    = 120000
-}
-
-resource "aws_api_gateway_method_response" "cors_response" {
-  rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
-  resource_id = aws_api_gateway_resource.recipe_generate_resource.id
-  http_method = aws_api_gateway_method.recipe_generate_method.http_method
-  status_code = "200"
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-    "method.response.header.Access-Control-Allow-Headers" = true
-  }
+  timeout_milliseconds    = 60000
 }
 
 resource "aws_api_gateway_integration_response" "cors_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
   resource_id = aws_api_gateway_resource.recipe_generate_resource.id
   http_method = aws_api_gateway_method.recipe_generate_method.http_method
-  status_code = aws_api_gateway_method_response.cors_response.status_code
+  status_code = "200"
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
     "method.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
+
+  depends_on = [aws_api_gateway_integration.lambda_integration]
 }
 
 resource "aws_api_gateway_deployment" "recipe_generate_deployment" {
@@ -68,6 +57,11 @@ resource "aws_api_gateway_deployment" "recipe_generate_deployment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_api_gateway_method.recipe_generate_method,
+    aws_api_gateway_integration.lambda_integration
+  ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
