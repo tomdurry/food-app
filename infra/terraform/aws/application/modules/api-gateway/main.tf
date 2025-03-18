@@ -39,9 +39,9 @@ resource "aws_api_gateway_method_response" "post_method_response" {
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "true"
-    "method.response.header.Access-Control-Allow-Methods" = "true"
-    "method.response.header.Access-Control-Allow-Headers" = "true"
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
   }
 }
 
@@ -74,9 +74,9 @@ resource "aws_api_gateway_method_response" "cors_options_response" {
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "true"
-    "method.response.header.Access-Control-Allow-Methods" = "true"
-    "method.response.header.Access-Control-Allow-Headers" = "true"
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
   }
 }
 
