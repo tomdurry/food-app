@@ -133,17 +133,30 @@ async def generate_recipe(recipe_request: RecipeRequest):
         return {"recipe": recipe}
 
     except Exception as e:
-        return {
-            "error": str(e),
-            "headers": {
+        raise HTTPException(
+            status_code=500,
+            detail=str(e),
+            headers={
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "POST, OPTIONS",
                 "Access-Control-Allow-Headers": "Content-Type",
             },
-        }
+        )
+
 
 def lambda_handler(event, context):
     from mangum import Mangum
 
     handler = Mangum(app)
-    return handler(event, context)
+    response = handler(event, context)
+    
+    if "headers" not in response:
+        response["headers"] = {}
+
+    response["headers"].update({
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+    })
+
+    return response
