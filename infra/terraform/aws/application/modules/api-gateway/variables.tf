@@ -60,7 +60,7 @@ variable "route_key" {
 
 variable "stage_name" {
   description = "The name of the API Gateway stage"
-  default     = "$default"
+  default     = "prod"
 }
 
 variable "auto_deploy" {

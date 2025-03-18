@@ -39,13 +39,14 @@ resource "aws_api_gateway_integration_response" "cors_integration_response" {
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-    "method.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
+    "integration.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "integration.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
+    "integration.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
 
   depends_on = [aws_api_gateway_integration.lambda_integration]
 }
+
 
 resource "aws_api_gateway_deployment" "recipe_generate_deployment" {
   rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
