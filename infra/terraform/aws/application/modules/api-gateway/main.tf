@@ -52,9 +52,9 @@ resource "aws_api_gateway_integration_response" "post_integration_response" {
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "*"
-    "method.response.header.Access-Control-Allow-Methods" = "POST, OPTIONS"
-    "method.response.header.Access-Control-Allow-Headers" = "Content-Type"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
 
   depends_on = [
@@ -110,9 +110,9 @@ resource "aws_api_gateway_integration_response" "cors_options_integration_respon
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "*"
-    "method.response.header.Access-Control-Allow-Methods" = "POST, OPTIONS"
-    "method.response.header.Access-Control-Allow-Headers" = "Content-Type"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
 
   depends_on = [
