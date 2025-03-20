@@ -4,7 +4,6 @@ import { useState } from 'react'
 
 export const Display = () => {
   const { Recipe, isLogin } = useStore()
-  console.log("🔍 Recipe from useStore:", Recipe)
   const [isFavorite, setIsFavorite] = useState(false)
   const { favoriteMutation } = useMutateRecipe()
 
