@@ -46,7 +46,10 @@ export const Generate = () => {
     )
 
     const generateData = await response.json()
-    GenerateRecipe(generateData.recipe)
+    console.log("Full API Response:", generateData)
+    const recipeData = generateData.body ? JSON.parse(generateData.body).recipe : generateData.recipe
+    console.log("Extracted Recipe:", recipeData)
+    GenerateRecipe(recipeData)
     setLoading(false)
     navigate('/display')
   }
