@@ -75,7 +75,7 @@ lambda_architectures = ["x86_64"]
 # API Gateway setting
 ########################################
 api_name               = "recipe-generate-api"
-protocol_type          = "HTTP"
+protocol_type          = "REST"
 cors_allow_origins     = ["*"]
 cors_allow_methods     = ["POST"]
 cors_allow_headers     = ["Content-Type"]
@@ -83,7 +83,7 @@ cors_max_age           = 3600
 integration_type       = "AWS_PROXY"
 payload_format_version = "2.0"
 route_key              = "POST /generate-recipe"
-stage_name             = "$default"
+stage_name             = "prod"
 auto_deploy            = true
 statement_id           = "AllowApiGatewayInvoke"
 lambda_action          = "lambda:InvokeFunction"

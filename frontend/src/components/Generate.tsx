@@ -32,6 +32,7 @@ export const Generate = () => {
       `${import.meta.env.VITE_RECIPE_GENERATE_API_URL}`,
       {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -45,7 +46,8 @@ export const Generate = () => {
     )
 
     const generateData = await response.json()
-    GenerateRecipe(generateData.recipe)
+    const recipeData = generateData.body ? JSON.parse(generateData.body).recipe : generateData.recipe
+    GenerateRecipe(recipeData)
     setLoading(false)
     navigate('/display')
   }

@@ -28,8 +28,6 @@ func NewRouter(uc controller.IUserController, rc controller.IRecipeController) *
 		CookieDomain:   os.Getenv("API_DOMAIN"),
 		CookieHTTPOnly: true,
 		CookieSameSite: http.SameSiteNoneMode,
-		//CookieSameSite: http.SameSiteDefaultMode,
-		//CookieMaxAge:   60,
 	}))
 	e.GET("/health", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Healthy")

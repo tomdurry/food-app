@@ -15,7 +15,7 @@ variable "api_name" {
 
 variable "protocol_type" {
   description = "The protocol type for the API Gateway"
-  default     = "HTTP"
+  default     = "REST"
 }
 
 variable "cors_allow_origins" {
@@ -60,7 +60,7 @@ variable "route_key" {
 
 variable "stage_name" {
   description = "The name of the API Gateway stage"
-  default     = "$default"
+  default     = "prod"
 }
 
 variable "auto_deploy" {
