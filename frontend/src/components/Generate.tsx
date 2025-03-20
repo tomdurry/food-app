@@ -32,6 +32,7 @@ export const Generate = () => {
       `${import.meta.env.VITE_RECIPE_GENERATE_API_URL}`,
       {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
