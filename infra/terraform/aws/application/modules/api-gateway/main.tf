@@ -57,12 +57,15 @@ resource "aws_api_gateway_integration_response" "post_integration_response" {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
 
+  response_templates = {
+    "application/json" = ""
+  }
+
   depends_on = [
     aws_api_gateway_integration.lambda_integration,
     aws_api_gateway_method_response.post_method_response
   ]
 }
-
 resource "aws_api_gateway_method" "cors_options" {
   rest_api_id   = aws_api_gateway_rest_api.recipe_generate_api.id
   resource_id   = aws_api_gateway_resource.recipe_generate_resource.id
@@ -115,10 +118,15 @@ resource "aws_api_gateway_integration_response" "cors_options_integration_respon
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type'"
   }
 
+  response_templates = {
+    "application/json" = ""
+  }
+
   depends_on = [
     aws_api_gateway_integration.cors_options_integration
   ]
 }
+
 
 resource "aws_api_gateway_deployment" "recipe_generate_deployment" {
   rest_api_id = aws_api_gateway_rest_api.recipe_generate_api.id
