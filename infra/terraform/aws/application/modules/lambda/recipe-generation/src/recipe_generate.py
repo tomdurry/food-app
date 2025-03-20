@@ -8,6 +8,7 @@ import requests
 import boto3
 from datetime import datetime
 import os
+from mangum import Mangum
 
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-1")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "food-app-racipe-image-prod")
@@ -150,3 +151,9 @@ async def generate_recipe(recipe_request: RecipeRequest):
             },
             "body": json.dumps({"error": str(e)})
         }
+
+
+handler = Mangum(app)
+
+def lambda_handler(event, context):
+    return handler(event, context) 
