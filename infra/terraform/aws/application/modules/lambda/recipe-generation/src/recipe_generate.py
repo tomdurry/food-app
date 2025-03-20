@@ -1,3 +1,72 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from typing import List
+from openai import OpenAI
+import json
+import requests
+import boto3
+from datetime import datetime
+import os
+
+AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-1")
+S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "food-app-racipe-image-prod")
+
+client = OpenAI()
+s3_client = boto3.client("s3", region_name=AWS_REGION)
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+class Ingredient(BaseModel):
+    ingredient: str
+
+
+class RecipeRequest(BaseModel):
+    ingredients: List[Ingredient]
+    cooking_time: str
+    taste: str
+    use_only_selected_ingredients: bool = Field(
+        default=False, description="指定された食材のみを使用するかどうか"
+    )
+
+
+class RecipeIngredient(BaseModel):
+    ingredient: str
+    quantity: str
+
+
+class Recipe(BaseModel):
+    ingredients: List[RecipeIngredient]
+    instructions: List[str] = Field(
+        description="手順", examples=[["材料を切ります。", "材料を炒めます。"]]
+    )
+    recipe_name: str = Field(description="料理名", example="チキンの炒め物")
+    image_url: str = Field(
+        description="レシピのイメージ画像URL", example="https://example.com/image.png"
+    )
+
+
+OUTPUT_RECIPE_FUNCTION = [
+    {
+        "type": "function",
+        "function": {
+            "name": "output_recipe",
+            "description": "レシピを出力する",
+            "parameters": Recipe.schema(),
+        },
+    }
+]
+
+
 @app.post("/generate-recipe")
 async def generate_recipe(recipe_request: RecipeRequest):
     try:
